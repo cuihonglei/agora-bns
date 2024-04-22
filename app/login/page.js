@@ -51,7 +51,7 @@ function LoginPage() {
           </button>
           {loginError && <p className="text-red-500 mt-4">{loginError}</p>}
           <p className="text-white mt-4">
-            Need an account? <Link href="/register" className="text-blue-200 hover:text-blue-400">Register here</Link>
+            Need an account? <Link href="https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home" className="text-blue-200 hover:text-blue-400">Register here</Link>
           </p>
         </div>
       </div>
