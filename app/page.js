@@ -1,9 +1,13 @@
 "use client";
+
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+
+import Header from './components/header';
 import Footer from './components/footer';
+
 import { useUserAuth } from './_utils/auth-context';
 
 export default function Home() {
@@ -15,14 +19,14 @@ export default function Home() {
     await googleSignIn();
   };
 
-  console.log(user);
-
   return (
     <>
       <Head>
         <title>Agora BNS - Buy and Sell Marketplace</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Header />
 
       <header className="bg-white shadow-md fixed w-full z-50 top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,7 +37,7 @@ export default function Home() {
               </Link>
             </div>
             <nav className="hidden md:flex space-x-10">
-              <Link href="/AboutUs" className="text-base font-medium text-gray-500 hover:text-gray-900">
+              <Link href="/about" className="text-base font-medium text-gray-500 hover:text-gray-900">
                 About Us
               </Link>
             </nav>

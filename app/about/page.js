@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 
-function AboutUs() {
+function About() {
 
     return (
         <>
@@ -110,7 +110,7 @@ function AboutUs() {
   );
 }
 
-export default AboutUs;
+export default About;
 
     
   

@@ -1,13 +1,17 @@
 "use client";
-import Head from 'next/head';
+
 import { useState } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+
 import { storage, auth, db } from '../_utils/firebase'; // Adjust the path as necessary to import your Firebase config
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection } from 'firebase/firestore';
-import Link from 'next/link';
 
+import { useUserAuth } from 'app/_utils/auth-context';
 
 export default function Sell() {
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',

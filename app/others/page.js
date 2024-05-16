@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from 'react';
 import { db } from '../_utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -118,7 +119,7 @@ function ShowProducts() {
                 )}
             </div>
             <div className="hidden md:flex space-x-10">
-            <Link href="/AboutUs" className="text-base font-medium text-gray-500 hover:text-gray-900">
+            <Link href="/about" className="text-base font-medium text-gray-500 hover:text-gray-900">
               About Us
             </Link>
           </div>

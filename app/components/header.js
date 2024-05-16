@@ -4,8 +4,10 @@
 import { React , useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useUserAuth } from '../_utils/auth-context';
 import Head from 'next/head';
+
+import { useUserAuth } from '../_utils/auth-context';
+
 
 function Header({ user, handleLogout}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -81,7 +83,7 @@ function Header({ user, handleLogout}) {
               )}
             </div>
             <Link
-              href="/AboutUs"
+              href="/about"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               About Us
