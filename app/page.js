@@ -4,9 +4,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import Footer from './components/footer';
+import { useUserAuth } from './_utils/auth-context';
 
 export default function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const { user, gitHubSignIn, googleSignIn } = useUserAuth();
+
+  const handleSignIn = async () => {
+    await googleSignIn();
+  };
+
+  console.log(user);
 
   return (
     <>
@@ -29,9 +38,10 @@ export default function Home() {
               </Link>
             </nav>
             <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-              <Link href="/login" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+              <button onClick={handleSignIn} className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">Sign In</button>
+              {/* <Link href="/login" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
                 Sign In
-              </Link>
+              </Link> */}
               <Link href="https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home" className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-r from-teal-500 to-cyan-600 hover:bg-gradient-to-br">
                 Sign Up
               </Link>

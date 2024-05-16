@@ -18,7 +18,6 @@ function ShowProducts() {
   const handleLogout = async () => {
     await firebaseSignOut();
   };
-  
 
   useEffect(() => {
     const fetchProducts = async () => {
