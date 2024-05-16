@@ -25,6 +25,11 @@ export const AuthContextProvider = ({ children }) => {
     return signInWithPopup(auth, provider);
   };
  
+  const firebaseSignIn = () => {
+    // TODO support multiple sign in methods
+    return googleSignIn();
+  };
+
   const firebaseSignOut = () => {
     return signOut(auth);
   };
@@ -37,7 +42,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []); // Remove user from dependency array
  
   return (
-    <AuthContext.Provider value={{ user, gitHubSignIn, googleSignIn, firebaseSignOut }}>
+    <AuthContext.Provider value={{ user, firebaseSignIn, firebaseSignOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,18 +1,39 @@
 // Header.js
 "use client"
 
-import { React , useState } from 'react';
+import { React, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Head from 'next/head';
 
 import { useUserAuth } from '../_utils/auth-context';
 
+function Header() {
 
-function Header({ user, handleLogout}) {
+  // Indicator for the categories drop down menu.
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const userName = user ? user.displayName : "Not logged in";
+  // Use the useUserAuth hook to get the user object and the logout function
+  const { user, firebaseSignIn, firebaseSignOut } = useUserAuth();
+
+  // Sign in to Firebase with authentication
+  const handleSignIn = async () => {
+    await firebaseSignIn();
+
+    // Redirect to the account page.
+    window.location.href = '/account';
+  };
+
+  // Sign out of Firebase
+  const handleSignOut = async () => {
+    try {
+      await firebaseSignOut();
+      // Redirect to the root URL
+      window.location.href = '/';
+    } catch (error) {
+      // Handle sign-out error
+      console.error("Error signing out:", error);
+    }
+  };
 
   return (
     <header className="bg-white shadow-md fixed w-full z-50 top-0">
@@ -24,7 +45,7 @@ function Header({ user, handleLogout}) {
             </Link>
           </div>
           <nav className="hidden md:flex space-x-10">
-            <div
+            {user  && <div
               className="relative pb-1"
               onMouseEnter={() => setIsDropdownOpen(true)}
               onMouseLeave={() => setIsDropdownOpen(false)}
@@ -50,7 +71,7 @@ function Header({ user, handleLogout}) {
                     Fashion
                   </Link>
                   <Link
-                    href="/home"
+                    href="/garden"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Home & Garden
@@ -74,41 +95,52 @@ function Header({ user, handleLogout}) {
                     Food & Groceries
                   </Link>
                   <Link
-                    href="/fooddrinks"
+                    href="/others"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Others
                   </Link>
                 </div>
               )}
-            </div>
+            </div>}
             <Link
               href="/about"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               About Us
             </Link>
-            <Link
+            {user && <Link
               href="/sell"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               Sell Products
-            </Link>
+            </Link>}
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <div className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-              {user ? `Welcome, ${user.displayName}` : 'Not logged in'}
-            </div>
-            <nav>
-              <Link href="https://agora-bns.vercel.app/"> {/*change link when deployed to vercel */}
+
+            {/* Show Welcome and logout or sign in according to the user object */}
+            {user ? (
+              <>
+                <span className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                  {`Welcome, ${user.displayName}`}
+                </span>
                 <button
-                  onClick={handleLogout}
+                  onClick={handleSignOut}
                   className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-gradient-to-r from-teal-500 to-cyan-600 hover:bg-gradient-to-br"
                 >
                   Logout
                 </button>
-              </Link>
-            </nav>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={handleSignIn}
+                  className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  Sign In
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
