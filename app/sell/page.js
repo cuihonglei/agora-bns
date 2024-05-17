@@ -4,13 +4,16 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { storage, auth, db } from '../_utils/firebase'; // Adjust the path as necessary to import your Firebase config
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { addDoc, collection } from 'firebase/firestore';
-
 import { useUserAuth } from 'app/_utils/auth-context';
+import { uploadProductImages } from '../_services/storage-service';
+import { addProduct } from '../_services/product-service';
+import { addUserProduct } from '../_services/user-service';
 
 export default function Sell() {
+
+  const { user } = useUserAuth();
+
+  // TODO Redirect to home page if not logged in. 
 
   const [formData, setFormData] = useState({
     name: '',
@@ -30,41 +33,37 @@ export default function Sell() {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.image) {
       alert('Please select an image to upload.');
       return;
     }
 
-    if (!auth.currentUser) {
+    // TODO Don't need to check this after the user checking.
+    if (!user) {
       console.error("No authenticated user available");
       alert('No authenticated user available');
       return;
     }
 
     try {
-      const imageName = `${Date.now()}_${formData.image.name}`;
-      console.log("Uploading image", imageName);
-      const imageRef = ref(storage, `products/${imageName}`);
-      const snapshot = await uploadBytes(imageRef, formData.image);
-      const imageUrl = await getDownloadURL(snapshot.ref);
-      console.log("Image URL", imageUrl);
-  
-      const docRef = await addDoc(collection(db, "products"), {
-        name: formData.name,
-        description: formData.description,
-        price: Number(formData.price),
-        category: formData.category,
-        condition: formData.condition,
-        imageUrl: imageUrl, // Store image URL in Firestore
-        userId: auth.currentUser.uid
-      });
-  
-      console.log("Document written with ID: ", docRef.id);
+
+      // Upload product image.
+      const imageUrl = await uploadProductImages(formData.image);
+
+      // Add product to database.
+      const productId = await addProduct(user.uid, formData.name, formData.description, formData.price, formData.category, formData.condition, imageUrl);
+
+      // Add the product to the user's product list.
+      await addUserProduct(user.uid, productId)
+
+      console.log("Document written with ID: ", productId);
       alert('Product added successfully!');
-      setFormData({ name: '', description: '', price: '', category: '', image: null }); // Reset form after successful submission
+
+      // Reset form after successful submission
+      setFormData({ name: '', description: '', price: '', category: '', image: null }); 
     } catch (error) {
       console.error("Error adding document: ", error);
       alert('Error adding product. Please try again.');
@@ -76,6 +75,7 @@ export default function Sell() {
       <Head>
         <title>Sell Your Product | Agora BNS</title>
       </Head>
+
       <div className="relative min-h-screen bg-gradient-to-r from-purple-800 to-indigo-700">
         <div className="flex justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
@@ -89,7 +89,10 @@ export default function Sell() {
             </h2>
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
               <input type="hidden" name="remember" value="true" />
-              <div className="rounded-md shadow-sm -space-y-px">
+
+              <div className="rounded-md shadow-sm space-y-2">
+
+                {/* Name */}
                 <div>
                   <label htmlFor="name" className="sr-only">Product Name</label>
                   <input
@@ -104,6 +107,8 @@ export default function Sell() {
                     onChange={handleChange}
                   />
                 </div>
+
+                {/* Description */}
                 <div>
                   <label htmlFor="description" className="sr-only">Description & Contact Information</label>
                   <textarea
@@ -117,6 +122,8 @@ export default function Sell() {
                     required
                   />
                 </div>
+
+                {/* Price */}
                 <div>
                   <label htmlFor="price" className="sr-only">Price</label>
                   <input
@@ -131,6 +138,8 @@ export default function Sell() {
                     onChange={handleChange}
                   />
                 </div>
+
+                {/* Category */}
                 <div>
                   <label htmlFor="category" className="sr-only">Category</label>
                   <select
@@ -150,6 +159,8 @@ export default function Sell() {
                     <option value="Others">Others</option>
                   </select>
                 </div>
+
+                {/* Condition */}
                 <div>
                   <label htmlFor="condition" className="sr-only">Condition</label>
                   <select
@@ -166,6 +177,8 @@ export default function Sell() {
                   </select>
                 </div>
               </div>
+
+              {/* Product Image */}
               <div>
                 <label htmlFor="image" className="block text-sm font-medium text-gray-700">Product Image</label>
                 <input
@@ -176,6 +189,8 @@ export default function Sell() {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm leading-tight text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 />
               </div>
+
+              {/* Submit Button */}
               <div>
                 <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   List Product
