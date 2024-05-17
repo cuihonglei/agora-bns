@@ -39,7 +39,6 @@ function ShowProducts() {
       </Head>
 
       <Header />
-      
       <main className="bg-white pt-24 pb-12 flex-grow ">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-center mb-6 text-black pt-20">Available Products</h1>
@@ -48,10 +47,10 @@ function ShowProducts() {
               <div key={product.id} className="border rounded-lg shadow-lg overflow-hidden">
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-black">{product.name}</h2>
-                  <p className="text-sm text-gray-600 text-black">{product.description}</p>
+                  <p className="text-sm text-black">{product.description}</p>
                   <p className="text-lg font-medium text-black">{product.price ? `$${product.price}` : 'Free'}</p>
-                  <p className="text-sm text-gray-600 text-black">Category: {product.category}</p>
-                  <p className="text-sm text-gray-600 text-black">Condition: {product.condition}</p>
+                  <p className="text-sm text-black">Category: {product.category}</p>
+                  <p className="text-sm text-black">Condition: {product.condition}</p>
                   {product.imageUrl && (
                     <img src={product.imageUrl} alt={product.name} className="w-full h-40 object-cover mt-2" onError={(e) => { e.target.onerror = null; e.target.src = '/no-image-available.png'; }} />
                   )}

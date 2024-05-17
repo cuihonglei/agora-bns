@@ -121,7 +121,7 @@ function FeaturedCategories() {
           </div>
           <div className="group relative">
             <Link href="/others">
-              <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 bg-white">
+              <div className="w-full h-80 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 bg-white">
                 <img
                   src="/image/agoralogo.jpg"
                   alt="Others"
