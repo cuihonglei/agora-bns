@@ -3,17 +3,16 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-
 import { useUserAuth } from 'app/_utils/auth-context';
+import { storage, auth, db } from '../_utils/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { addDoc, collection } from 'firebase/firestore';
 import { uploadProductImages } from '../_services/storage-service';
 import { addProduct } from '../_services/product-service';
 import { addUserProduct } from '../_services/user-service';
 
 export default function Sell() {
-
   const { user } = useUserAuth();
-
-  // TODO Redirect to home page if not logged in. 
 
   const [formData, setFormData] = useState({
     name: '',
@@ -21,27 +20,38 @@ export default function Sell() {
     price: '',
     category: '',
     condition: '',
-    image: null,
+    images: [], // Ensure this is always an array
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'image') {
-      setFormData({ ...formData, image: files[0] });
+    if (name === 'images') {
+      console.log(files); // Debugging log
+      setFormData({ ...formData, images: Array.from(files) }); // Ensure files are converted to an array
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
+  const validateFormData = (data) => {
+    const requiredFields = ['name', 'description', 'price', 'category', 'condition', 'images'];
+    for (const field of requiredFields) {
+      if (!data[field] || (Array.isArray(data[field]) && data[field].length === 0)) {
+        console.error(`Missing field: ${field}`);
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.image) {
-      alert('Please select an image to upload.');
+    if (!validateFormData(formData)) {
+      alert('Please fill in all fields and select at least one image to upload.');
       return;
     }
 
-    // TODO Don't need to check this after the user checking.
     if (!user) {
       console.error("No authenticated user available");
       alert('No authenticated user available');
@@ -49,23 +59,27 @@ export default function Sell() {
     }
 
     try {
+      console.log('Images to upload:', formData.images); // Debugging log
+      const imageUrls = await uploadProductImages(formData.images);
 
-      // Upload product image.
-      const imageUrl = await uploadProductImages(formData.image);
+      const productData = {
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        category: formData.category,
+        condition: formData.condition,
+        imageUrls: imageUrls,
+        userId: user.uid,
+      };
 
-      // Add product to database.
-      const productId = await addProduct(user.uid, formData.name, formData.description, formData.price, formData.category, formData.condition, imageUrl);
+      console.log('Product data:', productData); // Debugging log
+      const productId = await addProduct(productData);
+      await addUserProduct(user.uid, productId);
 
-      // Add the product to the user's product list.
-      await addUserProduct(user.uid, productId)
-
-      console.log("Document written with ID: ", productId);
       alert('Product added successfully!');
-
-      // Reset form after successful submission
-      setFormData({ name: '', description: '', price: '', category: '', image: null }); 
+      setFormData({ name: '', description: '', price: '', category: '', condition: '', images: [] });
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error adding product: ", error);
       alert('Error adding product. Please try again.');
     }
   };
@@ -91,7 +105,6 @@ export default function Sell() {
               <input type="hidden" name="remember" value="true" />
 
               <div className="rounded-md shadow-sm space-y-2">
-
                 {/* Name */}
                 <div>
                   <label htmlFor="name" className="sr-only">Product Name</label>
@@ -155,7 +168,7 @@ export default function Sell() {
                     <option value="Beauty">Beauty</option>
                     <option value="Automotive">Automotive</option>
                     <option value="Sports">Sports</option>
-                    <option value="Food and groceries">Food and Groceries</option>
+                    <option value="Food and Groceries">Food and Groceries</option>
                     <option value="Others">Others</option>
                   </select>
                 </div>
@@ -178,13 +191,14 @@ export default function Sell() {
                 </div>
               </div>
 
-              {/* Product Image */}
+              {/* Product Images */}
               <div>
-                <label htmlFor="image" className="block text-sm font-medium text-gray-700">Product Image</label>
+                <label htmlFor="images" className="block text-sm font-medium text-gray-700">Product Images</label>
                 <input
                   type="file"
-                  id="image"
-                  name="image"
+                  id="images"
+                  name="images"
+                  multiple
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm leading-tight text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 />

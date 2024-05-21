@@ -51,9 +51,9 @@ function ShowProducts() {
                     <p className="text-lg font-medium text-black">{product.price ? `$${product.price}` : 'Free'}</p>
                     <p className="text-sm text-black">Category: {product.category}</p>
                     <p className="text-sm text-black">Condition: {product.condition}</p>
-                    {product.imageUrl && (
-                      <img src={product.imageUrl} alt={product.name} className="w-full h-40 object-cover mt-2" onError={(e) => { e.target.onerror = null; e.target.src='/no-image-available.png'; }} />
-                    )}
+                    {product.imageUrls && Array.isArray(product.imageUrls) && product.imageUrls.map((url, index) => (
+                    <img key={index} src={url} alt={product.name} className="w-full h-40 object-cover mt-2" onError={(e) => { e.target.onerror = null; e.target.src = '/no-image-available.png'; }} />
+                  ))}
                   </div>
                 </div>
               ))}
