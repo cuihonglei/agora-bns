@@ -1,38 +1,34 @@
-// Header.js
-"use client"
+"use client";
 
 import { React, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-
+import { useRouter } from 'next/navigation';
 import { useUserAuth } from '../_utils/auth-context';
 
 function Header() {
-
-  // Indicator for the categories drop down menu.
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // Use the useUserAuth hook to get the user object and the logout function
   const { user, firebaseSignIn, firebaseSignOut } = useUserAuth();
+  const router = useRouter();
 
-  // Sign in to Firebase with authentication
   const handleSignIn = async () => {
     await firebaseSignIn();
-
-    // Redirect to the account page.
     window.location.href = '/account';
   };
 
-  // Sign out of Firebase
   const handleSignOut = async () => {
     try {
       await firebaseSignOut();
-      // Redirect to the root URL
       window.location.href = '/';
     } catch (error) {
-      // Handle sign-out error
       console.error("Error signing out:", error);
     }
+  };
+
+  const handleCategorySelect = (category) => {
+    const url = new URL('/showproducts', window.location.href);
+    url.searchParams.set('category', category);
+    router.push(url.toString());
   };
 
   return (
@@ -45,86 +41,96 @@ function Header() {
             </Link>
           </div>
           <nav className="hidden md:flex space-x-10">
-            {user  && <div
-              className="relative pb-1"
-              onMouseEnter={() => setIsDropdownOpen(true)}
-              onMouseLeave={() => setIsDropdownOpen(false)}
-            >
-              <a
-                href="#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
+            {user && (
+              <div
+                className="relative pb-1"
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
               >
-                Categories ↓
-              </a>
-              {isDropdownOpen && (
-                <div className="absolute z-10 mt-1 bg-white rounded-md shadow-lg w-48">
-                  <Link
-                    href="/electronics"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Electronics
-                  </Link>
-                  <Link
-                    href="/fashion"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Fashion
-                  </Link>
-                  <Link
-                    href="/garden"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Home & Garden
-                  </Link>
-                  <Link
-                    href="/beauty"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Beauty
-                  </Link>
-                  <Link
-                    href="/automotive"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Automotive
-                  </Link>
-                  <Link
-                    href="/food"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Food & Groceries
-                  </Link>
-                  <Link
-                    href="/sports"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Sports
-                  </Link>
-                  <Link
-                    href="/others"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Others
-                  </Link>
-                </div>
-              )}
-            </div>}
+                <a
+                  href="#"
+                  className="text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  Categories ↓
+                </a>
+                {isDropdownOpen && (
+                  <div className="absolute z-10 mt-1 bg-white rounded-md shadow-lg w-48">
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Electronics")}
+                    >
+                      Electronics
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Fashion")}
+                    >
+                      Fashion
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Home & Garden")}
+                    >
+                      Home & Garden
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Beauty")}
+                    >
+                      Beauty
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Automotive")}
+                    >
+                      Automotive
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Food & Groceries")}
+                    >
+                      Food & Groceries
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Sports")}
+                    >
+                      Sports
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Others")}
+                    >
+                      Others
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
             <Link
               href="/about"
               className="text-base font-medium text-gray-500 hover:text-gray-900"
             >
               About Us
             </Link>
-            {user && <Link
-              href="/sell"
-              className="text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              Sell Products
-            </Link>}
+            {user && (
+              <Link
+                href="/sell"
+                className="text-base font-medium text-gray-500 hover:text-gray-900"
+              >
+                Sell Products
+              </Link>
+            )}
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-
-            {/* Show Welcome and logout or sign in according to the user object */}
             {user ? (
               <>
                 <span className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
@@ -155,4 +161,3 @@ function Header() {
 }
 
 export default Header;
-
