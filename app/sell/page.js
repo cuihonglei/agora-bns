@@ -10,6 +10,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { uploadProductImages } from '../_services/storage-service';
 import { addProduct } from '../_services/product-service';
 import { addUserProduct } from '../_services/user-service';
+import Image from 'next/image';
 
 export default function Sell() {
   const { user } = useUserAuth();
@@ -23,11 +24,16 @@ export default function Sell() {
     images: [], // Ensure this is always an array
   });
 
+  const [imagePreviews, setImagePreviews] = useState([]);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'images') {
-      console.log(files); // Debugging log
-      setFormData({ ...formData, images: Array.from(files) }); // Ensure files are converted to an array
+      const fileArray = Array.from(files);
+      setFormData({ ...formData, images: fileArray });
+
+      const previewArray = fileArray.map(file => URL.createObjectURL(file));
+      setImagePreviews(previewArray);
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -78,6 +84,7 @@ export default function Sell() {
 
       alert('Product added successfully!');
       setFormData({ name: '', description: '', price: '', category: '', condition: '', images: [] });
+      setImagePreviews([]); // Clear the image previews
     } catch (error) {
       console.error("Error adding product: ", error);
       alert('Error adding product. Please try again.');
@@ -202,6 +209,19 @@ export default function Sell() {
                   onChange={handleChange}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm leading-tight text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                 />
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="w-20 h-20 relative">
+                      <Image
+                        src={preview}
+                        alt={`Preview ${index}`}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-md"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Submit Button */}
