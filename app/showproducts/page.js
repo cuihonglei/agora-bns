@@ -1,10 +1,14 @@
+/*
+This page allows us to delete 8 category pages and just use a single page
+to display products based on the category selected by the user. 
+*/
+
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation'; // Correct hook for accessing query parameters
-
+import { useSearchParams } from 'next/navigation'; 
 import Header from '../components/header';
 import Footer from '../components/footer';
 

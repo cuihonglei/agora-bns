@@ -25,6 +25,11 @@ function Header() {
     }
   };
 
+  /*
+  Function to handle category selection.
+  This function is called whenever the user selects a category from the dropdown menu
+  and redirects the user to the 'showproducts' page with the selected category as a query parameter.
+  */
   const handleCategorySelect = (category) => {
     const url = new URL('/showproducts', window.location.href);
     url.searchParams.set('category', category);
@@ -58,6 +63,20 @@ function Header() {
                     <a
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Automotive")}
+                    >
+                      Automotive
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Beauty")}
+                    >
+                      Beauty
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => handleCategorySelect("Electronics")}
                     >
                       Electronics
@@ -72,30 +91,16 @@ function Header() {
                     <a
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleCategorySelect("Food and Groceries")}
+                    >
+                      Food & Groceries
+                    </a>
+                    <a
+                      href="#"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => handleCategorySelect("Home & Garden")}
                     >
                       Home & Garden
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Beauty")}
-                    >
-                      Beauty
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Automotive")}
-                    >
-                      Automotive
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Food & Groceries")}
-                    >
-                      Food & Groceries
                     </a>
                     <a
                       href="#"
