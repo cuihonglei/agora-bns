@@ -7,8 +7,10 @@ import Link from 'next/link';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
+import 
 
 import { db } from '../_utils/firebase';
+
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
 function ShowProducts() {

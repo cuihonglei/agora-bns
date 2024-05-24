@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
+import FloatingChatWidget from '../FloatingChatWidget';
 
 import { db } from '../_utils/firebase';
 import { collection, getDocs } from 'firebase/firestore';
@@ -37,7 +38,6 @@ function ShowProducts() {
       </Head>
 
       <Header />
-
       <main className="bg-white pt-24 pb-12 flex-grow ">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-center mb-6 text-black pt-20">Available Products</h1>
@@ -57,6 +57,7 @@ function ShowProducts() {
               </div>
             ))}
           </div>
+          
           <div className="text-center mt-8">
             <Link href="/account" className="text-blue-600 hover:text-blue-800 font-semibold">
               ← Back to Home
@@ -64,8 +65,8 @@ function ShowProducts() {
           </div>
         </div>
       </main>
-
       <Footer />
+      <FloatingChatWidget />
     </>
   );
 }
