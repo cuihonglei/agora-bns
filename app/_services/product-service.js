@@ -4,18 +4,12 @@ import { db } from "../_utils/firebase"
 // Add a product to firebase database.
 // @param userId, the user who add the product.
 // @return the product ID.
-export const addProduct = async (userId, name, description, price, category, condition, imageUrl) => {
-
-    const docRef = await addDoc(collection(db, "products"), {
-      userId,
-      date: Date.now(),
-      name,
-      description,
-      price: Number(price),
-      category,
-      condition,
-      imageUrl, // Store image URL in Firestore
-    });
+export const addProduct = async (productData) => {
+  const docRef = await addDoc(collection(db, "products"), {
+    ...productData,
+    date: Date.now(),
+    price: Number(productData.price), // Ensure price is a number
+  });
 
     return docRef.id;
 };
