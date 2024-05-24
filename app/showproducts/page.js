@@ -5,7 +5,7 @@ to display products based on the category selected by the user.
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation'; 
@@ -88,4 +88,12 @@ function ShowProducts() {
   );
 }
 
-export default ShowProducts;
+function ShowProductsEx() {
+  return (
+    <Suspense>
+      <ShowProducts />
+    </Suspense>
+  )
+}
+
+export default ShowProductsEx;
