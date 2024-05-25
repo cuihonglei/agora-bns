@@ -5,7 +5,7 @@ to display products based on the category selected by the user.
 
 "use client";
 
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, Suspense } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation'; 
@@ -18,7 +18,7 @@ import { db } from '../_utils/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 
-function ShowProductsEx() {
+function ShowProducts() {
   const searchParams = useSearchParams(); // Get search parameters
   const category = searchParams.get('category'); // Get the 'category' parameter
   const [products, setProducts] = useState([]);
@@ -160,6 +160,14 @@ function ShowProductsEx() {
       <Footer />
     </>
   );
+}
+
+function ShowProductsEx() {
+  return (
+    <Suspense>
+      <ShowProducts />
+    </Suspense>
+  )
 }
 
 export default ShowProductsEx;
