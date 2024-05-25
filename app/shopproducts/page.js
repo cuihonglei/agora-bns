@@ -8,15 +8,18 @@ import Image from 'next/image';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
-
-import { db } from '../_utils/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { getProducts } from '../_services/product-service'; // Import the getProducts function
 
 function ShowProducts() {
   const [products, setProducts] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [lastDocs, setLastDocs] = useState([]);
+
+  const pageSize = 8;
 
   useLayoutEffect(() => {
     if (typeof window !== 'undefined' && document.querySelector('#__next')) {
@@ -26,20 +29,14 @@ function ShowProducts() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        const productList = [];
-        querySnapshot.forEach((doc) => {
-          productList.push({ id: doc.id, ...doc.data() });
-        });
-        setProducts(productList);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
+      const { products, lastDocs: newLastDocs, totalPages } = await getProducts(currentPage, pageSize, lastDocs);
+      setProducts(products);
+      setLastDocs(newLastDocs);
+      setTotalPages(totalPages);
     };
 
     fetchProducts();
-  }, []);
+  }, [currentPage]);
 
   const openModal = (images) => {
     setSelectedImages(images);
@@ -58,6 +55,10 @@ function ShowProducts() {
 
   const showPreviousImage = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + selectedImages.length) % selectedImages.length);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -95,6 +96,17 @@ function ShowProducts() {
                   )}
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={`px-4 py-2 mx-1 ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+              >
+                {index + 1}
+              </button>
             ))}
           </div>
           <div className="text-center mt-8">
