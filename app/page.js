@@ -3,20 +3,14 @@
 import Head from 'next/head';
 import Header from './components/header';
 import Footer from './components/footer';
-import { useUserAuth } from './_utils/auth-context';
 import FloatingChatWidget from './FloatingChatWidget';
 
 
 const Home = () => {
-  // Use the useUserAuth hook to get the user object and the logout function
-  const { firebaseSignIn } = useUserAuth();
-
   // Sign in to Firebase with authentication
-  const handleSignIn = async () => {
-    await firebaseSignIn();
-
-    // Redirect to the account page.
-    window.location.href = '/account';
+  const handleSignIn = () => {
+    // Redirect to the login page.
+    window.location.href = '/login';
   };
   return (
     <>

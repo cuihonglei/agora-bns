@@ -8,18 +8,17 @@ import { useUserAuth } from '../_utils/auth-context';
 
 function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { user, firebaseSignIn, firebaseSignOut } = useUserAuth();
+  const { user, firebaseSignOut } = useUserAuth();
   const router = useRouter();
 
-  const handleSignIn = async () => {
-    await firebaseSignIn();
-    window.location.href = '/account';
+  const handleSignIn = () => {
+    window.location.href = '/login';
   };
 
   const handleSignOut = async () => {
     try {
       await firebaseSignOut();
-      window.location.href = '/';
+      window.location.href = '/login';
     } catch (error) {
       console.error("Error signing out:", error);
     }
