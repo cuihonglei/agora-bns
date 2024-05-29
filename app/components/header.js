@@ -138,7 +138,8 @@ function Header() {
             {user ? (
               <>
                 <span className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-                  {`Welcome, ${user.displayName}`}
+                  {/* TODO get name from the database if there is no displayName, - login with Email. */}
+                  {user.displayName ? `Welcome, ${user.displayName}` : 'Welcome!'}
                 </span>
                 <button
                   onClick={handleSignOut}
