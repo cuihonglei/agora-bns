@@ -3,9 +3,8 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Head from 'next/head';
-import Link from 'next/link';
 import Image from 'next/image';
 
 import Header from '../components/header';
@@ -22,6 +21,8 @@ function ProductDetails() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(0);
+  const category = searchParams.get('category');
+  const router = useRouter();  // Initialize useRouter
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -60,6 +61,7 @@ function ProductDetails() {
       setRating(0);
     }
   };
+  
 
   if (!product) return <div className="text-center mt-20">Loading...</div>;
 
@@ -105,9 +107,12 @@ function ProductDetails() {
                   ))}
                 </div>
                 <div className="mt-6">
-                  <Link href="/showproducts" className="text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center">
+                  <button 
+                    onClick={() => router.back()} 
+                    className="text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center"
+                  >
                     ← Back to Products
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
