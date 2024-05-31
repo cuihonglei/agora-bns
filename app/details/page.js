@@ -12,6 +12,7 @@ import Footer from '../components/footer';
 
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { addComment, getComments } from '../_services/comment-service';
 
 function ProductDetails() {
   const searchParams = useSearchParams();
@@ -34,6 +35,8 @@ function ProductDetails() {
           const productData = { id: docSnap.id, ...docSnap.data() };
           setProduct(productData);
           setMainImage(productData.imageUrls[0]);
+          const productComments = await getComments(productData.id);
+          setComments(productComments || []);
         } else {
           console.log("No such document!");
         }
@@ -49,16 +52,21 @@ function ProductDetails() {
     setMainImage(url);
   };
 
-  const handleCommentSubmit = () => {
+  const handleCommentSubmit = async () => {
     if (newComment.trim()) {
       const newCommentObject = {
         text: newComment,
         rating: rating,
         date: new Date().toLocaleString()
       };
-      setComments([...comments, newCommentObject]);
-      setNewComment('');
-      setRating(0);
+      const commentId = await addComment(id, newCommentObject);
+      if (commentId) {
+        setComments([...comments, { id: commentId, ...newCommentObject }]);
+        setNewComment('');
+        setRating(0);
+      } else {
+        console.error("Failed to add comment");
+      }
     }
   };
   
@@ -119,7 +127,7 @@ function ProductDetails() {
             <div className="mt-8">
               <h2 className="text-2xl font-bold text-gray-800">Comments and Ratings</h2>
               <div className="mt-4">
-                {comments.map((comment, index) => (
+              {comments.map((comment, index) => (
                   <div key={index} className="mb-4 p-4 border rounded-lg shadow-sm">
                     <p className="text-sm text-gray-600">{comment.date}</p>
                     <p className="text-lg text-gray-800">{comment.text}</p>
