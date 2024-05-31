@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter} from "firebase/firestore";
+import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter, where} from "firebase/firestore";
 import { db } from "../_utils/firebase"
 
 // Add a product to firebase database.
@@ -46,11 +46,45 @@ export const getProducts = async (currentPage = 1, pageSize = 8, lastDocsSnapsho
 
 // Get products by category.
 // TODO pagination
-export const getProductsByCategory = async (category) => {
-  // TODO
 
-  return [];
+export const getProductsByCategory = async (category, currentPage = 1, pageSize = 8, lastDoc = null) => {
+  const productsCollection = collection(db, 'products');
+  let q = query(
+    productsCollection,
+    where('category', '==', category),
+    orderBy('date', 'desc'),
+    limit(pageSize)
+  );
+
+  if (lastDoc) {
+    q = query(
+      productsCollection,
+      where('category', '==', category),
+      orderBy('date', 'desc'),
+      startAfter(lastDoc),
+      limit(pageSize)
+    );
+  }
+
+  const querySnapshot = await getDocs(q);
+  const products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const newLastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+  const totalCountQuery = query(productsCollection, where('category', '==', category));
+  const totalCountSnapshot = await getDocs(totalCountQuery);
+  const totalPages = Math.ceil(totalCountSnapshot.docs.length / pageSize);
+
+  return { products, lastDoc: newLastDoc, totalPages };
 };
+
+
+
+
+
+
+
+
+
 
 // Get products under a specific user.
 // TODO pagination
