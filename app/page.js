@@ -3,7 +3,6 @@
 import Head from 'next/head';
 import Header from './components/header';
 import Footer from './components/footer';
-import FloatingChatWidget from './FloatingChatWidget';
 
 
 const Home = () => {
@@ -44,7 +43,6 @@ const Home = () => {
         </div>
       </main>
       <Footer />
-      <FloatingChatWidget />
     </>
   );
 }

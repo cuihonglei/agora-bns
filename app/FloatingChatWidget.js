@@ -1,34 +1,6 @@
-// FloatingChatWidget.js
-
-import React, { useState } from 'react';
-
+import React from 'react';
+//  this code is no longer need , I have implemented this code in the main header function.
 const FloatingChatWidget = () => {
-  const [clickCount, setClickCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-
-  const toggleVisibility = () => {
-    setClickCount(clickCount + 1);
-
-    if (clickCount === 0) {
-      setIsVisible(true);
-    } else if (clickCount === 1) {
-      setIsVisible(false);
-    } 
-  };
-
-  const getButtonText = () => {
-    switch (clickCount) {
-      case 0:
-        return 'Support';
-      case 1:
-        return 'Close Support';
-      default:
-        setIsVisible(true); // Show the button again
-        setClickCount(0); // Reset click count
-        return 'Support'; // Return default button text
-    }
-  };
-  
 
   const loadBotpressWebchat = () => {
     // Load Botpress webchat scripts
@@ -45,18 +17,14 @@ const FloatingChatWidget = () => {
 
   return (
     <div className="fixed bottom-4 left-4">
-      {isVisible && (
-        <div className="chat-widget">
-          {loadBotpressWebchat()}
-        </div>
-      )}
-      <button className="bg-green-600 text-white px-4 py-2 rounded-full shadow-lg" onClick={toggleVisibility}>
-        {getButtonText()}
-      </button>
+      <div className="chat-widget">
+        {loadBotpressWebchat()}
+      </div>
     </div>
   );
 };
 
 export default FloatingChatWidget;
+
 
 

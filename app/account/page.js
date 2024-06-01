@@ -41,7 +41,6 @@ function AccountPage() {
           </div>
         </div>
         <FeaturedCategories />
-        <FloatingChatWidget />
 
       </main>
 

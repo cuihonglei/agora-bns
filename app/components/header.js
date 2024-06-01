@@ -1,15 +1,11 @@
-"use client";
-
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useUserAuth } from '../_utils/auth-context';
 
 function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user, firebaseSignOut } = useUserAuth();
-  const router = useRouter();
 
   const handleSignIn = () => {
     window.location.href = '/login';
@@ -24,15 +20,19 @@ function Header() {
     }
   };
 
-  /*
-  Function to handle category selection.
-  This function is called whenever the user selects a category from the dropdown menu
-  and redirects the user to the 'showproducts' page with the selected category as a query parameter.
-  */
   const handleCategorySelect = (category) => {
-    const url = new URL('/showproducts', window.location.href);
-    url.searchParams.set('category', category);
-    router.push(url.toString());
+    // Your category selection logic here
+  };
+  const handleSupportClick = () => {
+    const injectScript = document.createElement('script');
+    injectScript.src = 'https://cdn.botpress.cloud/webchat/v1/inject.js';
+    injectScript.async = true;
+    document.head.appendChild(injectScript);
+
+    const configScript = document.createElement('script');
+    configScript.src = 'https://mediafiles.botpress.cloud/eacbf454-69c0-4f33-8a92-f53059a128af/webchat/config.js';
+    configScript.defer = true;
+    document.head.appendChild(configScript);
   };
 
   return (
@@ -45,6 +45,12 @@ function Header() {
             </Link>
           </div>
           <nav className="hidden md:flex space-x-10">
+            <button
+              className="text-base font-medium text-gray-500 hover:text-gray-900"
+              onClick={handleSupportClick} // Use router.push for navigation
+            >
+              Support
+            </button>
             {user && (
               <div
                 className="relative pb-1"
@@ -59,72 +65,11 @@ function Header() {
                 </a>
                 {isDropdownOpen && (
                   <div className="absolute z-10 mt-1 bg-white rounded-md shadow-lg w-48">
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Automotive")}
-                    >
-                      Automotive
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Beauty")}
-                    >
-                      Beauty
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Electronics")}
-                    >
-                      Electronics
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Fashion")}
-                    >
-                      Fashion
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Food and Groceries")}
-                    >
-                      Food & Groceries
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Home & Garden")}
-                    >
-                      Home & Garden
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Sports")}
-                    >
-                      Sports
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleCategorySelect("Others")}
-                    >
-                      Others
-                    </a>
+                    {/* Category Links */}
                   </div>
                 )}
               </div>
             )}
-            <Link
-              href="/about"
-              className="text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              About Us
-            </Link>
             {user && (
               <Link
                 href="/sell"
@@ -133,12 +78,18 @@ function Header() {
                 Sell Products
               </Link>
             )}
+            <Link
+              href="/about"
+              className="text-base font-medium text-gray-500 hover:text-gray-900"
+            >
+              About Us
+            </Link>
+            
           </nav>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             {user ? (
               <>
                 <span className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-                  {/* TODO get name from the database if there is no displayName, - login with Email. */}
                   {user.displayName ? `Welcome, ${user.displayName}` : 'Welcome!'}
                 </span>
                 <button
@@ -166,3 +117,5 @@ function Header() {
 }
 
 export default Header;
+
+
