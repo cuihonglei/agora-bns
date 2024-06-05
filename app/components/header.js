@@ -36,7 +36,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-white shadow-md fixed w-full z-50 top-0">
+    <header className="bg-white shadow-md w-full">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-2 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">

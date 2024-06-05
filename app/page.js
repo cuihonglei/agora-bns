@@ -18,7 +18,7 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className="mt-20"> {/* Adjust margin top to accommodate fixed header */}
+      <main> {/* Adjust margin top to accommodate fixed header */}
         {/* Hero section */}
         <div className="relative overflow-hidden">
           <div className="inset-0 z-0">

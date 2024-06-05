@@ -20,7 +20,7 @@ function AccountPage() {
 
       <Header />
 
-      <main className="mt-20"> {/* Adjust margin top to accommodate fixed header */}
+      <main>
         {/* Hero section */}
         <div className="relative overflow-hidden">
           <div className="absolute inset-0 z-0">
