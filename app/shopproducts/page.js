@@ -11,11 +11,12 @@ import { getProducts } from '../_services/product-service';
 import { sortProductsByPrice } from '../components/price-filter';
 
 function ShowProducts() {
+
+  const [sortOrder, setSortOrder] = useState('desc'); // State for sorting order
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [lastDocs, setLastDocs] = useState([]);
-  const [sortOrder, setSortOrder] = useState('desc'); // State for sorting order
 
   const pageSize = 8;
 

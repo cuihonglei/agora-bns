@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query } from "firebase/firestore";
+import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter} from "firebase/firestore";
 import { db } from "../_utils/firebase"
 
 // Add a product to firebase database.
@@ -16,12 +16,33 @@ export const addProduct = async (productData) => {
 
 // Get all products.
 // TODO pagination
-export const getProducts = async () => {
+export const getProducts = async (currentPage = 1, pageSize = 8, lastDocsSnapshot = []) => {
+  try {
+    const productsCollection = collection(db, "products");
+    let q = query(productsCollection, orderBy("date"), limit(pageSize));
+    let lastVisibleDoc = null;
 
-  // TODO
+    if (currentPage > 1 && lastDocsSnapshot[currentPage - 2]) {
+      lastVisibleDoc = lastDocsSnapshot[currentPage - 2];
+      q = query(productsCollection, orderBy("date"), startAfter(lastVisibleDoc), limit(pageSize));
+    }
 
-  return [];
+    const querySnapshot = await getDocs(q);
+    const productList = [];
+    querySnapshot.forEach((doc) => {
+      productList.push({ id: doc.id, ...doc.data() });
+    });
+
+    const newLastDocs = [...lastDocsSnapshot];
+    newLastDocs[currentPage - 1] = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+    return { products: productList, lastDocs: newLastDocs, totalPages: Math.ceil(querySnapshot.size / pageSize) };
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return { products: [], lastDocs: [], totalPages: 0 };
+  }
 };
+
 
 // Get products by category.
 // TODO pagination
