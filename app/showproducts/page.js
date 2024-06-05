@@ -86,7 +86,6 @@ function ShowProducts() {
           </div>
         </div>
       </main>
-
       <Footer />
     </>
   );
