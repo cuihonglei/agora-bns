@@ -3,7 +3,6 @@
 import Head from 'next/head';
 import Header from './components/header';
 import Footer from './components/footer';
-import Chatbot from './chatbot/chatbot';
 
 const Home = () => {
   // Sign in to Firebase with authentication
@@ -17,9 +16,10 @@ const Home = () => {
         <title>Agora BNS - Buy and Sell Marketplace</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      
       <Header />
-      <main> {/* Adjust margin top to accommodate fixed header */}
-        {/* Hero section */}
+
+      <main>
         <div className="relative overflow-hidden">
           <div className="inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-r from-purple-800 to-indigo-700 mix-blend-multiply"></div>
@@ -43,7 +43,6 @@ const Home = () => {
         </div>
       </main>
       <Footer />
-      < Chatbot/>
     </>
   );
 }

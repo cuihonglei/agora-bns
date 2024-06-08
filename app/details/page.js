@@ -11,7 +11,6 @@ import Footer from '../components/footer';
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addComment, getComments } from '../_services/comment-service';
-import Chatbot from '../chatbot/chatbot';
 
 function ProductDetails() {
   const searchParams = useSearchParams();
@@ -168,7 +167,6 @@ function ProductDetails() {
       </main>
 
       <Footer />
-      <Chatbot/>
     </>
   );
 }

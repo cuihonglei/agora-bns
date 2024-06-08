@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from '../components/header';
 import Footer from '../components/footer';
-import Chatbot from '../chatbot/chatbot';
 
 import { getProducts } from '../_services/product-service';
 import { sortProductsByPrice } from '../components/price-filter';
@@ -109,7 +108,6 @@ function ShowProducts() {
       </main>
 
       <Footer />
-      <Chatbot />
     </>
   );
 }
