@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 function FeaturedCategories() {
 
@@ -14,10 +15,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Electronics")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/elect_thumb.jpg"
                   alt="Electronics"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -30,10 +33,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Fashion")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/clothing_thumb.jpg"
                   alt="Fashion"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -46,10 +51,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Home & Garden")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/home_thumb.jpg"
                   alt="Home & Garden"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -62,10 +69,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Beauty")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/beauty_thumb.jpg"
                   alt="Beauty"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -78,10 +87,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Automotive")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/auto_thumb.jpg"
                   alt="Automotive"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -94,10 +105,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Food and Groceries")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/food_thumb.jpg"
                   alt="Food & Groceries"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -110,10 +123,12 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Sports")}>
               <div className="w-full h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75">
-                <img
+                <Image
                   src="/image/sports.jpg"
                   alt="Sports"
                   className="w-full h-full object-center object-cover"
+                  width={250}
+                  height={250}
                 />
               </div>
             </Link>
@@ -126,7 +141,7 @@ function FeaturedCategories() {
           <div className="group relative">
             <Link href={getCategoryUrl("Others")}>
               <div className="w-full h-80 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 bg-white">
-                <img
+                <Image
                   src="/image/agoralogo.jpg"
                   alt="Others"
                   className="object-center ml-5 pb-10 mt-5 pt-10"

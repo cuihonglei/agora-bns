@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 
 import { useUserAuth } from "app/_utils/auth-context";
 import { uploadProductImages } from "../_services/storage-service";
@@ -292,7 +293,7 @@ export default function Sell() {
                 />
                 <div className="mt-2 flex space-x-2">
                   {imagePreviews.map((src, index) => (
-                    <img
+                    <Image
                       key={index}
                       src={src}
                       alt={`Preview ${index}`}
