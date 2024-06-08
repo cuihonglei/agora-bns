@@ -20,12 +20,8 @@ function AccountPage() {
       <Header />
 
       <main>
-        {/* Hero section */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-800 to-indigo-700 mix-blend-multiply"></div>
-          </div>
-          <div className="relative z-10 text-center py-16 lg:py-32">
+        <div className="bg-gradient-to-r from-purple-800 to-indigo-700 flex flex-col justify-center items-center text-center py-16 lg:py-32">
+          <div>
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
               Discover Amazing Products
             </h1>
@@ -33,12 +29,15 @@ function AccountPage() {
               Explore the best products from various categories all in one place.
             </p>
             <div className="mt-10">
-              <Link href="/shopproducts" className="inline-block bg-indigo-600 text-white px-5 py-3 rounded-lg shadow-lg text-base font-medium hover:bg-indigo-700">
-                Shop Products
-              </Link>
+              <div className="mt-10">
+                <Link href="/shopproducts" className="inline-block bg-indigo-600 text-white px-5 py-3 rounded-lg shadow-lg text-base font-medium hover:bg-indigo-700">
+                  Shop Products
+                </Link>
+              </div>
             </div>
           </div>
         </div>
+
         <FeaturedCategories />
       </main>
 

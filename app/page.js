@@ -16,15 +16,12 @@ const Home = () => {
         <title>Agora BNS - Buy and Sell Marketplace</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
+
       <Header />
 
       <main>
-        <div className="relative overflow-hidden">
-          <div className="inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-800 to-indigo-700 mix-blend-multiply"></div>
-          </div>
-          <div className="relative z-10 text-center py-16 lg:py-32">
+        <div className="bg-gradient-to-r from-purple-800 to-indigo-700 flex flex-col justify-center items-center text-center py-16 lg:py-32">
+          <div>
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
               Discover Amazing Products
             </h1>
