@@ -36,7 +36,6 @@ function ShowProducts() {
   const handleSortChange = (event) => {
     setSortOrder(event.target.value); // Update sorting order state
     setCurrentPage(1); // Reset to first page on sort change
-    setLastDocs([]); // Clear last document snapshots on sort change
   };
 
   return (
