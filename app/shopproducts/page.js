@@ -16,22 +16,20 @@ function ShowProducts() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [lastDocs, setLastDocs] = useState([]);
 
   const pageSize = 8;
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const { products, lastDocs: newLastDocs, totalPages } = await getProducts(currentPage, pageSize, lastDocs);
+      const { products, totalPages } = await getProducts(currentPage, pageSize, sortOrder);
       setProducts(products);
-      setLastDocs(newLastDocs);
       setTotalPages(totalPages);
     };
 
     fetchProducts();
   }, [currentPage, sortOrder]); // Include sortOrder in dependency array
 
-  const handlePageChange = (page) => {
+  const handlePageChange = async (page) => {
     setCurrentPage(page);
   };
 
@@ -115,3 +113,4 @@ function ShowProducts() {
 }
 
 export default ShowProducts;
+

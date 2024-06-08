@@ -1,8 +1,3 @@
-/*
-This page allows us to delete 8 category pages and just use a single page
-to display products based on the category selected by the user. 
-*/
-
 "use client";
 
 import React, { useState, useEffect, Suspense } from 'react';
@@ -13,25 +8,25 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
-import { db } from '../_utils/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { getProductsByCategory } from '../_services/product-service'; // Adjust the import path as necessary
 import Image from 'next/image';
 
 function ShowProducts() {
   const searchParams = useSearchParams(); // Get search parameters
   const category = searchParams.get('category'); // Get the 'category' parameter
+  const [sortOrder, setSortOrder] = useState('desc'); // State for sorting order
   const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const pageSize = 8;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const q = query(collection(db, 'products'), where('category', '==', category));
-        const querySnapshot = await getDocs(q);
-        const productList = [];
-        querySnapshot.forEach((doc) => {
-          productList.push({ id: doc.id, ...doc.data() });
-        });
-        setProducts(productList);
+        const { products, totalPages } = await getProductsByCategory(category, currentPage, pageSize, sortOrder);
+        setProducts(products);
+        setTotalPages(totalPages);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -40,7 +35,16 @@ function ShowProducts() {
     if (category) {
       fetchProducts();
     }
-  }, [category]);
+  }, [category, currentPage, sortOrder]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value); // Update sorting order state
+    setCurrentPage(1); // Reset to first page on sort change
+  };
 
   return (
     <>
@@ -53,6 +57,18 @@ function ShowProducts() {
       <main className="bg-white pt-24 pb-12 flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold text-center mb-6 text-black pt-20">Available Products</h1>
+          <div className="text-center mb-6">
+            <label htmlFor="sort" className="mr-2 text-black">Sort by Price:</label>
+            <select
+              id="sort"
+              value={sortOrder}
+              onChange={handleSortChange}
+              className="border px-4 py-2 rounded-lg"
+            >
+              <option value="desc">Highest to Lowest</option>
+              <option value="asc">Lowest to Highest</option>
+            </select>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map(product => (
               <div key={product.id} className="border rounded-lg shadow-lg overflow-hidden">
@@ -77,6 +93,17 @@ function ShowProducts() {
                   )}
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={`px-4 py-2 mx-1 ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+              >
+                {index + 1}
+              </button>
             ))}
           </div>
           <div className="text-center mt-8">

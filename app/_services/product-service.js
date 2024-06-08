@@ -1,5 +1,6 @@
-import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter} from "firebase/firestore";
+import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter, where} from "firebase/firestore";
 import { db } from "../_utils/firebase"
+import { sortProductsByPrice } from '../components/price-filter.js'; // Ensure the correct import path
 
 // Add a product to firebase database.
 // @param userId, the user who add the product.
@@ -11,21 +12,48 @@ export const addProduct = async (productData) => {
     price: Number(productData.price), // Ensure price is a number
   });
 
-    return docRef.id;
+  return docRef.id;
 };
 
 // Get all products.
-// TODO pagination
-export const getProducts = async (currentPage = 1, pageSize = 8, lastDocsSnapshot = []) => {
+export const getProducts = async (currentPage = 1, pageSize = 8, sortOrder = 'desc') => {
   try {
     const productsCollection = collection(db, "products");
-    let q = query(productsCollection, orderBy("date"), limit(pageSize));
-    let lastVisibleDoc = null;
 
-    if (currentPage > 1 && lastDocsSnapshot[currentPage - 2]) {
-      lastVisibleDoc = lastDocsSnapshot[currentPage - 2];
-      q = query(productsCollection, orderBy("date"), startAfter(lastVisibleDoc), limit(pageSize));
-    }
+    const q = query(productsCollection);
+    const querySnapshot = await getDocs(q);
+    const productList = [];
+    querySnapshot.forEach((doc) => {
+      productList.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Sort products by price using the sortProductsByPrice function
+    const sortedProducts = sortProductsByPrice(productList, sortOrder);
+
+    // Calculate the starting index for the current page
+    const startIndex = (currentPage - 1) * pageSize;
+    // Extract products for the current page based on startIndex and pageSize
+    const currentPageProducts = sortedProducts.slice(startIndex, startIndex + pageSize);
+
+    return { 
+      products: currentPageProducts, 
+      totalPages: Math.ceil(sortedProducts.length / pageSize)
+    };
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return { products: [], totalPages: 0 };
+  }
+};
+
+// Get products by category.
+export const getProductsByCategory = async (category, currentPage = 1, pageSize = 8, sortOrder = 'desc') => {
+  try {
+    const productsCollection = collection(db, "products");
+
+    const q = query(
+      productsCollection,
+      where("category", "==", category)
+    );
 
     const querySnapshot = await getDocs(q);
     const productList = [];
@@ -33,23 +61,22 @@ export const getProducts = async (currentPage = 1, pageSize = 8, lastDocsSnapsho
       productList.push({ id: doc.id, ...doc.data() });
     });
 
-    const newLastDocs = [...lastDocsSnapshot];
-    newLastDocs[currentPage - 1] = querySnapshot.docs[querySnapshot.docs.length - 1];
+    // Sort products by price using the sortProductsByPrice function
+    const sortedProducts = sortProductsByPrice(productList, sortOrder);
 
-    return { products: productList, lastDocs: newLastDocs, totalPages: Math.ceil(querySnapshot.size / pageSize) };
+    // Calculate the starting index for the current page
+    const startIndex = (currentPage - 1) * pageSize;
+    // Extract products for the current page based on startIndex and pageSize
+    const currentPageProducts = sortedProducts.slice(startIndex, startIndex + pageSize);
+
+    return { 
+      products: currentPageProducts, 
+      totalPages: Math.ceil(sortedProducts.length / pageSize)
+    };
   } catch (error) {
     console.error("Error fetching products:", error);
-    return { products: [], lastDocs: [], totalPages: 0 };
+    return { products: [], totalPages: 0 };
   }
-};
-
-
-// Get products by category.
-// TODO pagination
-export const getProductsByCategory = async (category) => {
-  // TODO
-
-  return [];
 };
 
 // Get products under a specific user.
