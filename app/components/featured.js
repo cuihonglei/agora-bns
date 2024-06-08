@@ -1,12 +1,9 @@
-import React from 'react';
 import Link from 'next/link';
 
 function FeaturedCategories() {
 
   const getCategoryUrl = (category) => {
-    const url = new URL('/showproducts', window.location.href);
-    url.searchParams.set('category', category);
-    return url.href;
+    return `/showproducts?category=${encodeURIComponent(category)}`;
   }
 
   return (
