@@ -1,17 +1,16 @@
 "use client";
 
 import { useState } from "react";
+
 import Head from "next/head";
 import Link from "next/link";
+
 import { useUserAuth } from "app/_utils/auth-context";
-import { storage, auth, db } from "../_utils/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
 import { uploadProductImages } from "../_services/storage-service";
 import { addProduct } from "../_services/product-service";
 import { addUserProduct } from "../_services/user-service";
-import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Sell() {
