@@ -13,6 +13,7 @@ import { addUserProduct } from "../_services/user-service";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Chatbot from '../chatbot/chatbot';
 
 export default function Sell() {
   const { user } = useUserAuth();
@@ -317,6 +318,7 @@ export default function Sell() {
           </div>
         </div>
       </div>
+      <Chatbot />
     </>
   );
 }
