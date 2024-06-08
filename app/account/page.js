@@ -8,6 +8,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import FeaturedCategories from '../components/featured';
 import FloatingChatWidget from 'app/FloatingChatWidget';
+import Chatbot from '../chatbot/chatbot';
 
 function AccountPage() {
 
@@ -41,7 +42,7 @@ function AccountPage() {
           </div>
         </div>
         <FeaturedCategories />
-
+        <Chatbot/>
       </main>
 
       <Footer />

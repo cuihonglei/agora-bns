@@ -3,7 +3,7 @@
 import Head from 'next/head';
 import Header from './components/header';
 import Footer from './components/footer';
-
+import Chatbot from './chatbot/chatbot';
 
 const Home = () => {
   // Sign in to Firebase with authentication
@@ -43,6 +43,7 @@ const Home = () => {
         </div>
       </main>
       <Footer />
+      < Chatbot/>
     </>
   );
 }

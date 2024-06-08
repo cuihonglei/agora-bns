@@ -3,7 +3,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-
+import Chatbot from '../chatbot/chatbot';
 
 function About() {
 
@@ -106,6 +106,7 @@ function About() {
                     </p>
                 </div>
             </footer>
+            <Chatbot />
     </>
   );
 }
