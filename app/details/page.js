@@ -1,5 +1,3 @@
-// app/details/page.js
-
 "use client";
 
 import React, { useEffect, useState, Suspense } from 'react';
@@ -13,7 +11,7 @@ import Footer from '../components/footer';
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addComment, getComments } from '../_services/comment-service';
-import Chatbot from './chatbot/chatbot';
+import Chatbot from '../chatbot/chatbot';
 
 function ProductDetails() {
   const searchParams = useSearchParams();
