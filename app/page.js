@@ -4,6 +4,12 @@ import Head from 'next/head';
 import Header from './components/header';
 import Footer from './components/footer';
 
+// Components for this landing page.
+import Intro from './components/landing/intro';
+import Featured from './components/landing/featured';
+import Testimonials from './components/landing/testimonials';
+import FAQ from './components/landing/faq';
+
 const Home = () => {
   // Sign in to Firebase with authentication
   const handleSignIn = () => {
@@ -18,8 +24,14 @@ const Home = () => {
       </Head>
 
       <Header />
+      <Intro />
+      <Featured />
+      <Testimonials />
+      <FAQ />
+      <Footer />
 
-      <main>
+
+      {/* <main>
         <div className="bg-gradient-to-r from-purple-800 to-indigo-700 flex flex-col justify-center items-center text-center py-16 lg:py-32">
           <div>
             <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
@@ -38,8 +50,8 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+      </main> */}
+      
     </>
   );
 }
