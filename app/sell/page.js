@@ -241,16 +241,14 @@ export default function Sell() {
                     required
                   >
                     <option value="">Select Category</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Home & Garden">Home & Garden</option>
-                    <option value="Beauty">Beauty</option>
-                    <option value="Automotive">Automotive</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Food and Groceries">
-                      Food and Groceries
-                    </option>
-                    <option value="Others">Others</option>
+                    <option value="automotive">Automotive</option>
+                    <option value="beauty">Beauty</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="food-groceries">Food and Groceries</option>
+                    <option value="home-Garden">Home & Garden</option>
+                    <option value="sports">Sports</option>
+                    <option value="others">Others</option>
                   </select>
                 </div>
 
