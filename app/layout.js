@@ -16,7 +16,13 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Script src="https://cdn.botpress.cloud/webchat/v1/inject.js" />
       <body className={inter.className}>
-        <AuthContextProvider>{children}</AuthContextProvider>
+
+        {/* Auth Context */}
+        <AuthContextProvider>
+          {children}
+        </AuthContextProvider>
+
+        {/* Chatbot */}
         <div className="fixed bottom-4 left-4">
           <div className="chat-widget">
             <Script src="https://mediafiles.botpress.cloud/eacbf454-69c0-4f33-8a92-f53059a128af/webchat/config.js" />

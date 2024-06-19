@@ -5,17 +5,13 @@ import Header from './components/header';
 import Footer from './components/footer';
 
 // Components for this landing page.
-import Intro from './components/landing/intro';
-import Featured from './components/landing/featured';
-import Testimonials from './components/landing/testimonials';
-import FAQ from './components/landing/faq';
+import Intro from './components/home/intro';
+import FeaturedProducts from './components/home/featured-products';
+import FeaturedCategories from './components/home/featured-categories';
+import FAQ from './components/home/faq';
 
 const Home = () => {
-  // Sign in to Firebase with authentication
-  const handleSignIn = () => {
-    // Redirect to the login page.
-    window.location.href = '/login';
-  };
+
   return (
     <>
       <Head>
@@ -25,8 +21,8 @@ const Home = () => {
 
       <Header />
       <Intro />
-      <Featured />
-      <Testimonials />
+      <FeaturedProducts />
+      <FeaturedCategories />
       <FAQ />
       <Footer />
 

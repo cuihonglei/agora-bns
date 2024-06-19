@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
-
+import { useRouter } from 'next/navigation';
 import { useUserAuth } from '../_utils/auth-context';
 
 function LoginPage() {
+  
+  const router = useRouter();
+  
   const { user, googleSignIn, githubSignIn, emailPasswordSignIn, emailPasswordSignUp } = useUserAuth();
+
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState('');
 
@@ -70,10 +74,10 @@ function LoginPage() {
 
   useEffect(() => {
     if (user) {
-      // Redirect to a dashboard or another page after login
-      window.location.href = '/account'; // Change '/dashboard' to your target URL
+      // Redirect to the home page.
+      router.push('/');
     }
-  }, [user]); // Depend on user
+  }, [user]);
 
   return (
     <>
