@@ -245,8 +245,8 @@ export default function Sell() {
                     <option value="beauty">Beauty</option>
                     <option value="electronics">Electronics</option>
                     <option value="fashion">Fashion</option>
-                    <option value="food-groceries">Food and Groceries</option>
-                    <option value="home-Garden">Home & Garden</option>
+                    <option value="food-groceries">Food & Groceries</option>
+                    <option value="home-garden">Home & Garden</option>
                     <option value="sports">Sports</option>
                     <option value="others">Others</option>
                   </select>
