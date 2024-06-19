@@ -140,7 +140,7 @@ function Header() {
         </Link>
 
         {/* Menu */}
-        {true && 
+        {user && 
           <div className="flex flex-1">
             <Menu />
           </div>
