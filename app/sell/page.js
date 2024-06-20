@@ -161,7 +161,7 @@ export default function Sell() {
           <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
             <div className="text-center">
               <Link
-                href="/account"
+                href="/showproducts"
                 className="text-indigo-600 hover:text-indigo-800"
               >
                 ← Back to Home

@@ -29,11 +29,9 @@ function AccountPage() {
               Explore the best products from various categories all in one place.
             </p>
             <div className="mt-10">
-              <div className="mt-10">
-                <Link href="/shopproducts" className="inline-block bg-indigo-600 text-white px-5 py-3 rounded-lg shadow-lg text-base font-medium hover:bg-indigo-700">
-                  Shop Products
-                </Link>
-              </div>
+              <Link href="/showproducts" className="inline-block bg-indigo-600 text-white px-5 py-3 rounded-lg shadow-lg text-base font-medium hover:bg-indigo-700">
+                Shop Products
+              </Link>
             </div>
           </div>
         </div>

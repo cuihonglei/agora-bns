@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
-import { getProductsByCategory } from '../_services/product-service'; // Adjust the import path as necessary
+import { getProductsByCategory, getProducts } from '../_services/product-service'; // Adjust the import path as necessary
 import Image from 'next/image';
 
 function ShowProducts() {
@@ -24,7 +24,13 @@ function ShowProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { products, totalPages } = await getProductsByCategory(category, currentPage, pageSize, sortOrder);
+        let result;
+        if (category) {
+          result = await getProductsByCategory(category, currentPage, pageSize, sortOrder);
+        } else {
+          result = await getProducts(currentPage, pageSize, sortOrder);
+        }
+        const { products, totalPages } = result;
         setProducts(products);
         setTotalPages(totalPages);
       } catch (error) {
@@ -32,9 +38,7 @@ function ShowProducts() {
       }
     };
 
-    if (category) {
-      fetchProducts();
-    }
+    fetchProducts();
   }, [category, currentPage, sortOrder]);
 
   const handlePageChange = (page) => {
@@ -107,7 +111,7 @@ function ShowProducts() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link href="/account" className="text-blue-600 hover:text-blue-800 font-semibold">
+            <Link href="/showproducts" className="text-blue-600 hover:text-blue-800 font-semibold">
               ← Back to Home
             </Link>
           </div>
