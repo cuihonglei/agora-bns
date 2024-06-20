@@ -20,7 +20,7 @@ export default function Sell() {
     price: "",
     category: "",
     condition: "",
-    images: [], // Ensure this is always an array
+    images: [],
   });
   const [imagePreviews, setImagePreviews] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -67,7 +67,7 @@ export default function Sell() {
         draggable: true,
         progress: undefined,
       });
-      return; // Return early if form data is invalid
+      return;
     }
     if (!user) {
       console.error("No authenticated user available");
@@ -83,7 +83,6 @@ export default function Sell() {
       return;
     }
     try {
-      console.log("Images to upload:", formData.images); // Debugging log
       const imageUrls = await uploadProductImages(formData.images);
       const productData = {
         name: formData.name,
@@ -91,10 +90,9 @@ export default function Sell() {
         price: formData.price,
         category: formData.category,
         condition: formData.condition,
-        imageUrls: imageUrls,
+        imageUrls,
         userId: user.uid,
       };
-      console.log("Product data:", productData); // Debugging log
       const productId = await addProduct(productData);
       await addUserProduct(user.uid, productId);
       toast.success("Product added successfully!", {
@@ -114,7 +112,7 @@ export default function Sell() {
         condition: "",
         images: [],
       });
-      setImagePreviews([]); // Clear the image previews
+      setImagePreviews([]);
     } catch (error) {
       console.error("Error adding product: ", error);
       toast.error("An error occurred while adding the product. Please try again later.", {
@@ -151,8 +149,8 @@ export default function Sell() {
               ← Back to Home
             </Link>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            List a New Product
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
+            Sell Your Product
           </h2>
           <ToastContainer />
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -251,6 +249,7 @@ export default function Sell() {
                 >
                   <option value="">Select Condition</option>
                   <option value="New">New</option>
+                  <option value="New">Like New</option>
                   <option value="Used">Used</option>
                   <option value="Refurbished">Refurbished</option>
                 </select>
@@ -298,23 +297,12 @@ export default function Sell() {
         </div>
       </div>
 
-      <Modal isOpen={modalIsOpen} 
-        onRequestClose={closeModal} 
-        className="fixed inset-0 flex items-center justify-center z-50" 
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50">
+      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center z-50" overlayClassName="fixed inset-0 bg-black bg-opacity-50">
         <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full relative">
-          <button onClick={closeModal} 
-          className="absolute top-0 right-1 text-gray-700 hover:text-gray-900">
+          <button onClick={closeModal} className="absolute top-0 right-1 text-gray-700 hover:text-gray-900">
             ×
           </button>
-          <Image 
-          src={selectedImage} 
-          alt="Selected Preview" 
-          layout="responsive" 
-          width={800} 
-          height={600} 
-          objectFit="contain" 
-          className="rounded-md" />
+          <Image src={selectedImage} alt="Selected Preview" layout="responsive" width={800} height={600} objectFit="contain" className="rounded-md" />
         </div>
       </Modal>
     </>
