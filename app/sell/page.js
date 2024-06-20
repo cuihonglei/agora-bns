@@ -11,6 +11,8 @@ import { addProduct } from "../_services/product-service";
 import { addUserProduct } from "../_services/user-service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "../components/Header"; // Adjust the path as necessary
+import Footer from "../components/Footer"; // Adjust the path as necessary
 
 export default function Sell() {
   const { user } = useUserAuth();
@@ -65,7 +67,6 @@ export default function Sell() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
       });
       return;
     }
@@ -78,11 +79,11 @@ export default function Sell() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
       });
       return;
     }
     try {
+      console.log("Images to upload:", formData.images); // Debugging log
       const imageUrls = await uploadProductImages(formData.images);
       const productData = {
         name: formData.name,
@@ -93,6 +94,7 @@ export default function Sell() {
         imageUrls,
         userId: user.uid,
       };
+      console.log("Product data:", productData); // Debugging log
       const productId = await addProduct(productData);
       await addUserProduct(user.uid, productId);
       toast.success("Product added successfully!", {
@@ -102,7 +104,6 @@ export default function Sell() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
       });
       setFormData({
         name: "",
@@ -122,7 +123,6 @@ export default function Sell() {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
       });
     }
   };
@@ -142,85 +142,74 @@ export default function Sell() {
       <Head>
         <title>Sell Your Product | Agora BNS</title>
       </Head>
-      <div className="relative min-h-screen bg-gradient-to-r from-purple-800 to-indigo-700 flex justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
-          <div className="text-center">
+      
+      <Header />
+
+      <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto p-10 shadow-lg">
+          <div className="mb-8">
             <Link href="/account" className="text-indigo-600 hover:text-indigo-800">
               ← Back to Home
             </Link>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
-            Sell Your Product
-          </h2>
+          <h2 className="text-3xl font-extrabold text-black mb-8">Sell Your Product</h2>
           <ToastContainer />
-          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <input type="hidden" name="remember" value="true" />
-            <div className="rounded-md shadow-sm space-y-4">
-
-              {/* Name */}
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="name" className="block text-sm font-medium text-black">
                   Product Name
                 </label>
                 <input
                   id="name"
                   name="name"
-                  type="text"
-                  autoComplete="name"
-                  required
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="type here..."
+                  type="text"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-500 text-black"
                   value={formData.name}
                   onChange={handleChange}
                 />
               </div>
-
-              {/* Description */}
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                  Product Description & Contact Information
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  rows="3"
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="type here..."
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              {/* Price */}
-              <div>
-                <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="price" className="block text-sm font-medium text-black">
                   Price
                 </label>
                 <input
                   id="price"
                   name="price"
                   type="number"
-                  autoComplete="price"
                   required
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Price"
+                  className="block w-full px-3 py-2 border border-gray-500 text-black"
                   value={formData.price}
                   onChange={handleChange}
                 />
               </div>
-
-              {/* Category */}
+              <div className="col-span-2">
+                <label htmlFor="description" className="block text-sm font-medium text-black">
+                  Product Description & Contact Information
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  placeholder="type here..."
+                  rows="4"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-500 text-black"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </div>
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="category" className="block text-sm font-medium text-black">
                   Category
                 </label>
                 <select
                   name="category"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-500 text-black"
                   value={formData.category}
                   onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  required
                 >
                   <option value="">Select Category</option>
                   <option value="Electronics">Electronics</option>
@@ -233,62 +222,57 @@ export default function Sell() {
                   <option value="Others">Others</option>
                 </select>
               </div>
-
-              {/* Condition */}
               <div>
-                <label htmlFor="condition" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="condition" className="block text-sm font-medium text-black">
                   Condition
                 </label>
                 <select
                   id="condition"
                   name="condition"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-500 text-black"
                   value={formData.condition}
                   onChange={handleChange}
-                  className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  required
                 >
                   <option value="">Select Condition</option>
                   <option value="New">New</option>
-                  <option value="New">Like New</option>
+                  <option value="Like New">Like New</option>
                   <option value="Used">Used</option>
                   <option value="Refurbished">Refurbished</option>
                 </select>
               </div>
-            </div>
-
-            {/* Product Images */}
-            <div>
-              <label htmlFor="images" className="block text-sm font-medium text-gray-700">
-                Product Images
-              </label>
-              <input
-                id="images"
-                name="images"
-                type="file"
-                multiple
-                accept="image/*"
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                onChange={handleChange}
-                required
-              />
-              <div className="mt-4 grid grid-cols-3 gap-4">
-                {imagePreviews.map((src, index) => (
-                  <div key={index} className="relative h-32 cursor-pointer" onClick={() => openModal(src)}>
-                    <Image
-                      src={src}
-                      alt={`Preview ${index}`}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded"
-                    />
-                  </div>
-                ))}
+              <div className="col-span-2">
+                <label htmlFor="images" className="block text-sm font-medium text-black">
+                  Product Images
+                </label>
+                <input
+                  id="images"
+                  name="images"
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-500 text-black"
+                  onChange={handleChange}
+                />
+                <div className="mt-4 grid grid-cols-3 gap-4">
+                  {imagePreviews.map((src, index) => (
+                    <div key={index} className="relative h-32 cursor-pointer" onClick={() => openModal(src)}>
+                      <Image
+                        src={src}
+                        alt={`Preview ${index}`}
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div>
+            <div className="mt-6">
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="w-full flex justify-center py-3 px-4 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Add Product
               </button>
@@ -298,13 +282,15 @@ export default function Sell() {
       </div>
 
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center z-50" overlayClassName="fixed inset-0 bg-black bg-opacity-50">
-        <div className="bg-white p-4 rounded-lg shadow-lg max-w-2xl w-full relative">
+        <div className="bg-white p-4 shadow-lg max-w-2xl w-full relative">
           <button onClick={closeModal} className="absolute top-0 right-1 text-gray-700 hover:text-gray-900">
             ×
           </button>
-          <Image src={selectedImage} alt="Selected Preview" layout="responsive" width={800} height={600} objectFit="contain" className="rounded-md" />
+          <Image src={selectedImage} alt="Selected Preview" layout="responsive" width={800} height={600} objectFit="contain" />
         </div>
       </Modal>
+
+      <Footer />
     </>
   );
 }
