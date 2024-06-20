@@ -42,56 +42,56 @@ function Menu() {
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Automotive")}
+              onClick={() => handleCategorySelect("automotive")}
             >
               Automotive
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Beauty")}
+              onClick={() => handleCategorySelect("beauty")}
             >
               Beauty
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Electronics")}
+              onClick={() => handleCategorySelect("electronics")}
             >
               Electronics
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Fashion")}
+              onClick={() => handleCategorySelect("fashion")}
             >
               Fashion
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Food and Groceries")}
+              onClick={() => handleCategorySelect("food-groceries")}
             >
               Food & Groceries
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Home & Garden")}
+              onClick={() => handleCategorySelect("home-garden")}
             >
               Home & Garden
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Sports")}
+              onClick={() => handleCategorySelect("sports")}
             >
               Sports
             </a>
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              onClick={() => handleCategorySelect("Others")}
+              onClick={() => handleCategorySelect("others")}
             >
               Others
             </a>
