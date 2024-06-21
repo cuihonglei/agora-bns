@@ -5,6 +5,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/navigation';
 import { useUserAuth } from '../_utils/auth-context';
 
+// Components for common header, footer.
+import Header from '../components/header';
+import Footer from '../components/footer';
+
 function LoginPage() {
   
   const router = useRouter();
@@ -84,7 +88,10 @@ function LoginPage() {
       <Head>
         <title>Login | Agora BNS</title>
       </Head>
-      <div className="flex justify-center items-center h-screen bg-gradient-to-r from-purple-800 to-indigo-700">
+
+      <Header />
+
+      <div className="flex justify-center items-center h-screen bg-[#392F5A]">
         <div className="text-center">
           <h1 className="text-white text-4xl font-bold mb-8">Login to Agora BNS</h1>
 
@@ -121,6 +128,8 @@ function LoginPage() {
           {loginError && <p className="text-red-500 mt-4">{loginError}</p>}
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }
