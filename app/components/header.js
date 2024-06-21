@@ -154,7 +154,7 @@ function Header() {
               {/* TODO Use a character from the name if there's no photoURL. */}
               {user.photoURL && (
                 <Link href='/profile'>
-                  <Image src={user.photoURL} className="rounded-full" width={36} height={36} />
+                  <Image src={user.photoURL} alt="profile image" className="rounded-full" width={36} height={36} />
                 </Link>
               )}
 

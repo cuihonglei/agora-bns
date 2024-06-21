@@ -91,8 +91,8 @@ function LoginPage() {
 
       <Header />
 
-      <div className="flex justify-center items-center h-screen bg-[#392F5A]">
-        <div className="text-center">
+      <div className="flex justify-center items-center bg-[#392F5A]">
+        <div className="text-center my-48">
           <h1 className="text-white text-4xl font-bold mb-8">Login to Agora BNS</h1>
 
           <div className="flex flex-col gap-4">
