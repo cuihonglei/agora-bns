@@ -140,7 +140,7 @@ function Header() {
         </Link>
 
         {/* Menu */}
-        {user && 
+        {user &&
           <div className="flex flex-1">
             <Menu />
           </div>
@@ -150,16 +150,25 @@ function Header() {
         <div className="flex items-center mr-9">
           {user ? (
             <>
-              {/* TODO profile image */}
+              {/* Profile Image */}
+              {/* TODO Use a character from the name if there's no photoURL. */}
+              {user.photoURL && (
+                <Link href='/profile'>
+                  <Image src={user.photoURL} className="rounded-full" width={36} height={36} />
+                </Link>
+              )}
+
+              {/* Logout Button */}
               <button
                 onClick={handleSignOut}
-                className="text-lg font-bold text-[#FF8811] hover:text-[#392F5A]"
+                className="text-lg font-bold text-[#FF8811] hover:text-[#392F5A] ml-3"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
+              {/* Sign In button */}
               <button
                 onClick={handleSignIn}
                 className="text-lg font-bold text-[#FF8811] hover:text-[#392F5A]"
