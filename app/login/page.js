@@ -77,7 +77,7 @@ function LoginPage() {
       // Redirect to the home page.
       router.push('/');
     }
-  }, [user]);
+  }, [user, router]);
 
   return (
     <>
