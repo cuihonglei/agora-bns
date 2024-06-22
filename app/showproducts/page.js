@@ -57,6 +57,14 @@ function ShowProducts() {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))  // Capitalize the first letter of each word
       .join(' ');  // Join the words back into a single string
   }
+
+  function conditionEditor(string) {
+    return string
+      .replace(/-/g, ' ')  // Replace hyphens with spaces
+      .split(' ')  // Split the string into words
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))  // Capitalize the first letter of each word
+      .join(' ');  // Join the words back into a single string
+  }
   
   
   
@@ -92,7 +100,7 @@ function ShowProducts() {
                   <p className="text-sm text-black">{product.description}</p>
                   <p className="text-lg font-medium text-black">{product.price ? `$${product.price}` : 'Free'}</p>
                   <p className="text-sm text-black">Category: {categoryEditor(product.category)}</p>
-                  <p className="text-sm text-black">Condition: {product.condition}</p>
+                  <p className="text-sm text-black">Condition: {conditionEditor(product.condition)}</p>
                   {product.imageUrls && Array.isArray(product.imageUrls) && product.imageUrls.length > 0 && (
                     <Link href={`/details?id=${product.id}`}>
                       <div className="w-full h-40 mt-2 relative cursor-pointer">

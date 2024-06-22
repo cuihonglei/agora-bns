@@ -218,7 +218,7 @@ export default function Sell() {
                   <option value="beauty">Beauty</option>
                   <option value="automotive">Automotive</option>
                   <option value="sports">Sports</option>
-                  <option value="food-groceries">Food and Groceries</option>
+                  <option value="food-groceries">Food & Groceries</option>
                   <option value="others">Others</option>
                 </select>
               </div>
@@ -235,10 +235,10 @@ export default function Sell() {
                   onChange={handleChange}
                 >
                   <option value="">Select Condition</option>
-                  <option value="New">New</option>
-                  <option value="Like New">Like New</option>
-                  <option value="Used">Used</option>
-                  <option value="Refurbished">Refurbished</option>
+                  <option value="new">New</option>
+                  <option value="like-new">Like New</option>
+                  <option value="used">Used</option>
+                  <option value="refurbished">Refurbished</option>
                 </select>
               </div>
               <div className="col-span-2">
