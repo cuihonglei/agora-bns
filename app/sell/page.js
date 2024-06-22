@@ -212,13 +212,13 @@ export default function Sell() {
                   onChange={handleChange}
                 >
                   <option value="">Select Category</option>
+                  <option value="automotive">Automotive</option>
+                  <option value="beauty">Beauty</option>
                   <option value="electronics">Electronics</option>
                   <option value="fashion">Fashion</option>
-                  <option value="home-garden">Home & Garden</option>
-                  <option value="beauty">Beauty</option>
-                  <option value="automotive">Automotive</option>
-                  <option value="sports">Sports</option>
                   <option value="food-groceries">Food & Groceries</option>
+                  <option value="home-garden">Home & Garden</option>
+                  <option value="sports">Sports</option>
                   <option value="others">Others</option>
                 </select>
               </div>
