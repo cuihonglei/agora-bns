@@ -52,7 +52,7 @@ function ShowProducts() {
 
   function categoryEditor(string) {
     return string
-      .replace(/-/g, ' & ')  // Replace '&' symbol with spaces
+      .replace(/-/g, ' & ')  // Replace hyphens with '&' symbol
       .split(' ')  // Split the string into words
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))  // Capitalize the first letter of each word
       .join(' ');  // Join the words back into a single string
