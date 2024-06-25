@@ -1,8 +1,9 @@
 "use client";
 
 import Head from 'next/head';
-import Link from 'next/link';
 import Image from 'next/image';
+import Header from 'app/components/header';
+import Footer from 'app/components/footer';
 
 function About() {
 
@@ -12,17 +13,8 @@ function About() {
         <title>About Us | Agora BNS</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="bg-white shadow-md fixed w-full z-50 top-0">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
-            <div className="flex justify-start lg:w-0 lg:flex-1">
-              <Link href="/">
-                <Image src="/image/agoralogo.jpg" alt="Agora BNS Logo" width={80} height={70} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <Header />
 
       <main className="mt-24 bg-white">
         <div className="max-w-6xl mx-auto py-16 px-4 sm:px-6 lg:px-8 bg-white text-center">
@@ -98,13 +90,7 @@ function About() {
         </div>
       </main>
 
-      <footer className="bg-white">
-        <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
-          <p className="text-center text-base text-gray-400">
-            &copy; 2023 Agora BNS. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 }
