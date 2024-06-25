@@ -40,7 +40,7 @@ function FeaturedProducts() {
       setProducts(loadedProducts);
     };
     loadFeaturedProducts();
-  }, []);
+  });
 
   return (
     <div className="flex flex-col items-center justify-center bg-white text-black py-10">
