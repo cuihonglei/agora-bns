@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, addDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter, where} from "firebase/firestore";
+import { collection, getDocs, doc, addDoc, getDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter, where} from "firebase/firestore";
 import { db } from "../_utils/firebase"
 import { sortProductsByPrice } from '../components/price-filter.js'; // Ensure the correct import path
 
@@ -87,3 +87,17 @@ export const getProductsByUser = async (userId) => {
   return [];
 };
 
+// Get a product by using the product ID.
+export const getProductByID = async (id) => {
+  try {
+    const docRef = doc(db, "products", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.log("No such document!");
+    }
+  } catch (error) {
+    console.error("Error fetching product:", error);
+  }
+}

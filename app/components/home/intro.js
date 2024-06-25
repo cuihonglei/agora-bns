@@ -53,7 +53,7 @@ function Intro() {
         height={259}
       />
     </div>
-  )
+  );
 }
 
 export default Intro;

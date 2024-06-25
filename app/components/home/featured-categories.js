@@ -24,8 +24,8 @@ function FeaturedCategories() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-[#FFF8F0] text-black">
-      <p className="text-2xl font-bold mt-10 mb-8">Featured Categories</p>
+    <div className="flex flex-col items-center justify-center bg-[#FFF8F0] text-black py-10">
+      <p className="text-2xl font-bold mb-8">Featured Categories</p>
       <div className="max-w-5xl flex flex-wrap justify-center">
         <div className="flex flex-col items-center m-4 cursor-pointer" onClick={() => handleClick('automotive')}>
           <Image
