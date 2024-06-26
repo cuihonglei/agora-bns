@@ -12,13 +12,6 @@ function FeaturedProducts() {
   const { user } = useUserAuth();
   const [products, setProducts] = useState([]);
 
-  // The featured product IDs, change them as needed.
-  const featuredProductIDs = [
-    '59ZMh73syXcgLOq4ry4w',
-    '5ZZ8pEkW1aKXZk0zS8DS',
-    '6LJUlPKM0gx6ldyg47RV',
-  ];
-
   const handleClick = (productId) => {
     if (!user) {
       router.push('/login');
@@ -28,6 +21,14 @@ function FeaturedProducts() {
   };
 
   useEffect(() => {
+
+    // The featured product IDs, change them as needed.
+    const featuredProductIDs = [
+      '59ZMh73syXcgLOq4ry4w',
+      '5ZZ8pEkW1aKXZk0zS8DS',
+      '6LJUlPKM0gx6ldyg47RV',
+    ];
+
     // Load featured products.
     const loadFeaturedProducts = async () => {
       const loadedProducts = [];
