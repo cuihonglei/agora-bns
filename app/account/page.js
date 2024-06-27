@@ -1,14 +1,37 @@
 "use client";
 
-import { React } from 'react';
+import { React, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 
 import Header from '../components/header';
 import Footer from '../components/footer';
 import FeaturedCategories from '../components/featured';
+import { auth, db } from '../_utils/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 function AccountPage() {
+  const [user, loading, error] = useAuthState(auth);
+  useEffect(() => {
+    if (user && 'geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+
+          // Write the location to Firestore
+          const userDoc = doc(db, `users/${user.uid}`, "location", "current");
+          await setDoc(userDoc, location);
+        },
+        (error) => {
+          console.error(error.message);
+        }
+      );
+    }
+  }, [user]);
 
   return (
     <>

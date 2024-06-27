@@ -1,27 +1,27 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Head from 'next/head';
-import Image from 'next/image';
+import React, { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import Head from "next/head";
+import Image from "next/image";
+import Map from "../components/Map.js";
+import Header from "../components/header";
+import Footer from "../components/footer";
 
-import Header from '../components/header';
-import Footer from '../components/footer';
-
-import { db } from '../_utils/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { addComment, getComments } from '../_services/comment-service';
+import { db } from "../_utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { addComment, getComments } from "../_services/comment-service";
 
 function ProductDetails() {
   const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const id = searchParams.get("id");
   const [product, setProduct] = useState(null);
-  const [mainImage, setMainImage] = useState('');
+  const [mainImage, setMainImage] = useState("");
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [rating, setRating] = useState(0);
-  const category = searchParams.get('category');
-  const router = useRouter();  // Initialize useRouter
+  const category = searchParams.get("category");
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -55,19 +55,18 @@ function ProductDetails() {
       const newCommentObject = {
         text: newComment,
         rating: rating,
-        date: new Date().toLocaleString()
+        date: new Date().toLocaleString(),
       };
       const commentId = await addComment(id, newCommentObject);
       if (commentId) {
         setComments([...comments, { id: commentId, ...newCommentObject }]);
-        setNewComment('');
+        setNewComment("");
         setRating(0);
       } else {
         console.error("Failed to add comment");
       }
     }
   };
-  
 
   if (!product) return <div className="text-center mt-20">Loading...</div>;
 
@@ -94,14 +93,28 @@ function ProductDetails() {
                 />
               </div>
               <div className="flex-1 p-6">
-                <h1 className="text-4xl font-bold text-gray-800">{product.name}</h1>
-                <p className="text-2xl text-gray-600 my-4">{product.price ? `$${product.price}` : 'Free'}</p>
-                <p className="text-lg text-gray-700 mb-4">{product.description}</p>
-                <p className="text-sm text-gray-500 mb-1"><strong>Category:</strong> {product.category}</p>
-                <p className="text-sm text-gray-500 mb-4"><strong>Condition:</strong> {product.condition}</p>
+                <h1 className="text-4xl font-bold text-gray-800">
+                  {product.name}
+                </h1>
+                <p className="text-2xl text-gray-600 my-4">
+                  {product.price ? `$${product.price}` : "Free"}
+                </p>
+                <p className="text-lg text-gray-700 mb-4">
+                  {product.description}
+                </p>
+                <p className="text-sm text-gray-500 mb-1">
+                  <strong>Category:</strong> {product.category}
+                </p>
+                <p className="text-sm text-gray-500 mb-4">
+                  <strong>Condition:</strong> {product.condition}
+                </p>
                 <div className="flex flex-wrap space-x-2 mt-4">
                   {product.imageUrls.map((url, index) => (
-                    <div key={index} className="w-24 h-24 relative cursor-pointer" onClick={() => handleImageClick(url)}>
+                    <div
+                      key={index}
+                      className="w-24 h-24 relative cursor-pointer"
+                      onClick={() => handleImageClick(url)}
+                    >
                       <Image
                         src={url}
                         alt={`${product.name} image ${index + 1}`}
@@ -109,12 +122,13 @@ function ProductDetails() {
                         objectFit="contain"
                         className="rounded-md border border-gray-300"
                       />
-                    </div>
+                    </div>                    
                   ))}
+                  
                 </div>
                 <div className="mt-6">
-                  <button 
-                    onClick={() => router.back()} 
+                  <button
+                    onClick={() => router.back()}
                     className="text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center"
                   >
                     ← Back to Products
@@ -122,14 +136,29 @@ function ProductDetails() {
                 </div>
               </div>
             </div>
+            <div className="">
+              <div className="p-6 pl-3">
+              <h2 className="text-2xl font-bold text-gray-800">
+                Map
+              </h2>
+              </div>
+              <Map/>
+            </div>
             <div className="mt-8">
-              <h2 className="text-2xl font-bold text-gray-800">Comments and Ratings</h2>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Comments and Ratings
+              </h2>
               <div className="mt-4">
-              {comments.map((comment, index) => (
-                  <div key={index} className="mb-4 p-4 border rounded-lg shadow-sm">
+                {comments.map((comment, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-4 border rounded-lg shadow-sm"
+                  >
                     <p className="text-sm text-gray-600">{comment.date}</p>
                     <p className="text-lg text-gray-800">{comment.text}</p>
-                    <p className="text-sm text-gray-600">Rating: {comment.rating}/5</p>
+                    <p className="text-sm text-gray-600">
+                      Rating: {comment.rating}/5
+                    </p>
                   </div>
                 ))}
               </div>
@@ -149,8 +178,10 @@ function ProductDetails() {
                     onChange={(e) => setRating(Number(e.target.value))}
                   >
                     <option value="0">Select Rating</option>
-                    {[1, 2, 3, 4, 5].map(r => (
-                      <option key={r} value={r}>{r}</option>
+                    {[1, 2, 3, 4, 5].map((r) => (
+                      <option key={r} value={r}>
+                        {r}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -176,7 +207,7 @@ function ProductDetailsEx() {
     <Suspense>
       <ProductDetails />
     </Suspense>
-  )
+  );
 }
 
 export default ProductDetailsEx;

@@ -1,21 +1,19 @@
 "use client";
 
 import { useState } from "react";
-
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-
 import { useUserAuth } from "app/_utils/auth-context";
 import { uploadProductImages } from "../_services/storage-service";
 import { addProduct } from "../_services/product-service";
 import { addUserProduct } from "../_services/user-service";
 import { ToastContainer, toast } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Sell() {
   const { user } = useUserAuth();
+  console.log("User:", user); // Check user authentication
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,13 +21,14 @@ export default function Sell() {
     price: "",
     category: "",
     condition: "",
-    images: [], // Ensure this is always an array
+    images: [],
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+    console.log("Handle Change:", name, value, files); // Log changes
     if (name === "images") {
       const fileArray = Array.from(files);
       setFormData({ ...formData, images: fileArray });
@@ -42,20 +41,20 @@ export default function Sell() {
   };
 
   const validateFormData = (data) => {
-    const requiredFields = [
-      "name",
-      "description",
-      "price",
-      "category",
-      "condition",
-      "images",
-    ];
+    const requiredFields = ["name", "description", "price", "category", "condition", "images"];
     for (const field of requiredFields) {
-      if (
-        !data[field] ||
-        (Array.isArray(data[field]) && data[field].length === 0)
-      ) {
+      console.log(`Checking field: ${field}, Value: ${data[field]}`); // Log each field check
+      if (!data[field] || (Array.isArray(data[field]) && data[field].length === 0)) {
         console.error(`Missing field: ${field}`);
+        toast.error(`Missing field: ${field}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         return false;
       }
     }
@@ -64,24 +63,13 @@ export default function Sell() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Validate form data
+    console.log("Form submitted"); // Check form submission
+
     if (!validateFormData(formData)) {
-      toast.error(
-        "Please fill in all fields and select at least one image to upload.",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        }
-      );
-      return; // Return early if form data is invalid
+      console.log("Form validation failed"); // Log form validation failure
+      return;
     }
-  
+
     if (!user) {
       console.error("No authenticated user available");
       toast.error("No authenticated user available", {
@@ -95,11 +83,12 @@ export default function Sell() {
       });
       return;
     }
-  
+
     try {
-      console.log("Images to upload:", formData.images); // Debugging log
+      console.log("Images to upload:", formData.images); // Debugging log for images
       const imageUrls = await uploadProductImages(formData.images);
-  
+      console.log("Image URLs:", imageUrls); // Debugging log for uploaded images
+
       const productData = {
         name: formData.name,
         description: formData.description,
@@ -109,11 +98,12 @@ export default function Sell() {
         imageUrls: imageUrls,
         userId: user.uid,
       };
-  
-      console.log("Product data:", productData); // Debugging log
+
+      console.log("Product data:", productData); // Debugging log for product data
       const productId = await addProduct(productData);
+      console.log("Product ID:", productId); // Debugging log for product ID
       await addUserProduct(user.uid, productId);
-  
+
       toast.success("Product added successfully!", {
         position: "top-right",
         autoClose: 5000,
@@ -123,6 +113,7 @@ export default function Sell() {
         draggable: true,
         progress: undefined,
       });
+
       setFormData({
         name: "",
         description: "",
@@ -131,9 +122,9 @@ export default function Sell() {
         condition: "",
         images: [],
       });
-      setImagePreviews([]); // Clear the image previews
+      setImagePreviews([]);
     } catch (error) {
-      console.error("Error adding product: ", error);
+      console.error("Error adding product:", error);
       toast.error(
         "An error occurred while adding the product. Please try again later.",
         {
@@ -148,7 +139,6 @@ export default function Sell() {
       );
     }
   };
-  
 
   return (
     <>
@@ -160,10 +150,7 @@ export default function Sell() {
         <div className="flex justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
             <div className="text-center">
-              <Link
-                href="/account"
-                className="text-indigo-600 hover:text-indigo-800"
-              >
+              <Link href="/account" className="text-indigo-600 hover:text-indigo-800">
                 ← Back to Home
               </Link>
             </div>
@@ -173,13 +160,9 @@ export default function Sell() {
             <ToastContainer />
             <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
               <input type="hidden" name="remember" value="true" />
-
               <div className="rounded-md shadow-sm space-y-2">
-                {/* Name */}
                 <div>
-                  <label htmlFor="name" className="sr-only">
-                    Product Name
-                  </label>
+                  <label htmlFor="name" className="sr-only">Product Name</label>
                   <input
                     id="name"
                     name="name"
@@ -192,12 +175,8 @@ export default function Sell() {
                     onChange={handleChange}
                   />
                 </div>
-
-                {/* Description */}
                 <div>
-                  <label htmlFor="description" className="sr-only">
-                    Description & Contact Information
-                  </label>
+                  <label htmlFor="description" className="sr-only">Description & Contact Information</label>
                   <textarea
                     id="description"
                     name="description"
@@ -209,12 +188,8 @@ export default function Sell() {
                     required
                   />
                 </div>
-
-                {/* Price */}
                 <div>
-                  <label htmlFor="price" className="sr-only">
-                    Price
-                  </label>
+                  <label htmlFor="price" className="sr-only">Price</label>
                   <input
                     id="price"
                     name="price"
@@ -227,12 +202,8 @@ export default function Sell() {
                     onChange={handleChange}
                   />
                 </div>
-
-                {/* Category */}
                 <div>
-                  <label htmlFor="category" className="sr-only">
-                    Category
-                  </label>
+                  <label htmlFor="category" className="sr-only">Category</label>
                   <select
                     name="category"
                     value={formData.category}
@@ -247,18 +218,12 @@ export default function Sell() {
                     <option value="Beauty">Beauty</option>
                     <option value="Automotive">Automotive</option>
                     <option value="Sports">Sports</option>
-                    <option value="Food and Groceries">
-                      Food and Groceries
-                    </option>
+                    <option value="Food and Groceries">Food and Groceries</option>
                     <option value="Others">Others</option>
                   </select>
                 </div>
-
-                {/* Condition */}
                 <div>
-                  <label htmlFor="condition" className="sr-only">
-                    Condition
-                  </label>
+                  <label htmlFor="condition" className="sr-only">Condition</label>
                   <select
                     id="condition"
                     name="condition"
@@ -273,44 +238,30 @@ export default function Sell() {
                     <option value="Refurbished">Refurbished</option>
                   </select>
                 </div>
-              </div>
-
-              {/* Product Images */}
-              {/* Product Images */}
-              <div>
-                <label htmlFor="images" className="sr-only">
-                  Product Images
-                </label>
-                <input
-                  id="images"
-                  name="images"
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  onChange={handleChange}
-                  required
-                />
-                <div className="mt-2 flex space-x-2">
-                  {imagePreviews.map((src, index) => (
-                    <Image
-                      key={index}
-                      src={src}
-                      alt={`Preview ${index}`}
-                      width={50}
-                      height={50}
-                      className="rounded"
-                    />
-                  ))}
+                <div>
+                  <label htmlFor="images" className="sr-only">Images</label>
+                  <input
+                    id="images"
+                    name="images"
+                    type="file"
+                    multiple
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
-
+              <div className="flex justify-center space-x-2">
+                {imagePreviews.map((src, index) => (
+                  <Image key={index} src={src} alt={`Preview ${index}`} width={50} height={50} className="object-cover" />
+                ))}
+              </div>
               <div>
                 <button
                   type="submit"
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Add Product
+                  List Product
                 </button>
               </div>
             </form>
