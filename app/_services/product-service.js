@@ -1,6 +1,6 @@
 import { collection, getDocs, doc, addDoc, getDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter, where} from "firebase/firestore";
 import { db } from "../_utils/firebase"
-import { sortProductsByPrice } from '../components/price-filter.js'; // Ensure the correct import path
+import { sortProductsByPrice } from '../_components/price-filter.js'; // Ensure the correct import path
 
 // Add a product to firebase database.
 // @param userId, the user who add the product.

@@ -3,12 +3,12 @@ import { useRouter } from 'next/navigation';
 
 import { useUserAuth } from "../../_utils/auth-context";
 
-import categoryAutomotive from '../../assets/images/category-automotive.png';
-import categoryBeauty from '../../assets/images/category-beauty.png';
-import categoryElectronics from '../../assets/images/category-electronics.png';
-import categoryFoodGroceries from '../../assets/images/category-food-groceries.png';
-import categoryHomeGarden from '../../assets/images/category-home-garden.png';
-import categorySports from '../../assets/images/category-sports.png';
+import categoryAutomotive from '../../_assets/images/category-automotive.png';
+import categoryBeauty from '../../_assets/images/category-beauty.png';
+import categoryElectronics from '../../_assets/images/category-electronics.png';
+import categoryFoodGroceries from '../../_assets/images/category-food-groceries.png';
+import categoryHomeGarden from '../../_assets/images/category-home-garden.png';
+import categorySports from '../../_assets/images/category-sports.png';
 
 function FeaturedCategories() {
 

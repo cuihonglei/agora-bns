@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 import { useUserAuth } from '../_utils/auth-context';
 
-import logo from '../assets/images/logo.png';
+import logo from '../_assets/images/logo.png';
 
 // Menu component
 function Menu() {

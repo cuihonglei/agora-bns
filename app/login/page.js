@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useUserAuth } from '../_utils/auth-context';
 
 // Components for common header, footer.
-import Header from '../components/header';
-import Footer from '../components/footer';
+import Header from '../_components/header';
+import Footer from '../_components/footer';
 
 function LoginPage() {
   
