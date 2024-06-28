@@ -2,8 +2,8 @@
 
 import Head from 'next/head';
 import Image from 'next/image';
-import Header from 'app/components/header';
-import Footer from 'app/components/footer';
+import Header from 'app/_components/header';
+import Footer from 'app/_components/footer';
 
 function About() {
 
