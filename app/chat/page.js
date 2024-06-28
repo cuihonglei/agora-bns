@@ -1,14 +1,14 @@
 // pages/chat/[chatId].js
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUserAuth } from "app/_utils/auth-context";
 import { getChat, addMessage, getMessages } from "../_services/chat-service";
 import Head from "next/head";
 import Link from "next/link";
 
-export default function ChatPage() {
+function ChatPage() {
   const searchParams = useSearchParams();
   const { user } = useUserAuth();
   const [messages, setMessages] = useState([]);
@@ -112,3 +112,13 @@ export default function ChatPage() {
     </>
   );
 }
+
+function ChatEx() {
+  return (
+    <Suspense>
+      <ChatPage />
+    </Suspense>
+  )
+}
+
+export default ChatEx;
