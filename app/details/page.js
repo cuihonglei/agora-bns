@@ -119,6 +119,9 @@ function ProductDetails() {
                   >
                     ← Back to Products
                   </button>
+                  <div>
+                    <Map/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -134,6 +137,7 @@ function ProductDetails() {
                 ))}
               </div>
               <div className="mt-4">
+
                 <textarea
                   className="w-full p-2 border rounded-lg text-black"
                   rows="3"
