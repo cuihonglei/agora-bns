@@ -28,7 +28,7 @@ function Sidebar({ setActiveSection }) {
         )}
 
         <div>
-        <button onClick={() => setActiveSection('general')} className="mt-4 hover:underline flex items-center">
+        <button onClick={() => setActiveSection('general')} className="mt-4 hover:underline flex items-center mr-1">
           <GrUser className='mr-2'></GrUser>
           General
         </button>
@@ -49,7 +49,7 @@ function Sidebar({ setActiveSection }) {
         </div>
         
         <div>
-        <button onClick={handleSignOut} className="mt-2 hover:underline flex items-center">
+        <button onClick={handleSignOut} className="mt-2 hover:underline flex items-center mr-3">
           <GrPower className='mr-2'></GrPower>
           Logout
         </button>
