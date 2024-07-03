@@ -1,4 +1,3 @@
-// pages/chat/[chatId].js
 "use client";
 
 import React, { useState, useEffect, useRef, Suspense } from "react";
@@ -18,16 +17,13 @@ function ChatPage() {
 
   useEffect(() => {
     const chatId = searchParams.get('chatId');
-    console.log("Search params chatId:", chatId); // Debug log
     if (chatId) {
       setChatId(chatId);
-      console.log("Chat ID set to:", chatId); // Debug log
     }
   }, [searchParams]);
 
   useEffect(() => {
     if (chatId && user) {
-      console.log("Fetching messages for chat ID:", chatId); // Debug log
       return getMessages(chatId, setMessages);
     }
   }, [chatId, user]);
@@ -45,11 +41,23 @@ function ChatPage() {
         userName: user.displayName || user.email,
         timestamp: new Date(),
       };
-      console.log("Sending message:", message); // Debug log
       await addMessage(chatId, message);
       setNewMessage("");
     }
   };
+
+  const groupMessagesByDate = (messages) => {
+    return messages.reduce((groups, message) => {
+      const date = new Date(message.timestamp.toDate()).toLocaleDateString();
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(message);
+      return groups;
+    }, {});
+  };
+
+  const groupedMessages = groupMessagesByDate(messages);
 
   if (!chatId) {
     return (
@@ -67,42 +75,48 @@ function ChatPage() {
         <title>Chat | Agora BNS</title>
       </Head>
 
-      
       <div className="min-h-screen bg-gray-100 flex flex-col">
         <header className="bg-[#392F5A] p-4 text-white flex justify-between items-center">
           <h1 className="text-2xl font-bold">Chat</h1>
-          <Link href="/account"
-            className="text-white hover:text-gray-200">← Back to Home
+          <Link href="/account" className="text-white hover:text-gray-200">
+            ← Back to Home
           </Link>
         </header>
         <main className="flex-grow p-4 overflow-auto">
-          <div className="max-w-3xl mx-auto bg-[#FFF8F0] rounded-lg shadow-lg p-6">
-            <div className="overflow-auto max-h-[60vh]">
-              {messages.map((message) => (
-                <div key={message.id} className="mb-4">
-                  <div className="text-sm text-black font-semibold">{message.userName}</div>
-                  <div className="p-3 bg-gray-200 rounded-lg mt-1 text-black">{message.text}</div>
-                  <div className="text-xs text-gray-500 text-right mt-1">
-                    {new Date(message.timestamp?.toDate()).toLocaleString()}
-                  </div>
+          <div className="max-w-3xl mx-auto bg-[#e4d594] rounded-lg shadow-lg p-6">
+            <div className="overflow-auto max-h-[70vh]">
+              {Object.entries(groupedMessages).map(([date, messages]) => (
+                <div key={date}>
+                  <div className="text-center text-gray-500 my-4">{date}</div>
+                  {messages.map((message) => (
+                    <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-gray-200 text-black'}`} style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                        <div className="text-sm font-semibold">{message.userName}</div>
+                        <div className="mt-1">{message.text}</div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          {new Date(message.timestamp.toDate()).toLocaleTimeString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
           </div>
         </main>
-        <footer className="p-4 bg-[#392F5A] shadow-lg">
+        <footer className="p-4 bg-[#392F5A] border-t border-gray-200">
           <form onSubmit={handleSendMessage} className="flex items-center">
             <input
               type="text"
-              className="flex-grow p-3 border border-black rounded-lg focus:outline-none"
+              className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring focus:border-blue-300"
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <button
               type="submit"
-              className="ml-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
             >
               Send
             </button>
@@ -113,7 +127,7 @@ function ChatPage() {
   );
 }
 
-function ChatEx() {
+function ChatPageEx() {
   return (
     <Suspense>
       <ChatPage />
@@ -121,4 +135,4 @@ function ChatEx() {
   )
 }
 
-export default ChatEx;
+export default ChatPageEx;
