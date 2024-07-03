@@ -132,22 +132,22 @@ function Header() {
 
   return (
     <header className="bg-[#FFF8F0]">
-      <div className="max-w-5xl h-16 flex justify-between items-center mx-40 pl-7">
+      <div className="max-w-5xl h-16 flex justify-between items-center mx-auto">
 
         {/* Logo */}
-        <Link href="/" className="mr-8">
-          <Image src={logo} alt="Agora BNS Logo" width={48} height={70} />
+        <Link href="/" className="ml-9">
+          <Image src={logo} alt="Agora BNS Logo" width={48} height={43} />
         </Link>
 
         {/* Menu */}
         {user &&
-          <div className="flex flex-1 pl-40">
+          <div className="flex flex-1">
             <Menu />
           </div>
         }
 
         {/* Sign In/Logout Button */}
-        <div className="flex items-center pl-40">
+        <div className="flex items-center mr-9">
           {user ? (
             <>
               {/* Profile Image */}

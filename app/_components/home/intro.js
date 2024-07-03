@@ -4,9 +4,7 @@ import Image from 'next/image';
 import { useUserAuth } from "../../_utils/auth-context";
 
 import { AiOutlineLogin, AiOutlineShopping } from 'react-icons/ai';
-import introImage from "../../_assets/images/logo.png";
-
-
+import introImage from "../../_assets/images/intro-image.png";
 
 function Intro() {
 
