@@ -4,12 +4,9 @@ import Image from 'next/image';
 import { useUserAuth } from "../../_utils/auth-context";
 
 import { AiOutlineLogin, AiOutlineShopping } from 'react-icons/ai';
-<<<<<<< Updated upstream:app/_components/home/intro.js
 import introImage from "../../_assets/images/logo.png";
-=======
-import introImage from "../../assets/images/intro-image.png";
-import logo from "../../assets/images/logo.png";
->>>>>>> Stashed changes:app/components/home/intro.js
+
+
 
 function Intro() {
 
@@ -52,7 +49,7 @@ function Intro() {
       {/* Right Image */}
       <Image
         className="ml-24"
-        src={logo}
+        src={introImage}
         alt="Intro Image"
         width={274}
         height={259}
