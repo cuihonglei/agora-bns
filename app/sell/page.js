@@ -145,7 +145,7 @@ export default function Sell() {
       
       <Header />
 
-      <div className="min-h-screen bg-[#392F5A] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#392F5A] pt-12 pb-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto p-10 mt-8 shadow-lg bg-[#FFF8F0] rounded-xl">
           <div className="mb-12 ">
             <Link href="/showproducts" className="text-indigo-600 hover:text-indigo-800">
