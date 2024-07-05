@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useUserAuth } from '../_utils/auth-context';
 
@@ -9,10 +10,34 @@ import { useUserAuth } from '../_utils/auth-context';
 import Header from '../_components/header';
 import Footer from '../_components/footer';
 
+// Login Image.
+import loginImage from '../_assets/images/login-image.png';
+
+// Sign In Icons.
+import googleIcon from '../_assets/icons/signin-google.png';
+import facebookIcon from '../_assets/icons/signin-facebook.png';
+import appleIcon from '../_assets/icons/signin-apple.png';
+import microsoftIcon from '../_assets/icons/signin-microsoft.png';
+import githubIcon from '../_assets/icons/signin-github.png';
+
+// Sign In Button
+function SignInButton({ icon, text, onClick, isLoggingIn }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={isLoggingIn}
+      className="min-w-72 bg-white hover:bg-[#FF8811] text-black p-4 rounded-lg flex justify-center items-center"
+    >
+      <Image src={icon} alt="" width={24} height={24} className="mr-4" /> {text}
+    </button>
+  )
+}
+
+// Sign In Page
 function LoginPage() {
-  
+
   const router = useRouter();
-  
+
   const { user, googleSignIn, githubSignIn, emailPasswordSignIn, emailPasswordSignUp } = useUserAuth();
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -23,11 +48,20 @@ function LoginPage() {
       return;
     }
     setIsLoggingIn(true);
-    
+
     try {
       switch (provider) {
         case 'google':
           await googleSignIn();
+          break;
+        case 'facebook':
+          //await facebookSignIn();
+          break;
+        case 'apple':
+          //await appleSignIn();
+          break;
+        case 'microsoft':
+          //awaite microsoftSignIn();
           break;
         case 'github':
           await githubSignIn();
@@ -47,35 +81,6 @@ function LoginPage() {
     }
   };
 
-  const handleEmailPasswordLogin = async (email, password) => {
-    if (isLoggingIn) {
-      return;
-    }
-    setIsLoggingIn(true);
-    
-    try {
-      // Try to sign up the user
-      await emailPasswordSignUp(email, password);
-      // No need to handle setting user here as the redirection will happen in useEffect
-    } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-        // If email is already in use, try to sign in the user
-        try {
-          await emailPasswordSignIn(email, password);
-          // No need to handle setting user here as the redirection will happen in useEffect
-        } catch (signInError) {
-          console.error('Sign in error:', signInError);
-          setLoginError(`Login failed: ${signInError.code}`);
-        }
-      } else {
-        console.error('Sign up error:', error);
-        setLoginError(`Login failed: ${error.code}`);
-      }
-      setIsLoggingIn(false);
-    }
-  };
-  
-
   useEffect(() => {
     if (user) {
       // Redirect to the home page.
@@ -91,42 +96,29 @@ function LoginPage() {
 
       <Header />
 
-      <div className="flex justify-center items-center bg-[#392F5A]">
-        <div className="text-center my-48">
-          <h1 className="text-white text-4xl font-bold mb-8">Login to Agora BNS</h1>
+      <div className="flex flex-col justify-center items-center bg-[#392F5A] text-white py-36">
+        {/* Title */}
+        <p className="text-5xl font-extrabold leading-tight">Sign In to Agora BNS</p>
+        <p className="text-lg font-semibold leading-6 mt-4">Explore the best products from various categories all in one place.</p>
 
-          <div className="flex flex-col gap-4">
-            <button
-              onClick={() => handleLogin('google')}
-              disabled={isLoggingIn}
-              className={`bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded cursor-pointer ${isLoggingIn ? 'opacity-50' : ''}`}
-            >
-              Login with Google
-            </button>
+        {loginError && <p className="text-red-500 mt-4">{loginError}</p>}
 
-            <button
-              onClick={() => handleLogin('github')}
-              disabled={isLoggingIn}
-              className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer ${isLoggingIn ? 'opacity-50' : ''}`}
-            >
-              Login with GitHub
-            </button>
+        <div className="flex flex-row items-center my-24 gap-44">
 
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const { email, password } = e.target.elements;
-              handleEmailPasswordLogin(email.value, password.value);
-            }} className="flex flex-col gap-2">
-              <input type="email" name="email" placeholder="Email" className="p-2" required />
-              <input type="password" name="password" placeholder="Password" className="p-2" required />
-              <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
-                Log in or create account
-              </button>
-            </form>
+          {/* Left Image */}
+          <Image src={loginImage} alt="Sign In Image" width={320} height={320} />
+
+          {/* Right Buttons */}
+          <div className="flex flex-col justify-center gap-4">
+            <SignInButton icon={googleIcon} text="Sign in with Google" onClick={() => handleLogin('google')} isLoggingIn={isLoggingIn} />
+            <SignInButton icon={facebookIcon} text="Sign in with Facebook" onClick={() => handleLogin('facebook')} isLoggingIn={isLoggingIn} />
+            <SignInButton icon={appleIcon} text="Sign in with Apple" onClick={() => handleLogin('apple')} isLoggingIn={isLoggingIn} />
+            <SignInButton icon={microsoftIcon} text="Sign in with Microsoft" onClick={() => handleLogin('microsoft')} isLoggingIn={isLoggingIn} />
+            <SignInButton icon={githubIcon} text="Sign in with Github" onClick={() => handleLogin('github')} isLoggingIn={isLoggingIn} />
           </div>
 
-          {loginError && <p className="text-red-500 mt-4">{loginError}</p>}
         </div>
+        
       </div>
 
       <Footer />
