@@ -1,5 +1,5 @@
 import { db } from "../_utils/firebase";
-import { collection, doc, getDoc, setDoc, addDoc, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, addDoc, query, orderBy, onSnapshot, where } from "firebase/firestore";
 
 const getChatDocId = (userAId, userBId) => {
   return userAId < userBId ? `${userAId}_${userBId}` : `${userBId}_${userAId}`;
@@ -10,6 +10,7 @@ export const getChat = async (userAId, userBId) => {
   const chatDocRef = doc(db, "chats", chatId);
   const chatDoc = await getDoc(chatDocRef);
   if (!chatDoc.exists()) {
+    // Create the chat document with the users array
     await setDoc(chatDocRef, { users: [userAId, userBId] });
   }
   console.log("Chat ID retrieved/created:", chatId); // Debug log
@@ -46,5 +47,17 @@ export const getMessages = (chatId, callback) => {
     });
     console.log("Messages retrieved:", messages); // Debug log
     callback(messages);
+  });
+};
+
+export const getUserChats = async (userId, callback) => {
+  const q = query(collection(db, "chats"), where("users", "array-contains", userId));
+  return onSnapshot(q, (querySnapshot) => {
+    const chats = [];
+    querySnapshot.forEach((doc) => {
+      chats.push({ id: doc.id, ...doc.data() });
+    });
+    console.log("User chats retrieved:", chats); // Debug log
+    callback(chats);
   });
 };

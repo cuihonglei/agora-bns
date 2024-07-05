@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useRef, Suspense } from "react";
+import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUserAuth } from "app/_utils/auth-context";
-import { getChat, addMessage, getMessages } from "../_services/chat-service";
+import { getChat, addMessage, getMessages, getUserChats } from "../_services/chat-service";
 import Head from "next/head";
 import Link from "next/link";
+import Header from "app/_components/header"; // Adjust the import path as needed
+import Footer from "app/_components/footer"; // Adjust the import path as needed
+import { doc, getDoc } from "firebase/firestore";
 
 function ChatPage() {
   const searchParams = useSearchParams();
@@ -13,20 +16,43 @@ function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [chatId, setChatId] = useState(null);
+  const [chats, setChats] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const chatId = searchParams.get('chatId');
-    if (chatId) {
-      setChatId(chatId);
+    if (user) {
+      getUserChats(user.uid, setChats);
     }
-  }, [searchParams]);
+  }, [user]);
+
+  const startChat = useCallback(async (userBId) => {
+    if (user && userBId) {
+      try {
+        const chatId = await getChat(user.uid, userBId);
+        const chatDocRef = doc(db, "chats", chatId);
+        const chatDoc = await getDoc(chatDocRef);
+        setSelectedChat({ id: chatId, ...chatDoc.data() });
+        setChatId(chatId);
+      } catch (error) {
+        console.error("Error starting chat:", error);
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
-    if (chatId && user) {
-      return getMessages(chatId, setMessages);
+    const userBId = searchParams.get('userBId'); // Get the second user's ID from the query parameter
+    console.log("Starting chat with:", userBId); // Debug log
+    if (user && userBId) {
+      startChat(userBId);
     }
-  }, [chatId, user]);
+  }, [searchParams, user, startChat]);
+
+  useEffect(() => {
+    if (selectedChat) {
+      return getMessages(selectedChat.id, setMessages);
+    }
+  }, [selectedChat]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,15 +60,21 @@ function ChatPage() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (newMessage.trim() && user) {
+    if (newMessage.trim() && chatId && user) {
       const message = {
         text: newMessage,
         userId: user.uid,
         userName: user.displayName || user.email,
         timestamp: new Date(),
       };
-      await addMessage(chatId, message);
-      setNewMessage("");
+      try {
+        await addMessage(chatId, message);
+        setNewMessage("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    } else {
+      console.error("Cannot send message: Invalid chat ID or user", { chatId, user });
     }
   };
 
@@ -59,7 +91,7 @@ function ChatPage() {
 
   const groupedMessages = groupMessagesByDate(messages);
 
-  if (!chatId) {
+  if (!user) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -75,25 +107,40 @@ function ChatPage() {
         <title>Chat | Agora BNS</title>
       </Head>
 
-      <div className="min-h-screen bg-gray-100 flex flex-col">
-        <header className="bg-[#392F5A] p-4 text-white flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Chat</h1>
-          <Link href="/account" className="text-white hover:text-gray-200">
-            ← Back to Home
-          </Link>
-        </header>
-        <main className="flex-grow p-4 overflow-auto">
-          <div className="max-w-3xl mx-auto bg-[#e4d594] rounded-lg shadow-lg p-6">
-            <div className="overflow-auto max-h-[70vh]">
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <div className="flex flex-grow">
+          <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
+            <div className="text-2xl font-bold mb-4">Chat History</div>
+            <div>
+              {chats.map((chat) => (
+                <div
+                  key={chat.id}
+                  className={`flex items-center justify-between p-2 rounded-lg mb-2 cursor-pointer ${selectedChat?.id === chat.id ? 'bg-[#e09a4b]' : 'bg-[#634d9a]'}`}
+                  onClick={() => setSelectedChat(chat)}
+                >
+                  <span>{chat.users.find(uid => uid !== user.uid)}</span>
+                </div>
+              ))}
+            </div>
+          </aside>
+          <main className="flex-grow p-4 bg-white">
+            <div className="flex justify-between items-center mb-4">
+              <Link href="/" className="text-[#392F5A] hover:text-gray-700">
+                ← Back to Home
+              </Link>
+              <h1 className="text-2xl font-bold text-[#392F5A]">Private Chat Page</h1>
+            </div>
+            <div className="bg-gray-100 rounded-lg shadow-lg p-6 overflow-y-auto" style={{ height: "60vh" }}>
               {Object.entries(groupedMessages).map(([date, messages]) => (
                 <div key={date}>
-                  <div className="text-center text-gray-500 my-4">{date}</div>
+                  <div className="text-center text-black my-4">{date}</div>
                   {messages.map((message) => (
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-gray-200 text-black'}`} style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-gray-200 text-black'}`}>
                         <div className="text-sm font-semibold">{message.userName}</div>
                         <div className="mt-1">{message.text}</div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-black mt-1">
                           {new Date(message.timestamp.toDate()).toLocaleTimeString()}
                         </div>
                       </div>
@@ -103,25 +150,26 @@ function ChatPage() {
               ))}
               <div ref={messagesEndRef} />
             </div>
-          </div>
-        </main>
-        <footer className="p-4 bg-[#392F5A] border-t border-gray-200">
-          <form onSubmit={handleSendMessage} className="flex items-center">
-            <input
-              type="text"
-              className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="Type a message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-            >
-              Send
-            </button>
-          </form>
-        </footer>
+            <footer className="mt-4">
+              <form onSubmit={handleSendMessage} className="flex items-center">
+                <input
+                  type="text"
+                  className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring focus:border-blue-300"
+                  placeholder="Type a message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                >
+                  Send
+                </button>
+              </form>
+            </footer>
+          </main>
+        </div>
+        <Footer />
       </div>
     </>
   );
@@ -132,7 +180,7 @@ function ChatPageEx() {
     <Suspense>
       <ChatPage />
     </Suspense>
-  )
+  );
 }
 
 export default ChatPageEx;
