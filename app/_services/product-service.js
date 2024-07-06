@@ -15,44 +15,98 @@ export const addProduct = async (productData) => {
   return docRef.id;
 };
 
+
+// Function to get the total number of products
+const getTotalProductsCount = async () => {
+  const productsCollection = collection(db, "products");
+  const querySnapshot = await getDocs(productsCollection);
+  return querySnapshot.size;
+};
+
+// Function to get the total number of products by category
+const getTotalProductsCountByCategory = async (category) => {
+  const productsCollection = collection(db, "products");
+  const q = query(productsCollection, where("category", "==", category));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.size;
+};
+
+
 // Get all products.
-export const getProducts = async (currentPage = 1, pageSize = 8, sortOrder = 'desc') => {
+export const getProducts = async (currentPage, pageSize, sortOrder, cursorMap) => {
   try {
     const productsCollection = collection(db, "products");
+    let q = query(productsCollection, orderBy("price", sortOrder), limit(pageSize));
 
-    const q = query(productsCollection);
+    if (cursorMap[currentPage - 1]) {
+      q = query(productsCollection, orderBy("price", sortOrder), startAfter(cursorMap[currentPage - 1]), limit(pageSize));
+    }
+
     const querySnapshot = await getDocs(q);
     const productList = [];
     querySnapshot.forEach((doc) => {
       productList.push({ id: doc.id, ...doc.data() });
     });
 
-    // Sort products by price using the sortProductsByPrice function
-    const sortedProducts = sortProductsByPrice(productList, sortOrder);
+    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+    const totalProducts = await getTotalProductsCount();
+    const totalPages = Math.ceil(totalProducts / pageSize);
 
-    // Calculate the starting index for the current page
-    const startIndex = (currentPage - 1) * pageSize;
-    // Extract products for the current page based on startIndex and pageSize
-    const currentPageProducts = sortedProducts.slice(startIndex, startIndex + pageSize);
-
-    return { 
-      products: currentPageProducts, 
-      totalPages: Math.ceil(sortedProducts.length / pageSize)
-    };
+    return { products: productList, totalPages, lastVisible: lastVisibleDoc };
   } catch (error) {
     console.error("Error fetching products:", error);
-    return { products: [], totalPages: 0 };
+    return { products: [], totalPages: 0, lastVisible: null };
   }
 };
 
-// Get products by category.
-export const getProductsByCategory = async (category, currentPage = 1, pageSize = 8, sortOrder = 'desc') => {
+export const getProductsByCategory = async (category, currentPage, pageSize, sortOrder, cursorMap) => {
+  try {
+    const productsCollection = collection(db, "products");
+
+    let q = query(
+      productsCollection,
+      where("category", "==", category),
+      orderBy("price", sortOrder),
+      limit(pageSize)
+    );
+
+    if (cursorMap[currentPage - 1]) {
+      q = query(
+        productsCollection,
+        where("category", "==", category),
+        orderBy("price", sortOrder),
+        startAfter(cursorMap[currentPage - 1]),
+        limit(pageSize)
+      );
+    }
+
+    const querySnapshot = await getDocs(q);
+    const productList = [];
+    querySnapshot.forEach((doc) => {
+      productList.push({ id: doc.id, ...doc.data() });
+    });
+
+    const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+    const totalProductsInCategory = await getTotalProductsCountByCategory(category);
+    const totalPages = Math.ceil(totalProductsInCategory / pageSize);
+
+    return { products: productList, totalPages, lastVisible: lastVisibleDoc };
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return { products: [], totalPages: 0, lastVisible: null };
+  }
+};
+
+
+// Get products under a specific user.
+// TODO pagination
+export const getProductsByUser = async (userId, currentPage = 1, pageSize = 8) => {
   try {
     const productsCollection = collection(db, "products");
 
     const q = query(
       productsCollection,
-      where("category", "==", category)
+      where("userId", "==", userId) // Adjust field name based on your data model
     );
 
     const querySnapshot = await getDocs(q);
@@ -61,32 +115,20 @@ export const getProductsByCategory = async (category, currentPage = 1, pageSize 
       productList.push({ id: doc.id, ...doc.data() });
     });
 
-    // Sort products by price using the sortProductsByPrice function
-    const sortedProducts = sortProductsByPrice(productList, sortOrder);
-
     // Calculate the starting index for the current page
     const startIndex = (currentPage - 1) * pageSize;
     // Extract products for the current page based on startIndex and pageSize
-    const currentPageProducts = sortedProducts.slice(startIndex, startIndex + pageSize);
+    const currentPageProducts = productList.slice(startIndex, startIndex + pageSize);
 
     return { 
       products: currentPageProducts, 
-      totalPages: Math.ceil(sortedProducts.length / pageSize)
+      totalPages: Math.ceil(productList.length / pageSize)
     };
   } catch (error) {
     console.error("Error fetching products:", error);
     return { products: [], totalPages: 0 };
   }
 };
-
-// Get products under a specific user.
-// TODO pagination
-export const getProductsByUser = async (userId) => {
-  // TODO
-
-  return [];
-};
-
 // Get a product by using the product ID.
 export const getProductByID = async (id) => {
   try {
