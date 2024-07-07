@@ -6,9 +6,10 @@ import { useUserAuth } from "app/_utils/auth-context";
 import { getChat, addMessage, getMessages, getUserChats } from "../_services/chat-service";
 import Head from "next/head";
 import Link from "next/link";
-import Header from "app/_components/header"; // Adjust the import path as needed
-import Footer from "app/_components/footer"; // Adjust the import path as needed
+import Header from "app/_components/header";
+import Footer from "app/_components/footer";
 import { doc, getDoc } from "firebase/firestore";
+import { db } from "../_utils/firebase";
 
 function ChatPage() {
   const searchParams = useSearchParams();
@@ -22,14 +23,21 @@ function ChatPage() {
 
   useEffect(() => {
     if (user) {
-      getUserChats(user.uid, setChats);
+      try {
+        const unsubscribe = getUserChats(user.uid, setChats);
+        return () => unsubscribe(); // Cleanup the subscription on unmount
+      } catch (error) {
+        console.error("Error fetching user chats:", error);
+      }
     }
   }, [user]);
 
   const startChat = useCallback(async (userBId) => {
     if (user && userBId) {
       try {
+        console.log(`Starting chat with userBId: ${userBId}`);
         const chatId = await getChat(user.uid, userBId);
+        console.log(`Chat ID: ${chatId}`);
         const chatDocRef = doc(db, "chats", chatId);
         const chatDoc = await getDoc(chatDocRef);
         setSelectedChat({ id: chatId, ...chatDoc.data() });
@@ -41,8 +49,7 @@ function ChatPage() {
   }, [user]);
 
   useEffect(() => {
-    const userBId = searchParams.get('userBId'); // Get the second user's ID from the query parameter
-    console.log("Starting chat with:", userBId); // Debug log
+    const userBId = searchParams.get('userBId');
     if (user && userBId) {
       startChat(userBId);
     }
@@ -50,7 +57,12 @@ function ChatPage() {
 
   useEffect(() => {
     if (selectedChat) {
-      return getMessages(selectedChat.id, setMessages);
+      try {
+        const unsubscribe = getMessages(selectedChat.id, setMessages);
+        return () => unsubscribe(); // Cleanup the subscription on unmount
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
     }
   }, [selectedChat]);
 
