@@ -47,35 +47,50 @@ export const getMessages = (chatId, callback) => {
     return () => {};
   }
 
-  const q = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp"));
-
-  return onSnapshot(q, (querySnapshot) => {
-    try {
+  try {
+    const q = query(collection(db, "chats", chatId, "messages"), orderBy("timestamp"));
+    return onSnapshot(q, (querySnapshot) => {
       const messages = [];
       querySnapshot.forEach((doc) => {
         messages.push({ id: doc.id, ...doc.data() });
       });
       console.log("Messages retrieved:", messages);
       callback(messages);
-    } catch (error) {
-      console.error("Error getting messages:", error.message);
-    }
-  });
+    });
+  } catch (error) {
+    console.error("Error getting messages:", error.message);
+  }
 };
 
 export const getUserChats = (userId, callback) => {
-  const q = query(collection(db, "chats"), where("users", "array-contains", userId));
-
-  return onSnapshot(q, (querySnapshot) => {
-    try {
+  try {
+    const q = query(collection(db, "chats"), where("users", "array-contains", userId));
+    return onSnapshot(q, (querySnapshot) => {
       const chats = [];
       querySnapshot.forEach((doc) => {
         chats.push({ id: doc.id, ...doc.data() });
       });
       console.log("User chats retrieved:", chats);
       callback(chats);
-    } catch (error) {
-      console.error("Error getting user chats:", error.message);
-    }
-  });
+    });
+  } catch (error) {
+    console.error("Error getting user chats:", error.message);
+  }
 };
+
+export const getUserInfo = async (userId, userName) => {
+  try {
+    const userDocRef = doc(db, "users", userId, userName);
+    const userDoc = await getDoc(userDocRef);
+    if (userDoc.exists()) {
+      return userDoc.data();
+    } else {
+      console.error("No such user document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user info:", error.message);
+    return null;
+  }
+};
+

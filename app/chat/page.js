@@ -3,13 +3,13 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUserAuth } from "app/_utils/auth-context";
-import { getChat, addMessage, getMessages, getUserChats } from "../_services/chat-service";
+import { getChat, addMessage, getMessages, getUserChats, getUserInfo } from "../_services/chat-service";
 import Head from "next/head";
 import Link from "next/link";
 import Header from "app/_components/header";
 import Footer from "app/_components/footer";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../_utils/firebase";
+import { db } from "app/_utils/firebase";
 
 function ChatPage() {
   const searchParams = useSearchParams();
@@ -19,16 +19,13 @@ function ChatPage() {
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [userInfos, setUserInfos] = useState({});
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     if (user) {
-      try {
-        const unsubscribe = getUserChats(user.uid, setChats);
-        return () => unsubscribe(); // Cleanup the subscription on unmount
-      } catch (error) {
-        console.error("Error fetching user chats:", error);
-      }
+      const unsubscribe = getUserChats(user.uid, setChats);
+      return () => unsubscribe();
     }
   }, [user]);
 
@@ -57,18 +54,40 @@ function ChatPage() {
 
   useEffect(() => {
     if (selectedChat) {
-      try {
-        const unsubscribe = getMessages(selectedChat.id, setMessages);
-        return () => unsubscribe(); // Cleanup the subscription on unmount
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-      }
+      const unsubscribe = getMessages(selectedChat.id, setMessages);
+      setChatId(selectedChat.id);
+      return () => unsubscribe();
     }
   }, [selectedChat]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const fetchUserInfos = async () => {
+      const infos = {};
+      await Promise.all(chats.map(async (chat) => {
+        for (const userId of chat.users) {
+          if (!infos[userId]) {
+            try {
+              const info = await getUserInfo(userId);
+              if (info) {
+                infos[userId] = info;
+              }
+            } catch (error) {
+              console.error("Error fetching user info:", error.message);
+            }
+          }
+        }
+      }));
+      setUserInfos(infos);
+    };
+
+    if (chats.length > 0) {
+      fetchUserInfos();
+    }
+  }, [chats]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -125,15 +144,19 @@ function ChatPage() {
           <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
             <div className="text-2xl font-bold mb-4">Chat History</div>
             <div>
-              {chats.map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`flex items-center justify-between p-2 rounded-lg mb-2 cursor-pointer ${selectedChat?.id === chat.id ? 'bg-[#e09a4b]' : 'bg-[#634d9a]'}`}
-                  onClick={() => setSelectedChat(chat)}
-                >
-                  <span>{chat.users.find(uid => uid !== user.uid)}</span>
-                </div>
-              ))}
+              {chats.map((chat) => {
+                const otherUserId = chat.users.find(uid => uid !== user.uid);
+                const otherUserName = userInfos[otherUserId]?.displayName || otherUserId;
+                return (
+                  <div
+                    key={chat.id}
+                    className={`flex items-center justify-between p-2 rounded-lg mb-2 cursor-pointer ${selectedChat?.id === chat.id ? 'bg-[#e09a4b]' : 'bg-[#634d9a]'}`}
+                    onClick={() => setSelectedChat(chat)}
+                  >
+                    <span>{otherUserName}</span>
+                  </div>
+                );
+              })}
             </div>
           </aside>
           <main className="flex-grow p-4 bg-white">
@@ -149,7 +172,7 @@ function ChatPage() {
                   <div className="text-center text-black my-4">{date}</div>
                   {messages.map((message) => (
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-gray-200 text-black'}`}>
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-[#c7c3d3] text-black'}`}>
                         <div className="text-sm font-semibold">{message.userName}</div>
                         <div className="mt-1">{message.text}</div>
                         <div className="text-xs text-black mt-1">
@@ -162,11 +185,11 @@ function ChatPage() {
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <footer className="mt-4">
+            <footer className="mt-20">
               <form onSubmit={handleSendMessage} className="flex items-center">
                 <input
                   type="text"
-                  className="flex-grow p-3 border border-gray-300 rounded-full focus:outline-none focus:ring focus:border-blue-300"
+                  className="flex-grow p-3 border border-black rounded-full focus:outline-none focus:ring focus:border-blue-300"
                   placeholder="Type a message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
