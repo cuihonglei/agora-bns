@@ -50,6 +50,12 @@ function ShowProducts() {
     fetchProducts();
   }, [category, currentPage, sortOrder]);
 
+  useEffect(() => {
+    // Reset to the first page when category changes
+    setCurrentPage(1);
+    setCursorMap({});
+  }, [category]);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -70,52 +76,69 @@ function ShowProducts() {
 
   const renderPagination = () => {
     const pages = [];
-    const maxPagesToShow = 5;
+    const maxPagesToShow = 3;
 
-    if (totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={`px-4 py-2 mx-1 ${currentPage === i ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
-          >
-            {i}
-          </button>
-        );
-      }
-    } else {
-      for (let i = 1; i <= maxPagesToShow; i++) {
-        pages.push(
-          <button
-            key={i}
-            onClick={() => handlePageChange(i)}
-            className={`px-4 py-2 mx-1 ${currentPage === i ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
-          >
-            {i}
-          </button>
-        );
-      }
+    const showLeftDots = currentPage > 2;
+    const showRightDots = currentPage < totalPages - 1;
 
-      if (currentPage > maxPagesToShow) {
-        pages.push(
-          <span key="dots" className="px-4 py-2 mx-1 text-black">
-            ...
-          </span>
-        );
+    // Show first page button
+    if (currentPage > 1) {
+      pages.push(
+        <button
+          key="first"
+          onClick={() => handlePageChange(1)}
+          className={`px-4 py-2 mx-1 bg-gray-200 text-black rounded-lg hover:bg-blue-800 font-semibold`}
+        >
+          First
+        </button>
+      );
+    }
 
-        if (currentPage < totalPages) {
-          pages.push(
-            <button
-              key={currentPage}
-              onClick={() => handlePageChange(currentPage)}
-              className={`px-4 py-2 mx-1 bg-blue-600 text-white rounded-lg hover:bg-blue-800 font-semibold`}
-            >
-              {currentPage}
-            </button>
-          );
-        }
-      }
+    // Show left dots
+    if (showLeftDots) {
+      pages.push(
+        <span key="leftDots" className="px-4 py-2 mx-1 text-black">
+          ...
+        </span>
+      );
+    }
+
+    // Show middle pages
+    let startPage = Math.max(1, currentPage - 1);
+    let endPage = Math.min(totalPages, currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-4 py-2 mx-1 ${currentPage === i ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Show right dots
+    if (showRightDots) {
+      pages.push(
+        <span key="rightDots" className="px-4 py-2 mx-1 text-black">
+          ...
+        </span>
+      );
+    }
+
+    // Show last page button
+    if (currentPage < totalPages) {
+      pages.push(
+        <button
+          key="last"
+          onClick={() => handlePageChange(totalPages)}
+          className={`px-4 py-2 mx-1 bg-gray-200 text-black rounded-lg hover:bg-blue-800 font-semibold`}
+        >
+          Last
+        </button>
+      );
     }
 
     return pages;
