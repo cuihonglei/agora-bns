@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { useUserAuth } from '../_utils/auth-context';
 
 import logo from '../_assets/images/logo.png';
+import profileImage  from '../_assets/images/profile-image.png';
+
 
 // Menu component
 function Menu() {
@@ -151,12 +153,9 @@ function Header() {
           {user ? (
             <>
               {/* Profile Image */}
-              {/* TODO Use a character from the name if there's no photoURL. */}
-              {user.photoURL && (
-                <Link href='/profile'>
-                  <Image src={user.photoURL} alt="profile image" className="rounded-full" width={36} height={36} />
-                </Link>
-              )}
+              <Link href='/profile'>
+                <Image src={user.photoURL || profileImage} alt="profile image" className="rounded-full" width={36} height={36} />
+              </Link>
 
               {/* Logout Button */}
               <button
