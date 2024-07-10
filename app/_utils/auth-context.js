@@ -9,6 +9,7 @@ import {
   FacebookAuthProvider,
   GithubAuthProvider,
   OAuthProvider,
+  TwitterAuthProvider,
 } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -21,14 +22,6 @@ export const AuthContextProvider = ({ children }) => {
     return signInWithPopup(auth, new GoogleAuthProvider());
   };
 
-  const facebookSignIn = () => {
-    return signInWithPopup(auth, new FacebookAuthProvider());
-  }
-
-  const appleSignIn = () => {
-    //return signInWithPopup(auth, new AppleAuthProvider());
-  }
-
   const microsoftSignIn = () => {
     return signInWithPopup(auth,  new OAuthProvider('microsoft.com'));
   }
@@ -36,6 +29,14 @@ export const AuthContextProvider = ({ children }) => {
   const githubSignIn = () => {
     return signInWithPopup(auth, new GithubAuthProvider());
   };
+
+  const facebookSignIn = () => {
+    return signInWithPopup(auth, new FacebookAuthProvider());
+  }
+
+  const twitterSignIn = () => {
+    return signInWithPopup(auth, new TwitterAuthProvider());
+  }
 
   const firebaseSignOut = () => {
     return signOut(auth);
@@ -52,7 +53,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []); // Remove user from dependency array
 
   return (
-    <AuthContext.Provider value={{ user, googleSignIn, facebookSignIn, appleSignIn, microsoftSignIn, githubSignIn, firebaseSignOut }}>
+    <AuthContext.Provider value={{ user, googleSignIn, microsoftSignIn, githubSignIn, twitterSignIn, facebookSignIn, firebaseSignOut }}>
       {children}
     </AuthContext.Provider>
   );

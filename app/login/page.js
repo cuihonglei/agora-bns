@@ -15,10 +15,11 @@ import loginImage from '../_assets/images/login-image.png';
 
 // Sign In Icons.
 import googleIcon from '../_assets/icons/signin-google.png';
-import facebookIcon from '../_assets/icons/signin-facebook.png';
-import appleIcon from '../_assets/icons/signin-apple.png';
 import microsoftIcon from '../_assets/icons/signin-microsoft.png';
 import githubIcon from '../_assets/icons/signin-github.png';
+import facebookIcon from '../_assets/icons/signin-facebook.png';
+import twitterIcon from '../_assets/icons/signin-twitter.png';
+
 
 // Sign In Button
 function SignInButton({ icon, text, onClick, isLoggingIn }) {
@@ -38,7 +39,7 @@ function LoginPage() {
 
   const router = useRouter();
 
-  const { user, googleSignIn, facebookSignIn, appleSignIn, microsoftSignIn, githubSignIn } = useUserAuth();
+  const { user, googleSignIn, microsoftSignIn, githubSignIn, facebookSignIn, twitterSignIn } = useUserAuth();
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -54,17 +55,17 @@ function LoginPage() {
         case 'google':
           await googleSignIn();
           break;
-        case 'facebook':
-          await facebookSignIn();
-          break;
-        case 'apple':
-          await appleSignIn();
-          break;
         case 'microsoft':
           await microsoftSignIn();
           break;
         case 'github':
           await githubSignIn();
+          break;
+        case 'facebook':
+          await facebookSignIn();
+          break;
+        case 'twitter':
+          await twitterSignIn();
           break;
         default:
           throw new Error('Unsupported provider');
@@ -111,14 +112,14 @@ function LoginPage() {
           {/* Right Buttons */}
           <div className="flex flex-col justify-center gap-4">
             <SignInButton icon={googleIcon} text="Sign in with Google" onClick={() => handleLogin('google')} isLoggingIn={isLoggingIn} />
-            <SignInButton icon={facebookIcon} text="Sign in with Facebook" onClick={() => handleLogin('facebook')} isLoggingIn={isLoggingIn} />
-            <SignInButton icon={appleIcon} text="Sign in with Apple" onClick={() => handleLogin('apple')} isLoggingIn={isLoggingIn} />
             <SignInButton icon={microsoftIcon} text="Sign in with Microsoft" onClick={() => handleLogin('microsoft')} isLoggingIn={isLoggingIn} />
             <SignInButton icon={githubIcon} text="Sign in with Github" onClick={() => handleLogin('github')} isLoggingIn={isLoggingIn} />
+            <SignInButton icon={facebookIcon} text="Sign in with Facebook" onClick={() => handleLogin('facebook')} isLoggingIn={isLoggingIn} />
+            <SignInButton icon={twitterIcon} text="Sign in with Twitter" onClick={() => handleLogin('twitter')} isLoggingIn={isLoggingIn} />
           </div>
 
         </div>
-        
+
       </div>
 
       <Footer />
