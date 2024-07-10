@@ -38,7 +38,7 @@ function LoginPage() {
 
   const router = useRouter();
 
-  const { user, googleSignIn, githubSignIn, emailPasswordSignIn, emailPasswordSignUp } = useUserAuth();
+  const { user, googleSignIn, facebookSignIn, appleSignIn, microsoftSignIn, githubSignIn } = useUserAuth();
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -55,13 +55,13 @@ function LoginPage() {
           await googleSignIn();
           break;
         case 'facebook':
-          //await facebookSignIn();
+          await facebookSignIn();
           break;
         case 'apple':
-          //await appleSignIn();
+          await appleSignIn();
           break;
         case 'microsoft':
-          //awaite microsoftSignIn();
+          await microsoftSignIn();
           break;
         case 'github':
           await githubSignIn();
