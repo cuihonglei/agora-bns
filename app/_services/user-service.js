@@ -20,10 +20,46 @@ export const addUserProduct = async (userId, productId) => {
     await setDoc(userDocRef, { products: updatedProducts }, { merge: true });
 };
 
-export const addUser = (userId, info) => {
-  // TODO
+
+// updates the user's profile
+export const updateUser = async (userId, updateInfo) => {
+  const userDocRef = doc(db, 'users', userId);
+
+  try {
+    // Fetch the current user data
+    const userDocSnap = await getDoc(userDocRef);
+    const userData = userDocSnap.exists() ? userDocSnap.data() : {};
+
+    // Merge the updated info with the existing user data
+    const updatedUserData = { ...userData, ...updateInfo };
+
+    // Update the user document with the merged data
+    await setDoc(userDocRef, updatedUserData, { merge: true });
+
+    console.log('User data updated successfully');
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    throw error; // Throw the error for handling in the calling component
+  }
 };
 
-export const getUser = (userId) => {
-  // TODO
-}
+// gets the user's profile from firebase and displays in profile page
+export const getUser = async (userId) => {
+  const userDocRef = doc(db, 'users', userId);
+
+  try {
+    // Fetch the user document snapshot
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      // Return user data if document exists
+      return userDocSnap.data();
+    } else {
+      console.log('User document not found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    throw error; // Throw the error for handling in the calling component
+  }
+};

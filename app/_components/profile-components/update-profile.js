@@ -2,13 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { GrFormClose, GrFormCheckmark } from "react-icons/gr";
+import { updateUser, getUser } from '../../_services/user-service'; // Adjust the path to updateUser and getUser functions
+import { useUserAuth } from '../../_utils/auth-context'; // Adjust the path to useUserAuth
 
-function UpdateProfile({ onCancel, onSave }) {
+function UpdateProfile({ onCancel }) {
+  const { user } = useUserAuth(); // Retrieve user from context
+  const [activeSection, setActiveSection] = useState('general'); // State to manage the active section
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phoneNumber: '',
-    emailAddress: '',
+    email: '',
     website: '',
     facebook: '',
     twitter: '',
@@ -17,6 +21,25 @@ function UpdateProfile({ onCancel, onSave }) {
 
   const [saveMessage, setSaveMessage] = useState('');
   const [formErrors, setFormErrors] = useState({});
+  
+  useEffect(() => {
+    // Fetch user data from Firestore on component mount
+    const fetchUserData = async () => {
+      try {
+        const userData = await getUser(user.uid); // Replace with your getUser function implementation
+        if (userData) {
+          setFormData(userData);
+        } else {
+          console.error('User data not found');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Optionally, handle error scenario
+      }
+    };
+
+    fetchUserData();
+  }, [user.uid]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,6 +50,7 @@ function UpdateProfile({ onCancel, onSave }) {
   };
 
   const handleCancel = () => {
+    setActiveSection('general'); // Navigate to the general section
     onCancel();
   };
 
@@ -41,8 +65,8 @@ function UpdateProfile({ onCancel, onSave }) {
     if (!formData.phoneNumber.trim()) {
       errors.phoneNumber = 'Phone Number is required';
     }
-    if (!formData.emailAddress.trim()) {
-      errors.emailAddress = 'Email Address is required';
+    if (!formData.email.trim()) {
+      errors.email = 'Email Address is required';
     }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -54,30 +78,38 @@ function UpdateProfile({ onCancel, onSave }) {
         return; // Exit early if form is not valid
       }
       
-      // Call onSave function passed from parent component
-      onSave(formData);
+      // Prepare data to be saved
+      const updateInfo = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phoneNumber: formData.phoneNumber,
+        email: formData.email,
+        website: formData.website,
+        facebook: formData.facebook,
+        twitter: formData.twitter,
+        address: formData.address
+      };
+
+      // Call updateUser function to save data
+      await updateUser(user.uid, updateInfo); // Pass userId and updateInfo
 
       // Set save message
       setSaveMessage('Changes have been saved. Redirecting...');
 
-      // Redirect to general information after 5 seconds
+      // Redirect to general information after 3 seconds
       setTimeout(() => {
         setSaveMessage('');
-        onCancel(); // Redirect to general information
-      }, 5000); // 5 seconds
+        handleCancel(); // Redirect to general information
+        setTimeout(() => {
+          window.location.reload(); // Reload the page after navigation
+        }, 100); // Delay to ensure navigation occurs before reload
+      }, 3000); // 3 seconds
 
     } catch (error) {
       console.error('Error saving data:', error);
       // Optionally, handle error scenario
     }
   };
-
-  useEffect(() => {
-    return () => {
-      // Clean up timeout if component unmounts before redirection
-      clearTimeout();
-    };
-  }, []);
 
   return (
     <div className="mb-1">
@@ -140,14 +172,14 @@ function UpdateProfile({ onCancel, onSave }) {
           <label className="block text-sm font-medium text-gray-700">Email Address *</label>
           <input
             type="email"
-            name="emailAddress"
+            name="email"
             placeholder="Enter your email address"
-            className={`block w-full p-2 border ${formErrors.emailAddress ? 'border-red-500' : 'border-gray-300'} rounded`}
-            value={formData.emailAddress}
+            className={`block w-full p-2 border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} rounded`}
+            value={formData.email}
             onChange={handleInputChange}
           />
-          {formErrors.emailAddress && (
-            <p className="text-sm text-red-500 mt-1">{formErrors.emailAddress}</p>
+          {formErrors.email && (
+            <p className="text-sm text-red-500 mt-1">{formErrors.email}</p>
           )}
         </div>
 
