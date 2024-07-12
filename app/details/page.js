@@ -11,7 +11,7 @@ import Map from 'app/_components/Map';
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addComment, getComments } from '../_services/comment-service';
-import Map from '../_components/Map';
+
 function ProductDetails() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
