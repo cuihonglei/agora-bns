@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 import Header from '../_components/header';
 import Footer from '../_components/footer';
-
+import Map from 'app/_components/Map';
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addComment, getComments } from '../_services/comment-service';
