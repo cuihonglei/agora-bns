@@ -17,7 +17,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
         port: '',
-      },      
+      },
+      {
+        protocol: 'https',
+        hostname: 'graph.facebook.com',
+        port: '',
+      },
     ],
   },
 };
