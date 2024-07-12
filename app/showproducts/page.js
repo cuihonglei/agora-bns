@@ -18,6 +18,7 @@ function ShowProducts() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [cursorMap, setCursorMap] = useState({}); // Map to track cursors for each page
 
   const pageSize = 8;
 
@@ -26,13 +27,21 @@ function ShowProducts() {
       try {
         let result;
         if (category) {
-          result = await getProductsByCategory(category, currentPage, pageSize, sortOrder);
+          console.log(`Fetching products for category: ${category}`);
+          result = await getProductsByCategory(category, currentPage, pageSize, sortOrder, cursorMap);
         } else {
-          result = await getProducts(currentPage, pageSize, sortOrder);
+          console.log(`Fetching all products`);
+          result = await getProducts(currentPage, pageSize, sortOrder, cursorMap);
         }
-        const { products, totalPages } = result;
+        const { products, totalPages, lastVisible } = result;
         setProducts(products);
         setTotalPages(totalPages);
+
+        // Update the cursor map with the last visible document for the current page
+        setCursorMap(prev => ({
+          ...prev,
+          [currentPage]: lastVisible
+        }));
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -41,6 +50,12 @@ function ShowProducts() {
     fetchProducts();
   }, [category, currentPage, sortOrder]);
 
+  useEffect(() => {
+    // Reset to the first page when category changes
+    setCurrentPage(1);
+    setCursorMap({});
+  }, [category]);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -48,6 +63,7 @@ function ShowProducts() {
   const handleSortChange = (event) => {
     setSortOrder(event.target.value); // Update sorting order state
     setCurrentPage(1); // Reset to first page on sort change
+    setCursorMap({}); // Reset cursor map for new query
   };
 
   function categoryEditor(string) {
@@ -65,6 +81,76 @@ function ShowProducts() {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))  // Capitalize the first letter of each word
       .join(' ');  // Join the words back into a single string
   }
+
+  const renderPagination = () => {
+    const pages = [];
+    const maxPagesToShow = 3;
+
+    const showLeftDots = currentPage > 2;
+    const showRightDots = currentPage < totalPages - 1;
+
+    // Show first page button
+    if (currentPage > 1) {
+      pages.push(
+        <button
+          key="first"
+          onClick={() => handlePageChange(1)}
+          className={`px-4 py-2 mx-1 bg-gray-200 text-black rounded-lg hover:bg-blue-800 font-semibold`}
+        >
+          First
+        </button>
+      );
+    }
+
+    // Show left dots
+    if (showLeftDots) {
+      pages.push(
+        <span key="leftDots" className="px-4 py-2 mx-1 text-black">
+          ...
+        </span>
+      );
+    }
+
+    // Show middle pages
+    let startPage = Math.max(1, currentPage - 1);
+    let endPage = Math.min(totalPages, currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-4 py-2 mx-1 ${currentPage === i ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Show right dots
+    if (showRightDots) {
+      pages.push(
+        <span key="rightDots" className="px-4 py-2 mx-1 text-black">
+          ...
+        </span>
+      );
+    }
+
+    // Show last page button
+    if (currentPage < totalPages) {
+      pages.push(
+        <button
+          key="last"
+          onClick={() => handlePageChange(totalPages)}
+          className={`px-4 py-2 mx-1 bg-gray-200 text-black rounded-lg hover:bg-blue-800 font-semibold`}
+        >
+          Last
+        </button>
+      );
+    }
+
+    return pages;
+  };
 
   return (
     <>
@@ -116,18 +202,24 @@ function ShowProducts() {
             ))}
           </div>
           <div className="text-center mt-8">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={`px-4 py-2 mx-1 ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
-              >
-                {index + 1}
-              </button>
-            ))}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 mx-1 ${currentPage === 1 ? 'bg-gray-300 text-gray-600' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+            >
+              &larr; Prev
+            </button>
+            {renderPagination()}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 mx-1 ${currentPage === totalPages ? 'bg-gray-300 text-gray-600' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+            >
+              Next &rarr;
+            </button>
           </div>
           <div className="text-center mt-8">
-            <Link href="/showproducts" className="text-blue-600 hover:text-blue-800 font-semibold">
+            <Link href="/" className="text-blue-600 hover:text-blue-800 font-semibold">
               ← Back to Home
             </Link>
           </div>
