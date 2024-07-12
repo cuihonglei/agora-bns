@@ -23,6 +23,11 @@ const nextConfig = {
         hostname: 'graph.facebook.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'abs.twimg.com',
+        port: '',
+      },
     ],
   },
 };

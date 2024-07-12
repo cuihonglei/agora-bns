@@ -6,10 +6,10 @@ import {
   signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
-  FacebookAuthProvider,
   GithubAuthProvider,
-  OAuthProvider,
+  FacebookAuthProvider,
   TwitterAuthProvider,
+  OAuthProvider,
 } from "firebase/auth";
 import { auth } from "./firebase";
 
