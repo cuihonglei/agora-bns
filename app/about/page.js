@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../_utils/firebase";
 import Head from 'next/head';
