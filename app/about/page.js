@@ -1,5 +1,8 @@
 "use client";
-
+import React, { useState, useEffect } from "react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../_utils/firebase";
 import Head from 'next/head';
 import Image from 'next/image';
 import Header from 'app/_components/header';
@@ -18,56 +21,56 @@ function About() {
       <main className="mt-24 bg-white">
         <div className="max-w-6xl mx-auto py-16 px-4 sm:px-6 lg:px-8 text-center text-blue-950">
           <h1 className="text-4xl font-bold sm:text-5xl transition-all duration-300 hover:text-orange-500">
-            About Agora BNS 
+            About Agora BNS
           </h1>
           <p className="mt-4 text-lg leading-6 text-gray-700">
             Agora BNS is a leading marketplace dedicated to providing the best products across a diverse range of categories.
-            Our mission is to empower sellers and provide customers with an exceptional shopping experience.Providing ease to people and reliability is our mission.
+            Our mission is to empower sellers and provide customers with an exceptional shopping experience. Providing ease to people and reliability is our mission.
           </p>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <div className="flex flex-col items-center">
-                <div className="p-4">
-                  <Image
-                    src="/image/reliability.jpg"
-                    alt="Reliability"
-                    width={200}
-                    height={200}
-                    quality={100}
-                    className="rounded-lg"
-                  />
-                </div>
-                <p className="mt-4 text-lg font-medium text-gray-800">Reliability</p>
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center">
+              <div className="p-4">
+                <Image
+                  src="/image/reliability.jpg"
+                  alt="Reliability"
+                  width={200}
+                  height={200}
+                  quality={100}
+                  className="rounded-lg"
+                />
               </div>
-              <div className="flex flex-col items-center mt-4"> {/* Adjusted margin top for Trust */}
-                <div className="p-4">
-                  <Image
-                    src="/image/newtrust.jpg"
-                    alt="Trust"
-                    width={200}
-                    height={200}
-                    quality={100}
-                    className="rounded-lg"
-                  />
-                </div>
-                <p className="mt-4 text-lg font-medium text-gray-800">Trust</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="rounded-lg p-3"> {/* Reduced padding for Honesty */}
-                  <div className="pt-2">
-                    <Image
-                      src="/image/honesty1.png"
-                      alt="Honesty"
-                      width={180} 
-                      height={180} 
-                      quality={100}
-                      className="rounded-lg"
-                    />
-                  </div>
-                </div>
-                <p className="mt-4 text-lg font-medium text-gray-800">Honesty</p>
-              </div>
+              <p className="mt-4 text-lg font-medium text-gray-800">Reliability</p>
             </div>
+            <div className="flex flex-col items-center mt-4">
+              <div className="p-4">
+                <Image
+                  src="/image/newtrust.jpg"
+                  alt="Trust"
+                  width={200}
+                  height={200}
+                  quality={100}
+                  className="rounded-lg"
+                />
+              </div>
+              <p className="mt-4 text-lg font-medium text-gray-800">Trust</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="rounded-lg p-3">
+                <div className="pt-2">
+                  <Image
+                    src="/image/honesty1.png"
+                    alt="Honesty"
+                    width={180}
+                    height={180}
+                    quality={100}
+                    className="rounded-lg"
+                  />
+                </div>
+              </div>
+              <p className="mt-4 text-lg font-medium text-gray-800">Honesty</p>
+            </div>
+          </div>
 
           <section className="mt-16">
             <h2 className="text-3xl font-bold mb-8 hover:text-orange-500">Our Philosophy</h2>
@@ -88,9 +91,9 @@ function About() {
               ].map((member, index) => (
                 <div key={index} className="pt-6 transition-transform duration-300 transform hover:scale-105">
                   <div className="flow-root bg-blue-950 rounded-lg px-6 pb-8 mx-auto max-w-xs">
-                    <div className="rounded-full p-2 inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg mt-4">
+                    <div className="rounded-full p-2 inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg mt-4" style={{ width: '96px', height: '96px' }}>
                       <Image
-                        className="rounded-full"
+                        className="rounded-full object-cover"
                         src={member.image}
                         alt={member.name}
                         width={96}
@@ -114,6 +117,7 @@ function About() {
 }
 
 export default About;
+
 
 
 
