@@ -78,9 +78,9 @@ export const getUserChats = (userId, callback) => {
   }
 };
 
-export const getUserInfo = async (userId, userName) => {
+export const getUserInfo = async (userId) => {
   try {
-    const userDocRef = doc(db, "users", userId, userName);
+    const userDocRef = doc(db, "users", userId);
     const userDoc = await getDoc(userDocRef);
     if (userDoc.exists()) {
       return userDoc.data();
@@ -93,4 +93,6 @@ export const getUserInfo = async (userId, userName) => {
     return null;
   }
 };
+
+
 

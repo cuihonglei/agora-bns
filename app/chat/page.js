@@ -74,13 +74,16 @@ function ChatPage() {
               const info = await getUserInfo(userId);
               if (info) {
                 infos[userId] = info;
+              } else {
+                console.error(`No user info found for userId ${userId}`);
               }
             } catch (error) {
-              console.error("Error fetching user info:", error.message);
+              console.error(`Error fetching user info for userId ${userId}: ${error.message}`);
             }
           }
         }
       }));
+      console.log("Fetched user infos:", infos);
       setUserInfos(infos);
     };
 
@@ -146,7 +149,11 @@ function ChatPage() {
             <div>
               {chats.map((chat) => {
                 const otherUserId = chat.users.find(uid => uid !== user.uid);
-                const otherUserName = userInfos[otherUserId]?.displayName || otherUserId;
+                const otherUserName = `${userInfos[otherUserId]?.firstName || ''} ${userInfos[otherUserId]?.lastName || ''}`.trim() || otherUserId;
+
+                // Debugging log
+                console.log(`Chat ID: ${chat.id}, Other User ID: ${otherUserId}, Other User Name: ${otherUserName}`);
+
                 return (
                   <div
                     key={chat.id}
@@ -172,8 +179,7 @@ function ChatPage() {
                   <div className="text-center text-black my-4">{date}</div>
                   {messages.map((message) => (
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-[#c7c3d3] text-black'}`}>
-                        <div className="text-sm font-semibold">{message.userName}</div>
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-[#d8d5e2] text-black'}`}>
                         <div className="mt-1">{message.text}</div>
                         <div className="text-xs text-black mt-1">
                           {new Date(message.timestamp.toDate()).toLocaleTimeString()}
@@ -219,3 +225,9 @@ function ChatPageEx() {
 }
 
 export default ChatPageEx;
+
+
+
+
+
+
