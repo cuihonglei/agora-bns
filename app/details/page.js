@@ -21,7 +21,7 @@ function ProductDetails() {
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(0);
   const category = searchParams.get('category');
-  const router = useRouter();  // Initialize useRouter
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -67,7 +67,12 @@ function ProductDetails() {
       }
     }
   };
-  
+
+  const handleChatButtonClick = () => {
+    if (product && product.userId) {
+      router.push(`/chat?userBId=${product.userId}`);
+    }
+  };
 
   if (!product) return <div className="text-center mt-20">Loading...</div>;
 
@@ -118,6 +123,14 @@ function ProductDetails() {
                     className="text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center"
                   >
                     ← Back to Products
+                  </button>
+                </div>
+                <div className="mt-6">
+                  <button
+                    onClick={handleChatButtonClick}
+                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  >
+                    Chat with Seller
                   </button>
                 </div>
               </div>
