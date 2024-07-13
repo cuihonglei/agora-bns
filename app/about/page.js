@@ -1,12 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
-
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../_utils/firebase";
+import React from "react";
 import Head from 'next/head';
 import Image from 'next/image';
 import Header from 'app/_components/header';
 import Footer from 'app/_components/footer';
+import DaveImage from '../_assets/images/Dave.jpg';
+import HongleiImage from '../_assets/images/HongLei.jpeg';
+import JairoImage from '../_assets/images/Jairo.jpg';
+import JustinImage from '../_assets/images/Justin.jpg';
+import ParthImage from '../_assets/images/Parth.png';
+import ReliabilityImage from '../_assets/images/reliability.jpg';
+import TrustImage from '../_assets/images/newtrust.jpg';
+import HonestyImage from '../_assets/images/honesty1.png'; 
 
 function About() {
   return (
@@ -32,7 +37,7 @@ function About() {
             <div className="flex flex-col items-center">
               <div className="p-4">
                 <Image
-                  src="/image/reliability.jpg"
+                  src={ReliabilityImage}
                   alt="Reliability"
                   width={200}
                   height={200}
@@ -45,7 +50,7 @@ function About() {
             <div className="flex flex-col items-center mt-4">
               <div className="p-4">
                 <Image
-                  src="/image/newtrust.jpg"
+                  src={TrustImage}
                   alt="Trust"
                   width={200}
                   height={200}
@@ -59,7 +64,7 @@ function About() {
               <div className="rounded-lg p-3">
                 <div className="pt-2">
                   <Image
-                    src="/image/honesty1.png"
+                    src={HonestyImage}
                     alt="Honesty"
                     width={180}
                     height={180}
@@ -83,11 +88,11 @@ function About() {
             <h2 className="text-3xl font-bold mb-8 hover:text-orange-500">Meet Our Team</h2>
             <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 justify-center">
               {[
-                { name: "Jairo De Guzman", image: "/image/Jairo.jpg" },
-                { name: "Dave Luna", image: "/image/Dave.jpg" },
-                { name: "HongLei Cui", image: "/image/HongLei.jpeg" },
-                { name: "Parth Arora", image: "/image/Parth.png" },
-                { name: "Justin James Marquez", image: "/image/Justin.jpg" },
+                { name: "Jairo De Guzman", image: JairoImage },
+                { name: "Dave Luna", image: DaveImage },
+                { name: "HongLei Cui", image: HongleiImage },
+                { name: "Parth Arora", image: ParthImage },
+                { name: "Justin James Marquez", image: JustinImage },
               ].map((member, index) => (
                 <div key={index} className="pt-6 transition-transform duration-300 transform hover:scale-105">
                   <div className="flow-root bg-blue-950 rounded-lg px-6 pb-8 mx-auto max-w-xs">
