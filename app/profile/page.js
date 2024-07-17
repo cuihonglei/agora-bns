@@ -10,6 +10,7 @@ import Header from '../_components/header';
 import Footer from '../_components/footer';
 import Sidebar from '../_components/profile-components/sidebar';
 import UpdateProfile from '../_components/profile-components/update-profile';
+import ShowProducts from '../_components/profile-components/profile-product';
 
 function ProfilePage() {
   const router = useRouter();
@@ -152,13 +153,13 @@ function ProfilePage() {
               />
             )}
 
-            {/* Render products component */}
-            {activeSection === 'products' && (
-              <div>
-                <h2 className="text-2xl font-bold">Listed Products</h2>
-                {/* Add your products listing content here */}
-              </div>
-            )}
+          { /* Render products component */ }
+          {activeSection === 'products' && (
+            <div>
+              <h2 className="text-2xl font-bold">Listed Products</h2>
+              <ShowProducts/>
+            </div>
+          )}
 
             {/* Render messages component */}
             {activeSection === 'messages' && (
