@@ -49,8 +49,8 @@ function Intro() {
         className="ml-24"
         src={introImage}
         alt="Intro Image"
-        width={274}
-        height={259}
+        width={256}
+        height={256}
       />
     </div>
   );
