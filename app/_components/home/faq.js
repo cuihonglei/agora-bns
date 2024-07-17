@@ -7,23 +7,23 @@ const FAQ = () => {
   const faqs = [
     {
       question: 'How do I create an account?',
-      answer: 'Creating an account is simple. Click on the "Sign In" button on the top right corner of the homepage, fill in your personal details including your email, username, and password. You will receive a confirmation email. Click on the link in the email to activate your account and start using the marketplace.',
+      answer: 'Creating an account is simple. Click on the "Sign In" button on the top right corner of the homepage. Choose your preferred third-party login option from Google, Microsoft, GitHub, Facebook, or Twitter. Follow the prompts to sign in using your selected service. Once authenticated, your account will be created, and you can start using the marketplace immediately.',
     },
     {
       question: 'How can I list an item for sale?',
-      answer: 'To list an item for sale, log in to your account and go to the "Sell" section. Provide detailed information about your item, including a title, description, price, and high-quality images. Select the appropriate category and condition of the item. After reviewing your details, click "Submit" to list your item on the marketplace.',
+      answer: 'To list an item for sale, log in to your account and go to the "Sell Products" section. Provide detailed information about your item, including a title, description, price, and high-quality images. Select the appropriate category and condition of the item. After reviewing your details, click "Add Product" to list your item on the marketplace.',
     },
     {
       question: 'What payment methods are accepted?',
-      answer: 'We accept various payment methods including credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers. During checkout, you can choose your preferred payment method. For sellers, we support direct deposits to your bank account or transfers to your PayPal account.',
+      answer: 'We do not support direct payments on the platform. Users should handle payments individually between buyers and sellers. Ensure to communicate clearly and use trusted payment methods such as credit cards, PayPal, or bank transfers to complete transactions securely.',
     },
     {
       question: 'Can I return an item I purchased?',
-      answer: 'Yes, most items can be returned within 14 days of receipt. To initiate a return, log in to your account, go to your order history, and select the item you want to return. Follow the instructions to generate a return label. Ensure the item is in its original condition and packaging. Return shipping costs may apply, depending on the seller\'s return policy.',
+      answer: 'As our platform only facilitates information exchange between users, we do not manage returns directly. All purchases and returns must be handled between the buyer and seller. Please communicate with the seller regarding their return policy and the process for returning an item.',
     },
     {
       question: 'How do I contact customer support?',
-      answer: 'You can contact our customer support team via the "Contact Us" page on our website. We offer 24/7 support through live chat, email, and phone. Our team is here to help with any inquiries or issues you may have, ensuring a smooth and satisfactory experience on our marketplace.',
+      answer: 'First, check our chatbot for help by clicking the chat icon at the bottom right corner of the website. If you need further assistance, you can send an email to honglei9423@gmail.com. Our team is here to help with any inquiries or issues you may have.',
     },
   ];
 
