@@ -4,8 +4,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import 'leaflet/dist/leaflet.css';
-
 import Header from '../_components/header';
 import Footer from '../_components/footer';
 import Map from '../_components/Map';
