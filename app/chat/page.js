@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUserAuth } from "app/_utils/auth-context";
-import { getChat, addMessage, getMessages, getUserChats, getUserInfo } from "../_services/chat-service";
+import { getChat, addMessage, getMessages, getUserChats, getUserInfo, deleteChat } from "../_services/chat-service";
 import Head from "next/head";
 import Link from "next/link";
 import Header from "app/_components/header";
@@ -20,6 +20,7 @@ function ChatPage() {
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [userInfos, setUserInfos] = useState({});
+  const [showActions, setShowActions] = useState({});
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -112,13 +113,46 @@ function ChatPage() {
     }
   };
 
-  const groupMessagesByDate = (messages) => {
-    return messages.reduce((groups, message) => {
-      const date = new Date(message.timestamp.toDate()).toLocaleDateString();
-      if (!groups[date]) {
-        groups[date] = [];
+  const handleDeleteChat = async (chatId) => {
+    if (window.confirm("Are you sure you want to delete this chat?")) {
+      try {
+        await deleteChat(chatId);
+        setSelectedChat(null);
+        setChatId(null);
+      } catch (error) {
+        console.error("Error deleting chat:", error);
       }
-      groups[date].push(message);
+    }
+  };
+  
+  const toggleActions = (chatId) => {
+    setShowActions((prev) => ({
+      ...prev,
+      [chatId]: !prev[chatId],
+    }));
+  };
+
+  const groupMessagesByDate = (messages) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    return messages.reduce((groups, message) => {
+      const messageDate = new Date(message.timestamp.toDate());
+      let dateLabel;
+
+      if (messageDate.toDateString() === today.toDateString()) {
+        dateLabel = 'Today';
+      } else if (messageDate.toDateString() === yesterday.toDateString()) {
+        dateLabel = 'Yesterday';
+      } else {
+        dateLabel = messageDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+
+      if (!groups[dateLabel]) {
+        groups[dateLabel] = [];
+      }
+      groups[dateLabel].push(message);
       return groups;
     }, {});
   };
@@ -161,14 +195,39 @@ function ChatPage() {
                     onClick={() => setSelectedChat(chat)}
                   >
                     <span>{otherUserName}</span>
+                    <div className="relative">
+                      <button
+                        className="ml-2 px-2 text-white rounded-full focus:outline-none focus:ring focus:ring-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleActions(chat.id);
+                        }}
+                      >
+                        &#8801; 
+                      </button>
+                      {showActions[chat.id] && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                          <button
+                            className="block w-full text-center px-4 py-2 text-black hover:bg-[#e09a4b]"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteChat(chat.id);
+                              setShowActions({});
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
                   </div>
+                </div>
                 );
               })}
             </div>
           </aside>
           <main className="flex-grow p-4 bg-white">
             <div className="flex justify-between items-center mb-4">
-              <Link href="/" className="text-[#392F5A] hover:text-gray-700">
+              <Link href="/" className="text-[#392F5A] hover:text-[#e09a4b]">
                 ← Back to Home
               </Link>
               <h1 className="text-2xl font-bold text-[#392F5A]">Private Chat Page</h1>
@@ -179,7 +238,7 @@ function ChatPage() {
                   <div className="text-center text-black my-4">{date}</div>
                   {messages.map((message) => (
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-blue-400 text-white' : 'bg-[#d8d5e2] text-black'}`}>
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#e09a4b] text-white' : 'bg-[#d8d5e2] text-black'}`}>
                         <div className="mt-1">{message.text}</div>
                         <div className="text-xs text-black mt-1">
                           {new Date(message.timestamp.toDate()).toLocaleTimeString()}
