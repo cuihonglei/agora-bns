@@ -261,7 +261,7 @@ function ChatPage() {
                 />
                 <button
                   type="submit"
-                  className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                  className="ml-2 px-4 py-2 bg-[#392F5A] text-white rounded-full hover:bg-[#e09a4b] focus:outline-none focus:ring focus:ring-blue-300"
                 >
                   Send
                 </button>
