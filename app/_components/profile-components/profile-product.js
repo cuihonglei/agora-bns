@@ -9,25 +9,26 @@ import { getProductsByUser } from '../../_services/product-service';
 import { editUserProduct, removeUserProduct } from '../../_services/user-service';
 import EditProduct from '../edit-product';
 import RemoveProduct from '../remove-product';
-import { useAuth } from '../../_utils/auth-context';
+import { useUserAuth } from '../../_utils/auth-context';
 
 function ShowProducts() {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [editingProduct, setEditingProduct] = useState(null);
-  const user = useAuth();
+  const { user } = useUserAuth(); // Destructure user from context
 
   const pageSize = 8;
 
   useEffect(() => {
     if (!user) {
-      console.error("User is not authenticated");
+      console.error("User is not authenticated or UID is missing");
       return;
     }
 
     const fetchProducts = async () => {
       try {
+        console.log("Fetching products for user:", user.uid);
         const productsData = await getProductsByUser(user.uid, currentPage, pageSize);
         console.log("Fetched products:", productsData);
         setProducts(productsData.products);
@@ -40,14 +41,14 @@ function ShowProducts() {
     fetchProducts();
   }, [user, currentPage]);
 
-  const handlePageChange = async (page) => {
+  const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
   const handleEditSave = async (updatedProduct) => {
     try {
       if (!user) {
-        console.error("User is not authenticated");
+        console.error("User is not authenticated or UID is missing");
         return;
       }
       await editUserProduct(user.uid, editingProduct.id, updatedProduct);
@@ -70,6 +71,10 @@ function ShowProducts() {
 
   const handleRemove = async (productId) => {
     try {
+      if (!user) {
+        console.error("User is not authenticated or UID is missing");
+        return;
+      }
       await removeUserProduct(user.uid, productId);
       const productsData = await getProductsByUser(user.uid, currentPage, pageSize);
       setProducts(productsData.products);
@@ -102,7 +107,7 @@ function ShowProducts() {
       </Head>
 
       <main className="bg-white pt-24 pb-12 flex-grow">
-        <ToastContainer /> {/* Add ToastContainer here */}
+        <ToastContainer />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6">
             {products.map(product => (
