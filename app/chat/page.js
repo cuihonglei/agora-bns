@@ -6,10 +6,10 @@ import { useUserAuth } from "app/_utils/auth-context";
 import { getChat, addMessage, getMessages, getUserChats, getUserInfo } from "../_services/chat-service";
 import Head from "next/head";
 import Link from "next/link";
-import Header from "app/_components/header";
-import Footer from "app/_components/footer";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "app/_utils/firebase";
+import Header from "app/_components/header";
+import Footer from "app/_components/footer";
 
 function ChatPage() {
   const searchParams = useSearchParams();
@@ -142,7 +142,7 @@ function ChatPage() {
       </Head>
 
       <div className="min-h-screen flex flex-col">
-        <Header />
+        <Header></Header>
         <div className="flex flex-grow">
           <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
             <div className="text-2xl font-bold mb-4">Chat History</div>
@@ -168,8 +168,8 @@ function ChatPage() {
           </aside>
           <main className="flex-grow p-4 bg-white">
             <div className="flex justify-between items-center mb-4">
-              <Link href="/" className="text-[#392F5A] hover:text-gray-700">
-                ← Back to Home
+              <Link href="/profile" className="text-[#392F5A] hover:text-gray-700">
+                ← Back to Profile
               </Link>
               <h1 className="text-2xl font-bold text-[#392F5A]">Private Chat Page</h1>
             </div>
@@ -210,7 +210,7 @@ function ChatPage() {
             </footer>
           </main>
         </div>
-        <Footer />
+        <Footer></Footer>
       </div>
     </>
   );

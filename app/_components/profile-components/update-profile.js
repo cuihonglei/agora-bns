@@ -236,19 +236,22 @@ function UpdateProfile({ onCancel }) {
         </div>
 
         {/* Buttons */}
+
+        {/* Cancel Button */}
         <div className="flex">
           <button
             type="button"
-            className="bg-orange-500 text-white px-4 py-2 rounded flex items-center"
+            className="bg-[#FF8811] text-white px-4 py-2 rounded flex items-center"
             onClick={handleCancel}
           >
             <GrFormClose className="mr-2" />
             Cancel
           </button>
 
+          {/* Save Button */}
           <button
             type="button"
-            className="bg-orange-500 text-white px-4 py-2 rounded ml-5 flex items-center"
+            className="bg-[#FF8811] text-white px-4 py-2 rounded ml-5 flex items-center"
             onClick={handleSave}
           >
             <GrFormCheckmark className="mr-2" />
