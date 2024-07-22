@@ -101,9 +101,6 @@
 
 
 
-
-
-
 import React, { useState, useEffect } from "react";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { doc, getDoc } from "firebase/firestore";
@@ -114,45 +111,40 @@ const containerStyle = {
   height: '300px',
 };
 
+const DEFAULT_LOCATION = { lat: 51.0646, lng: -114.0896 }; 
+
 const Map = () => {
   const [userPosition, setUserPosition] = useState(null);
   const [locationError, setLocationError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserLocation = async () => {
-      try {
-        const address = "2668 Capitol Hill Crescent NW, Calgary";
+    fetchUserLocation();
+  }, []);
+
+  const fetchUserLocation = async () => {
+    try {
+      const docRef = doc(db, "users", "address");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const address = data.address;
         console.log("Geocoding address:", address);
         const position = await geocodeAddress(address);
         setUserPosition(position);
-      } catch (error) {
-        console.error("Error geocoding address:", error);
-        try {
-          const docRef = doc(db, "locations", "userLocation");
-          const docSnap = await getDoc(docRef);
-
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            const latitude = data.latitude;
-            const longitude = data.longitude;
-            setUserPosition({ lat: latitude, lng: longitude });
-            console.log(`User's location from Firebase: Latitude: ${latitude}, Longitude: ${longitude}`);
-          } else {
-            console.log("No such document!");
-            setLocationError("No location data available");
-          }
-        } catch (firestoreError) {
-          setLocationError(firestoreError.message);
-          console.error("Error fetching user location from Firebase:", firestoreError);
-        }
-      } finally {
-        setLoading(false);
+      } else {
+        console.log("No such document! Using default location.");
+        setUserPosition(DEFAULT_LOCATION);
       }
-    };
-
-    fetchUserLocation();
-  }, []);
+    } catch (error) {
+      setLocationError(error.message);
+      console.error("Error fetching user location from Firebase:", error);
+      setUserPosition(DEFAULT_LOCATION);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const geocodeAddress = async (address) => {
     const geocoder = new window.google.maps.Geocoder();
@@ -187,17 +179,10 @@ const Map = () => {
         zoom: 15,
       });
 
-      if ( window.google.maps.marker.AdvancedMarkerElement) {
-        new window.google.maps.marker.AdvancedMarkerElement({
-          position: userPosition,
-          map: map,
-        });
-      } else {
-        new window.google.maps.Marker({
-          position: userPosition,
-          map: map,
-        });
-      }
+      new window.google.maps.Marker({
+        position: userPosition,
+        map: map,
+      });
     }
   }, [isLoaded, userPosition]);
 
@@ -205,7 +190,7 @@ const Map = () => {
     <div>
       {loading && <p className="text-gray-700 text-center p-4">Loading map...</p>}
       {locationError && <p className="text-red-500 text-center p-4">Error fetching location: {locationError}</p>}
-      <div id="map" style={containerStyle}></div>
+      <div style={containerStyle}></div>
     </div>
   );
 };
