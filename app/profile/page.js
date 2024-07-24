@@ -135,7 +135,7 @@ function ProfilePage() {
                 </div>
 
                 <div>
-                  <button type="button" className="bg-orange-500 text-white px-4 py-2 rounded hover:underline flex items-center" onClick={handleUpdateClick}>
+                  <button type="button" className="bg-[#FF8811] text-white px-4 py-2 rounded hover:underline flex items-center" onClick={handleUpdateClick}>
                     <GrFormEdit className='mr-2'></GrFormEdit>
                     Edit
                   </button>
@@ -157,14 +157,6 @@ function ProfilePage() {
               <div>
                 <h2 className="text-2xl font-bold">Listed Products</h2>
                 {/* Add your products listing content here */}
-              </div>
-            )}
-
-            {/* Render messages component */}
-            {activeSection === 'messages' && (
-              <div>
-                <h2 className="text-2xl font-bold">Messages</h2>
-                {/* Add your messages content here */}
               </div>
             )}
           </div>

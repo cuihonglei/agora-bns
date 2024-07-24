@@ -227,8 +227,8 @@ function ChatPage() {
           </aside>
           <main className="flex-grow p-4 bg-white">
             <div className="flex justify-between items-center mb-4">
-              <Link href="/" className="text-[#392F5A] hover:text-[#e09a4b]">
-                ← Back to Home
+              <Link href="/profile" className="text-[#392F5A] hover:text-[#e09a4b]">
+                ← Back to Profile
               </Link>
               <h1 className="text-2xl font-bold text-[#392F5A]">Private Chat Page</h1>
             </div>

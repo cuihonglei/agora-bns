@@ -63,3 +63,18 @@ export const getUser = async (userId) => {
     throw error; // Throw the error for handling in the calling component
   }
 };
+
+// update the user's profile picture
+export const updateUserPhoto = async (userId, photoURL) => {
+  const userDocRef = doc(db, 'users', userId);
+
+  try {
+    // Update the user document with the new photoURL
+    await updateDoc(userDocRef, { photoURL });
+
+    console.log('User photo updated successfully');
+  } catch (error) {
+    console.error('Error updating user photo:', error);
+    throw error; // Throw the error for handling in the calling component
+  }
+}
