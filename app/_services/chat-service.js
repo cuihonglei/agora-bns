@@ -1,5 +1,5 @@
 import { db } from "../_utils/firebase";
-import { collection, doc, getDoc, setDoc, addDoc, query, orderBy, onSnapshot, where } from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, addDoc, query, orderBy, onSnapshot, where, deleteDoc, getDocs } from "firebase/firestore";
 
 const getChatDocId = (userAId, userBId) => {
   return userAId < userBId ? `${userAId}_${userBId}` : `${userBId}_${userAId}`;
@@ -91,6 +91,26 @@ export const getUserInfo = async (userId) => {
   } catch (error) {
     console.error("Error fetching user info:", error.message);
     return null;
+  }
+};
+
+export const deleteChat = async (chatId) => {
+  try {
+    const chatDocRef = doc(db, "chats", chatId);
+    const messagesCollectionRef = collection(db, "chats", chatId, "messages");
+
+    // Delete all messages in the chat
+    const messagesSnapshot = await getDocs(messagesCollectionRef);
+    const deletePromises = messagesSnapshot.docs.map((doc) => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+
+    // Delete the chat document
+    await deleteDoc(chatDocRef);
+
+    console.log(`Chat with ID ${chatId} and its messages deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting chat:", error.message);
+    throw new Error("Failed to delete chat");
   }
 };
 
