@@ -8,7 +8,9 @@ import Image from 'next/image';
 import { useUserAuth } from '../_utils/auth-context';
 
 import logo from '../_assets/images/logo.png';
-import profileImage  from '../_assets/images/profile-image.png';
+import profileImage from '../_assets/images/profile-image.png';
+
+import { AiOutlineMessage } from 'react-icons/ai';
 
 
 // Menu component
@@ -119,6 +121,10 @@ function Header() {
   const router = useRouter();
   const { user, firebaseSignOut } = useUserAuth();
 
+  // Unread messsage count
+  // TODO Get it from the database
+  const [unread, setUnread] = useState(0);
+
   const handleSignIn = () => {
     router.push('/login');
   };
@@ -155,6 +161,16 @@ function Header() {
               {/* Profile Image */}
               <Link href='/profile'>
                 <Image src={user.photoURL || profileImage} alt="profile image" className="rounded-full" width={36} height={36} />
+              </Link>
+
+              {/* Chat Notification */}
+              <Link href='/chat'>
+                <div className="relative flex items-center justify-center w-9 h-9 bg-[#9DD9D2] rounded-full ml-3">
+                  <AiOutlineMessage size={24} />
+                  {unread > 0 && <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {unread}
+                  </div>}
+                </div>
               </Link>
 
               {/* Logout Button */}
