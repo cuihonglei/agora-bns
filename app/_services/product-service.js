@@ -1,6 +1,17 @@
-import { collection, getDocs, doc, addDoc, getDoc, deleteDoc, updateDoc, query, orderBy, limit, startAfter, where} from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  getDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  where
+} from "firebase/firestore";
 import { db } from "../_utils/firebase"
-import { sortProductsByPrice } from '../_components/price-filter.js'; // Ensure the correct import path
 
 // Add a product to firebase database.
 // @param userId, the user who add the product.
@@ -120,9 +131,9 @@ export const getProductsByUser = async (userId, currentPage = 1, pageSize = 8) =
     // Extract products for the current page based on startIndex and pageSize
     const currentPageProducts = productList.slice(startIndex, startIndex + pageSize);
 
-    return { 
-      products: currentPageProducts, 
-      totalPages: Math.ceil(productList.length / pageSize) 
+    return {
+      products: currentPageProducts,
+      totalPages: Math.ceil(productList.length / pageSize)
     };
   } catch (error) {
     console.error("Error fetching products:", error);
