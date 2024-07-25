@@ -155,9 +155,9 @@ function ProfilePage() {
 
           { /* Render products component */ }
           {activeSection === 'products' && (
-            <div>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
               <h2 className="text-2xl font-bold">Listed Products</h2>
-              <ShowProducts/>
+              <ShowProducts className="mt-0"/>
             </div>
           )}
 
