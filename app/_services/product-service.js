@@ -8,8 +8,7 @@ import {
   where,
   orderBy,
   limit,
-  startAfter,
-  where
+  startAfter
 } from "firebase/firestore";
 import { db } from "../_utils/firebase"
 
