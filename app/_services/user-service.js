@@ -81,7 +81,7 @@ export const getUser = async (userId) => {
       // Return user data if document exists
       return userDocSnap.data();
     } else {
-      console.log('User document not found');
+      console.error('User document not found');
       return null;
     }
   } catch (error) {
@@ -105,7 +105,9 @@ export const updateUserPhoto = async (userId, photoURL) => {
   }
 };
 
-// TODO Get the unread messages count.
+// Get the unread messages count.
+// TODO Is that possible to get only the unreadMessages field?
 export const getUnreadMessages = async (userId) => {
-
+  const user = await getUser(userId);
+  return (user && user.unreadMessages) || 0;
 };

@@ -47,7 +47,7 @@ function ProductDetails() {
             console.error(`No user info found for userId ${productData.userId}`);
           }
         } else {
-          console.log("No such document!");
+          console.error("No such document!");
         }
       } catch (error) {
         console.error("Error fetching product:", error);

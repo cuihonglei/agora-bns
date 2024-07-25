@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import { useUserAuth } from '../_utils/auth-context';
+import { getUnreadMessages } from '../_services/user-service';
 
 import logo from '../_assets/images/logo.png';
 import profileImage from '../_assets/images/profile-image.png';
@@ -122,7 +123,6 @@ function Header() {
   const { user, firebaseSignOut } = useUserAuth();
 
   // Unread messsage count
-  // TODO Get it from the database
   const [unread, setUnread] = useState(0);
 
   const handleSignIn = () => {
@@ -137,6 +137,16 @@ function Header() {
       console.error("Error signing out:", error);
     }
   };
+
+  // Get unread messages count from the database.
+  useEffect(() => {
+    const getUnread = async () => {
+      if (user) {
+        setUnread(await getUnreadMessages(user.uid));
+      }
+    };
+    getUnread();
+  }, [user]);
 
   return (
     <header className="bg-[#FFF8F0]">

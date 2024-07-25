@@ -148,7 +148,7 @@ export const getProductByID = async (id) => {
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() };
     } else {
-      console.log("No such document!");
+      console.error("No such document!");
     }
   } catch (error) {
     console.error("Error fetching product:", error);
