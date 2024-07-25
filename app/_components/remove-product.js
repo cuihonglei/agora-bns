@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
+import { deleteProductComments } from '../_services/user-service'
 
 const RemoveProduct = ({ productId, onRemove }) => {
   const [confirming, setConfirming] = useState(false);
 
   const handleConfirm = async () => {
     try {
+      // Delete comments associated with the product
+      await deleteProductComments(productId);
+      // Remove the product
       await onRemove(productId);
     } catch (error) {
-      console.error('Error removing product:', error);
+      console.error('Error removing product or its comments:', error);
     }
     setConfirming(false);
   };
