@@ -7,8 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { getProductsByUser } from '../../_services/product-service';
 import { editUserProduct, removeUserProduct } from '../../_services/user-service';
-import EditProduct from '../edit-product';
-import RemoveProduct from '../remove-product';
+import EditProduct from './edit-product';
+import RemoveProduct from './remove-product';
 import { useUserAuth } from '../../_utils/auth-context';
 
 function ShowProducts() {

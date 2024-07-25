@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { deleteProductComments } from '../_services/user-service'
+import { deleteProductComments } from '../../_services/user-service'
 
 const RemoveProduct = ({ productId, onRemove }) => {
   const [confirming, setConfirming] = useState(false);
