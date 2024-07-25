@@ -3,7 +3,7 @@ import { storage } from '../_utils/firebase';
 
 // Upload multiple product images and return their URLs.
 export const uploadProductImages = async (images) => {
-  console.log("Uploading images", images);
+  //console.log("Uploading images", images);
   const imageUrls = await Promise.all(
     images.map(async (image) => {
       const imageName = `${Date.now()}_${image.name}`;
@@ -13,6 +13,6 @@ export const uploadProductImages = async (images) => {
       return imageUrl;
     })
   );
-  console.log("Image URLs", imageUrls);
+  //console.log("Image URLs", imageUrls);
   return imageUrls;
 };

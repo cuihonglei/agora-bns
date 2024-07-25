@@ -35,7 +35,7 @@ function ProfilePage() {
           const userData = await getUser(user.uid); // Adjust getUser function to fetch user data
 
           if (userData) {
-            console.log('Fetched user data:', userData); // Log retrieved data for debugging
+            //console.log('Fetched user data:', userData); // Log retrieved data for debugging
             setGeneralInfo({
               firstName: userData.firstName || '',
               lastName: userData.lastName || '',

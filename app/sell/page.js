@@ -83,7 +83,7 @@ export default function Sell() {
       return;
     }
     try {
-      console.log("Images to upload:", formData.images); // Debugging log
+      //console.log("Images to upload:", formData.images); // Debugging log
       const imageUrls = await uploadProductImages(formData.images);
       const productData = {
         name: formData.name,
@@ -94,7 +94,7 @@ export default function Sell() {
         imageUrls,
         userId: user.uid,
       };
-      console.log("Product data:", productData); // Debugging log
+      //console.log("Product data:", productData); // Debugging log
       const productId = await addProduct(productData);
       await addUserProduct(user.uid, productId);
       toast.success("Product added successfully!", {

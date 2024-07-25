@@ -3,7 +3,9 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useUserAuth } from "app/_utils/auth-context";
-import { getChat, addMessage, getMessages, getUserChats, getUserInfo, deleteChat } from "../_services/chat-service";
+import { getUser } from "../_services/user-service";
+import { getChat, addMessage, getMessages, getUserChats, deleteChat } from "../_services/chat-service";
+
 import Head from "next/head";
 import Link from "next/link";
 import Header from "app/_components/header";
@@ -34,9 +36,9 @@ function ChatPage() {
   const startChat = useCallback(async (userBId) => {
     if (user && userBId) {
       try {
-        console.log(`Starting chat with userBId: ${userBId}`);
+        //console.log(`Starting chat with userBId: ${userBId}`);
         const chatId = await getChat(user.uid, userBId);
-        console.log(`Chat ID: ${chatId}`);
+        //console.log(`Chat ID: ${chatId}`);
         const chatDocRef = doc(db, "chats", chatId);
         const chatDoc = await getDoc(chatDocRef);
         setSelectedChat({ id: chatId, ...chatDoc.data() });
@@ -73,7 +75,7 @@ function ChatPage() {
         for (const userId of chat.users) {
           if (!infos[userId]) {
             try {
-              const info = await getUserInfo(userId);
+              const info = await getUser(userId);
               if (info) {
                 infos[userId] = info;
               } else {
@@ -85,7 +87,7 @@ function ChatPage() {
           }
         }
       }));
-      console.log("Fetched user infos:", infos);
+      //console.log("Fetched user infos:", infos);
       setUserInfos(infos);
     };
 
@@ -188,7 +190,7 @@ function ChatPage() {
                 const otherUserInfo = userInfos[otherUserId];
                 const otherUserName = `${otherUserInfo?.firstName || ''} ${otherUserInfo?.lastName || ''}`.trim() || otherUserId;
                 // Debugging log
-                console.log(`Chat ID: ${chat.id}, Other User ID: ${otherUserId}, Other User Name: ${otherUserName}`);
+                //console.log(`Chat ID: ${chat.id}, Other User ID: ${otherUserId}, Other User Name: ${otherUserName}`);
 
                 return (
                   <div

@@ -78,22 +78,6 @@ export const getUserChats = (userId, callback) => {
   }
 };
 
-export const getUserInfo = async (userId) => {
-  try {
-    const userDocRef = doc(db, "users", userId);
-    const userDoc = await getDoc(userDocRef);
-    if (userDoc.exists()) {
-      return userDoc.data();
-    } else {
-      console.error("No such user document!");
-      return null;
-    }
-  } catch (error) {
-    console.error("Error fetching user info:", error.message);
-    return null;
-  }
-};
-
 export const deleteChat = async (chatId) => {
   try {
     const chatDocRef = doc(db, "chats", chatId);

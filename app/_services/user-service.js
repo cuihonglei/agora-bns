@@ -3,21 +3,21 @@ import { db } from "../_utils/firebase"
 
 // Add a new product to the user.
 export const addUserProduct = async (userId, productId) => {
-    // Construct the reference to the user document
-    const userDocRef = doc(db, "users", userId);
+  // Construct the reference to the user document
+  const userDocRef = doc(db, "users", userId);
 
-    // Retrieve the current list of products from the user document
-    const userDocSnap = await getDoc(userDocRef);
-    const userData = userDocSnap.exists() ? userDocSnap.data() : {};
+  // Retrieve the current list of products from the user document
+  const userDocSnap = await getDoc(userDocRef);
+  const userData = userDocSnap.exists() ? userDocSnap.data() : {};
 
-    // Get the current list of products or create an empty array if it doesn't exist
-    const currentProducts = userData.products || [];
+  // Get the current list of products or create an empty array if it doesn't exist
+  const currentProducts = userData.products || [];
 
-    // Add the new productId to the list of products
-    const updatedProducts = [...currentProducts, productId];
+  // Add the new productId to the list of products
+  const updatedProducts = [...currentProducts, productId];
 
-    // Update the user document with the updated list of products
-    await setDoc(userDocRef, { products: updatedProducts }, { merge: true });
+  // Update the user document with the updated list of products
+  await setDoc(userDocRef, { products: updatedProducts }, { merge: true });
 };
 
 export const editUserProduct = async (userId, productId, updatedProduct) => {
@@ -49,9 +49,9 @@ export default deleteProductComments;
 
 // updates the user's profile
 export const updateUser = async (userId, updateInfo) => {
-  const userDocRef = doc(db, 'users', userId);
-
   try {
+    const userDocRef = doc(db, 'users', userId);
+
     // Fetch the current user data
     const userDocSnap = await getDoc(userDocRef);
     const userData = userDocSnap.exists() ? userDocSnap.data() : {};
@@ -62,18 +62,18 @@ export const updateUser = async (userId, updateInfo) => {
     // Update the user document with the merged data
     await setDoc(userDocRef, updatedUserData, { merge: true });
 
-    console.log('User data updated successfully');
+    //console.log('User data updated successfully');
   } catch (error) {
     console.error('Error updating user data:', error);
     throw error; // Throw the error for handling in the calling component
   }
 };
 
-// gets the user's profile from firebase and displays in profile page
+// gets the user's profile from firebase.
 export const getUser = async (userId) => {
-  const userDocRef = doc(db, 'users', userId);
-
   try {
+    const userDocRef = doc(db, 'users', userId);
+
     // Fetch the user document snapshot
     const userDocSnap = await getDoc(userDocRef);
 
@@ -92,15 +92,20 @@ export const getUser = async (userId) => {
 
 // update the user's profile picture
 export const updateUserPhoto = async (userId, photoURL) => {
-  const userDocRef = doc(db, 'users', userId);
-
   try {
+    const userDocRef = doc(db, 'users', userId);
+
     // Update the user document with the new photoURL
     await updateDoc(userDocRef, { photoURL });
 
-    console.log('User photo updated successfully');
+    //console.log('User photo updated successfully');
   } catch (error) {
     console.error('Error updating user photo:', error);
     throw error; // Throw the error for handling in the calling component
   }
-}
+};
+
+// TODO Get the unread messages count.
+export const getUnreadMessages = async (userId) => {
+
+};

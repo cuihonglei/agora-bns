@@ -11,7 +11,7 @@ import Footer from '../_components/footer';
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addComment, getComments } from '../_services/comment-service';
-import { getUserInfo } from '../_services/chat-service'; // Ensure this import is correct
+import { getUser } from '../_services/user-service';
 
 function ProductDetails() {
   const searchParams = useSearchParams();
@@ -39,7 +39,7 @@ function ProductDetails() {
           setComments(productComments || []);
           
           // Fetch seller info
-          const userInfo = await getUserInfo(productData.userId);
+          const userInfo = await getUser(productData.userId);
           if (userInfo) {
             const fullName = `${userInfo.firstName || ''} ${userInfo.lastName || ''}`.trim();
             setSellerName(fullName || productData.userId);
