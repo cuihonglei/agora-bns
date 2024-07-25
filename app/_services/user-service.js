@@ -1,4 +1,4 @@
-import { collection, getDocs, getDoc, setDoc, doc, addDoc, deleteDoc, updateDoc, query } from "firebase/firestore";
+import { collection, getDocs, getDoc, setDoc, doc, addDoc, deleteDoc, updateDoc, query, where } from "firebase/firestore";
 import { db } from "../_utils/firebase"
 
 // Add a new product to the user.
@@ -20,6 +20,32 @@ export const addUserProduct = async (userId, productId) => {
     await setDoc(userDocRef, { products: updatedProducts }, { merge: true });
 };
 
+export const editUserProduct = async (userId, productId, updatedProduct) => {
+  const productDocRef = doc(db, "products", productId);
+  await updateDoc(productDocRef, updatedProduct);
+};
+
+// Remove a product from the user.
+export const removeUserProduct = async (userId, productId) => {
+  const userDocRef = doc(db, "users", userId);
+  const userDocSnap = await getDoc(userDocRef);
+  const userData = userDocSnap.exists() ? userDocSnap.data() : {};
+  const currentProducts = userData.products || [];
+  const updatedProducts = currentProducts.filter(id => id !== productId);
+  await setDoc(userDocRef, { products: updatedProducts }, { merge: true });
+  await deleteDoc(doc(db, "products", productId));
+};
+
+export const deleteProductComments = async (productId) => {
+  const commentsQuery = query(collection(db, 'comments'), where('productId', '==', productId));
+  const commentsSnapshot = await getDocs(commentsQuery);
+
+  const deletePromises = commentsSnapshot.docs.map((doc) => deleteDoc(doc.ref));
+
+  await Promise.all(deletePromises);
+};
+
+export default deleteProductComments;
 
 // updates the user's profile
 export const updateUser = async (userId, updateInfo) => {

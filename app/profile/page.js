@@ -10,6 +10,7 @@ import Header from '../_components/header';
 import Footer from '../_components/footer';
 import Sidebar from '../_components/profile-components/sidebar';
 import UpdateProfile from '../_components/profile-components/update-profile';
+import ShowProducts from '../_components/profile-components/profile-product';
 
 function ProfilePage() {
   const router = useRouter();
@@ -56,7 +57,7 @@ function ProfilePage() {
     };
 
     fetchUserData();
-    
+
   }, [user]);
 
   const handleSaveGeneralInfo = (updatedInfo) => {
@@ -152,11 +153,19 @@ function ProfilePage() {
               />
             )}
 
-            {/* Render products component */}
+            { /* Render products component */}
             {activeSection === 'products' && (
-              <div>
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl font-bold">Listed Products</h2>
-                {/* Add your products listing content here */}
+                <ShowProducts className="mt-0" />
+              </div>
+            )}
+
+            {/* Render messages component */}
+            {activeSection === 'messages' && (
+              <div>
+                <h2 className="text-2xl font-bold">Messages</h2>
+                {/* Add your messages content here */}
               </div>
             )}
           </div>

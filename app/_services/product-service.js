@@ -122,13 +122,14 @@ export const getProductsByUser = async (userId, currentPage = 1, pageSize = 8) =
 
     return { 
       products: currentPageProducts, 
-      totalPages: Math.ceil(productList.length / pageSize)
+      totalPages: Math.ceil(productList.length / pageSize) 
     };
   } catch (error) {
     console.error("Error fetching products:", error);
     return { products: [], totalPages: 0 };
   }
 };
+
 // Get a product by using the product ID.
 export const getProductByID = async (id) => {
   try {
