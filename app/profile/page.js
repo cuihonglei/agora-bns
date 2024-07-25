@@ -8,9 +8,9 @@ import { getUser } from '../_services/user-service'; // Adjust the path to getUs
 
 import Header from '../_components/header';
 import Footer from '../_components/footer';
-import Sidebar from '../_components/profile-components/sidebar';
-import UpdateProfile from '../_components/profile-components/update-profile';
-import ShowProducts from '../_components/profile-components/profile-product';
+import Sidebar from '../_components/profile/sidebar';
+import UpdateProfile from '../_components/profile/update-profile';
+import ShowProducts from '../_components/profile/profile-product';
 
 function ProfilePage() {
   const router = useRouter();
