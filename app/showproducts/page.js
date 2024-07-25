@@ -27,10 +27,10 @@ function ShowProducts() {
       try {
         let result;
         if (category) {
-          console.log(`Fetching products for category: ${category}`);
+          //console.log(`Fetching products for category: ${category}`);
           result = await getProductsByCategory(category, currentPage, pageSize, sortOrder, cursorMap);
         } else {
-          console.log(`Fetching all products`);
+          //console.log(`Fetching all products`);
           result = await getProducts(currentPage, pageSize, sortOrder, cursorMap);
         }
         const { products, totalPages, lastVisible } = result;

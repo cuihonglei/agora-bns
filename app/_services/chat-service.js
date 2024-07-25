@@ -13,11 +13,11 @@ export const getChat = async (userAId, userBId) => {
     const chatDoc = await getDoc(chatDocRef);
 
     if (!chatDoc.exists()) {
-      console.log(`Chat document with ID ${chatId} does not exist. Creating new chat document.`);
+      //console.log(`Chat document with ID ${chatId} does not exist. Creating new chat document.`);
       await setDoc(chatDocRef, { users: [userAId, userBId] });
     }
 
-    console.log("Chat ID retrieved/created:", chatId);
+    //console.log("Chat ID retrieved/created:", chatId);
     return chatId;
   } catch (error) {
     console.error("Error getting or creating chat:", error.message);
@@ -33,7 +33,7 @@ export const addMessage = async (chatId, message) => {
 
   try {
     const docRef = await addDoc(collection(db, "chats", chatId, "messages"), message);
-    console.log("Message added with ID:", docRef.id);
+    //console.log("Message added with ID:", docRef.id);
     return docRef.id;
   } catch (error) {
     console.error("Error adding message:", error.message);
@@ -54,7 +54,7 @@ export const getMessages = (chatId, callback) => {
       querySnapshot.forEach((doc) => {
         messages.push({ id: doc.id, ...doc.data() });
       });
-      console.log("Messages retrieved:", messages);
+      //console.log("Messages retrieved:", messages);
       callback(messages);
     });
   } catch (error) {
@@ -70,7 +70,7 @@ export const getUserChats = (userId, callback) => {
       querySnapshot.forEach((doc) => {
         chats.push({ id: doc.id, ...doc.data() });
       });
-      console.log("User chats retrieved:", chats);
+      //console.log("User chats retrieved:", chats);
       callback(chats);
     });
   } catch (error) {
@@ -107,7 +107,7 @@ export const deleteChat = async (chatId) => {
     // Delete the chat document
     await deleteDoc(chatDocRef);
 
-    console.log(`Chat with ID ${chatId} and its messages deleted successfully.`);
+    //console.log(`Chat with ID ${chatId} and its messages deleted successfully.`);
   } catch (error) {
     console.error("Error deleting chat:", error.message);
     throw new Error("Failed to delete chat");

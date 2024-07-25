@@ -28,9 +28,9 @@ function ShowProducts() {
 
     const fetchProducts = async () => {
       try {
-        console.log("Fetching products for user:", user.uid);
+        //console.log("Fetching products for user:", user.uid);
         const productsData = await getProductsByUser(user.uid, currentPage, pageSize);
-        console.log("Fetched products:", productsData);
+        //console.log("Fetched products:", productsData);
         setProducts(productsData.products);
         setTotalPages(productsData.totalPages);
       } catch (error) {
