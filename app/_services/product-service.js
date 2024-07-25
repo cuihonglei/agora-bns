@@ -49,6 +49,8 @@ export const getProducts = async (currentPage, pageSize, sortOrder, cursorMap) =
     });
 
     const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+    cursorMap[currentPage] = lastVisibleDoc; // Update cursorMap for the current page
+
     const totalProducts = await getTotalProductsCount();
     const totalPages = Math.ceil(totalProducts / pageSize);
 
@@ -87,6 +89,8 @@ export const getProductsByCategory = async (category, currentPage, pageSize, sor
     });
 
     const lastVisibleDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
+    cursorMap[currentPage] = lastVisibleDoc; // Update cursorMap for the current page
+
     const totalProductsInCategory = await getTotalProductsCountByCategory(category);
     const totalPages = Math.ceil(totalProductsInCategory / pageSize);
 
