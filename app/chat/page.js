@@ -10,6 +10,7 @@ import Header from "app/_components/header";
 import Footer from "app/_components/footer";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "app/_utils/firebase";
+import Image from "next/image";
 
 function ChatPage() {
   const searchParams = useSearchParams();
@@ -175,16 +176,17 @@ function ChatPage() {
         <title>Chat | Agora BNS</title>
       </Head>
 
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <div className="flex flex-grow">
+      <Header/>
+
+      <div className="flex flex-col items-center justify-center bg-gray-100">
+        <div className="flex flex-grow w-full max-w-5xl bg-white shadow-lg m-4">
           <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
             <div className="text-2xl font-bold mb-4">Chat History</div>
             <div>
               {chats.map((chat) => {
                 const otherUserId = chat.users.find(uid => uid !== user.uid);
-                const otherUserName = `${userInfos[otherUserId]?.firstName || ''} ${userInfos[otherUserId]?.lastName || ''}`.trim() || otherUserId;
-
+                const otherUserInfo = userInfos[otherUserId];
+                const otherUserName = `${otherUserInfo?.firstName || ''} ${otherUserInfo?.lastName || ''}`.trim() || otherUserId;
                 // Debugging log
                 console.log(`Chat ID: ${chat.id}, Other User ID: ${otherUserId}, Other User Name: ${otherUserName}`);
 
@@ -194,7 +196,17 @@ function ChatPage() {
                     className={`flex items-center justify-between p-2 rounded-lg mb-2 cursor-pointer ${selectedChat?.id === chat.id ? 'bg-[#e09a4b]' : 'bg-[#634d9a]'}`}
                     onClick={() => setSelectedChat(chat)}
                   >
+                    <div className="flex items-center">
+                      {otherUserInfo?.photoURL && (
+                        <Image
+                         src={otherUserInfo.photoURL} 
+                         alt={`${otherUserName} profile`} 
+                         width={32}
+                         height={32}
+                         className="w-8 h-8 rounded-full mr-2" />
+                      )}
                     <span>{otherUserName}</span>
+                    </div>
                     <div className="relative">
                       <button
                         className="ml-2 px-2 text-white rounded-full focus:outline-none focus:ring focus:ring-white"
@@ -238,17 +250,35 @@ function ChatPage() {
                   <div className="text-center text-black my-4">{date}</div>
                   {messages.map((message) => (
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#e09a4b] text-white' : 'bg-[#d8d5e2] text-black'}`}>
-                        <div className="mt-1">{message.text}</div>
-                        <div className="text-xs text-black mt-1">
-                          {new Date(message.timestamp.toDate()).toLocaleTimeString()}
-                        </div>
+                    {message.userId !== user?.uid && (
+                      <Image
+                        src={userInfos[message.userId]?.photoURL}
+                        alt={`${userInfos[message.userId]?.firstName} profile`}
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 rounded-full mr-2"
+                      />
+                    )}
+                    <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#e09a4b] text-white' : 'bg-[#d8d5e2] text-black'}`} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                      <div className="mt-1">{message.text}</div>
+                      <div className="text-xs text-black mt-1">
+                        {new Date(message.timestamp.toDate()).toLocaleTimeString()}
                       </div>
                     </div>
-                  ))}
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
+                    {message.userId === user?.uid && (
+                      <Image
+                        src={user.photoURL}
+                        alt={`${userInfos[message.userId]?.firstName} profile`}
+                        width={32}
+                        height={32}
+                        className="w-8 h-8 rounded-full ml-2"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
             </div>
             <footer className="mt-20">
               <form onSubmit={handleSendMessage} className="flex items-center">
@@ -269,8 +299,8 @@ function ChatPage() {
             </footer>
           </main>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }
