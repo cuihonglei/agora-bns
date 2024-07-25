@@ -1,4 +1,4 @@
-// components/profile-components/Sidebar.js
+// components/profile/sidebar.js
 "use client";
 
 import { useState } from 'react';
