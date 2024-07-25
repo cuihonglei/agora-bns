@@ -54,23 +54,3 @@ export const AuthContextProvider = ({ children }) => {
 export const useUserAuth = () => {
   return useContext(AuthContext);
 };
-
-export const useAuth = () => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        setUser(authUser);
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []); // Dependency array is empty to run effect only once on mount
-
-  return user;
-};
-
-
