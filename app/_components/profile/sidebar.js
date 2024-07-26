@@ -14,7 +14,7 @@ function MenuItem({ Icon, text, onClick, active, first }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full h-14 font-semibold text-lg flex items-center justify-start ${first && 'border-t'} border-b border-[#FF8811] ${active ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'}`}
+      className={`w-full h-14 font-semibold text-lg flex items-center justify-start ${first && 'border-t'} border-b border-x border-[#FF8811] ${active ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'}`}
     >
       <Icon size={24} className="ml-10 mr-3" />{text}
     </button>
