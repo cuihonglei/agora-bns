@@ -23,9 +23,9 @@ function About() {
 
       <Header />
 
-      <div className="mt-24 max-w-6xl mx-auto py-16 px-8 text-center text-blue-950 min-h-[calc(100vh-8rem)]">
+      <div className="max-w-6xl mx-auto py-16 px-8 text-center text-blue-950 min-h-[calc(100vh-8rem)]">
 
-        <h1 className="font-bold text-5xl hover:text-orange-500">
+        <h1 className="font-bold text-5xl hover:text-orange-500 mt-24">
           About Agora BNS
         </h1>
         
@@ -34,7 +34,7 @@ function About() {
           Our mission is to empower sellers and provide customers with an exceptional shopping experience. Providing ease to people and reliability is our mission.
         </p>
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div className="mt-8 grid grid-cols-3 gap-8">
           <div className="flex flex-col items-center">
             <div className="p-4">
               <Image
