@@ -182,10 +182,10 @@ function ChatPage() {
 
       <div className="flex flex-col items-center justify-cente min-h-[calc(100vh-8rem)]">
         <div className="flex flex-grow w-full max-w-5xl bg-white">
-          <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
-            <div className="text-2xl font-bold mb-4">Chat History</div>
+          <aside className="w-60 bg-[#392F5A] text-white">
+            <div className="text-lg font-bold text-center mt-12 mb-9">Chat History</div>
             <div>
-              {chats.map((chat) => {
+              {chats.map((chat, index) => {
                 const otherUserId = chat.users.find(uid => uid !== user.uid);
                 const otherUserInfo = userInfos[otherUserId];
                 const otherUserName = `${otherUserInfo?.firstName || ''} ${otherUserInfo?.lastName || ''}`.trim() || otherUserId;
@@ -195,23 +195,23 @@ function ChatPage() {
                 return (
                   <div
                     key={chat.id}
-                    className={`flex items-center justify-between p-2 rounded-lg mb-2 cursor-pointer ${selectedChat?.id === chat.id ? 'bg-[#e09a4b]' : 'bg-[#634d9a]'}`}
+                    className={`flex items-center justify-between h-14 cursor-pointer ${index === 0 && 'border-t'} border-x border-b border-[#FF8811] ${selectedChat?.id === chat.id ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'}`}
                     onClick={() => setSelectedChat(chat)}
                   >
-                    <div className="flex items-center">
+                    <div className="flex items-center mx-4">
                       {otherUserInfo?.photoURL && (
                         <Image
                           src={otherUserInfo.photoURL}
                           alt={`${otherUserName} profile`}
                           width={32}
                           height={32}
-                          className="w-8 h-8 rounded-full mr-2" />
+                          className="w-9 h-9 rounded-full mr-3" />
                       )}
-                      <span>{otherUserName}</span>
+                      <span className="font-semibold overflow-hidden whitespace-nowrap text-ellipsis w-36">{otherUserName}</span>
                     </div>
                     <div className="relative">
                       <button
-                        className="ml-2 px-2 text-white rounded-full focus:outline-none focus:ring focus:ring-white"
+                        className="mr-4 text-white rounded-full"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleActions(chat.id);
@@ -222,7 +222,7 @@ function ChatPage() {
                       {showActions[chat.id] && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                           <button
-                            className="block w-full text-center px-4 py-2 text-black hover:bg-[#e09a4b]"
+                            className="block w-full text-center px-4 py-2 text-black"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteChat(chat.id);
@@ -256,7 +256,7 @@ function ChatPage() {
                           className="w-8 h-8 rounded-full mr-2"
                         />
                       )}
-                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#e09a4b] text-white' : 'bg-[#d8d5e2] text-black'}`} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#FFF8F0] text-black' : 'bg-[#d8d5e2] text-black'}`} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                         <div className="mt-1">{message.text}</div>
                         <div className="text-xs text-black mt-1">
                           {new Date(message.timestamp.toDate()).toLocaleTimeString()}
