@@ -102,7 +102,6 @@ function ShowProducts() {
 
   const renderPagination = () => {
     const pages = [];
-    const maxPagesToShow = 3;
     const showLeftDots = currentPage > 2;
     const showRightDots = currentPage < totalPages - 1;
 
@@ -231,7 +230,7 @@ function ShowProducts() {
               </div>
             </div>
           )}
-          <div className="text-center mt-8">
+          {products.length > 0  && <div className="text-center mt-8">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -247,12 +246,7 @@ function ShowProducts() {
             >
               &rarr;
             </button>
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/" className="text-blue-600 hover:text-blue-800 font-semibold">
-              ← Back to Home
-            </Link>
-          </div>
+          </div>}
         </div>
       </main>
     </>
