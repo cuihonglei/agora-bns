@@ -127,7 +127,7 @@ function ChatPage() {
       }
     }
   };
-  
+
   const toggleActions = (chatId) => {
     setShowActions((prev) => ({
       ...prev,
@@ -164,7 +164,7 @@ function ChatPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p>Loading chat...</p>
         </div>
@@ -178,10 +178,10 @@ function ChatPage() {
         <title>Chat | Agora BNS</title>
       </Head>
 
-      <Header/>
+      <Header />
 
-      <div className="flex flex-col items-center justify-center bg-gray-100 min-h-[calc(100vh-8rem)]">
-        <div className="flex flex-grow w-full max-w-5xl bg-white shadow-lg m-4">
+      <div className="flex flex-col items-center justify-cente min-h-[calc(100vh-8rem)]">
+        <div className="flex flex-grow w-full max-w-5xl bg-white">
           <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
             <div className="text-2xl font-bold mb-4">Chat History</div>
             <div>
@@ -201,13 +201,13 @@ function ChatPage() {
                     <div className="flex items-center">
                       {otherUserInfo?.photoURL && (
                         <Image
-                         src={otherUserInfo.photoURL} 
-                         alt={`${otherUserName} profile`} 
-                         width={32}
-                         height={32}
-                         className="w-8 h-8 rounded-full mr-2" />
+                          src={otherUserInfo.photoURL}
+                          alt={`${otherUserName} profile`}
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 rounded-full mr-2" />
                       )}
-                    <span>{otherUserName}</span>
+                      <span>{otherUserName}</span>
                     </div>
                     <div className="relative">
                       <button
@@ -217,7 +217,7 @@ function ChatPage() {
                           toggleActions(chat.id);
                         }}
                       >
-                        &#8801; 
+                        &#8801;
                       </button>
                       {showActions[chat.id] && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
@@ -233,75 +233,71 @@ function ChatPage() {
                           </button>
                         </div>
                       )}
+                    </div>
                   </div>
-                </div>
                 );
               })}
             </div>
           </aside>
+
           <main className="flex-grow p-4 bg-white">
-            <div className="flex justify-between items-center mb-4">
-              <Link href="/profile" className="text-[#392F5A] hover:text-[#e09a4b]">
-                ← Back to Profile
-              </Link>
-              <h1 className="text-2xl font-bold text-[#392F5A]">Private Chat Page</h1>
-            </div>
-            <div className="bg-gray-100 rounded-lg shadow-lg p-6 overflow-y-auto" style={{ height: "60vh" }}>
+            <div className="p-6 overflow-y-auto" style={{ height: "60vh" }}>
               {Object.entries(groupedMessages).map(([date, messages]) => (
                 <div key={date}>
                   <div className="text-center text-black my-4">{date}</div>
                   {messages.map((message) => (
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
-                    {message.userId !== user?.uid && (
-                      <Image
-                        src={userInfos[message.userId]?.photoURL}
-                        alt={`${userInfos[message.userId]?.firstName} profile`}
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded-full mr-2"
-                      />
-                    )}
-                    <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#e09a4b] text-white' : 'bg-[#d8d5e2] text-black'}`} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
-                      <div className="mt-1">{message.text}</div>
-                      <div className="text-xs text-black mt-1">
-                        {new Date(message.timestamp.toDate()).toLocaleTimeString()}
+                      {message.userId !== user?.uid && (
+                        <Image
+                          src={userInfos[message.userId]?.photoURL}
+                          alt={`${userInfos[message.userId]?.firstName} profile`}
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 rounded-full mr-2"
+                        />
+                      )}
+                      <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#e09a4b] text-white' : 'bg-[#d8d5e2] text-black'}`} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                        <div className="mt-1">{message.text}</div>
+                        <div className="text-xs text-black mt-1">
+                          {new Date(message.timestamp.toDate()).toLocaleTimeString()}
+                        </div>
                       </div>
+                      {message.userId === user?.uid && (
+                        <Image
+                          src={user.photoURL}
+                          alt={`${userInfos[message.userId]?.firstName} profile`}
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 rounded-full ml-2"
+                        />
+                      )}
                     </div>
-                    {message.userId === user?.uid && (
-                      <Image
-                        src={user.photoURL}
-                        alt={`${userInfos[message.userId]?.firstName} profile`}
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded-full ml-2"
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
+                  ))}
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
             </div>
-            <footer className="mt-20">
-              <form onSubmit={handleSendMessage} className="flex items-center">
-                <input
-                  type="text"
-                  className="flex-grow p-3 border border-black rounded-full focus:outline-none focus:ring focus:border-blue-300"
-                  placeholder="Type a message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                />
-                <button
-                  type="submit"
-                  className="ml-2 px-4 py-2 bg-[#392F5A] text-white rounded-full hover:bg-[#e09a4b] focus:outline-none focus:ring focus:ring-blue-300"
-                >
-                  Send
-                </button>
-              </form>
-            </footer>
+
+            {/* Message Input Field */}
+            <form onSubmit={handleSendMessage} className="mt-2 flex items-center">
+              <input
+                type="text"
+                className="flex-grow p-3 border border-black rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Type a message..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="ml-2 px-4 py-2 bg-[#392F5A] text-white rounded-lg hover:bg-[#e09a4b] focus:outline-none focus:ring focus:ring-blue-300"
+              >
+                Send
+              </button>
+            </form>
           </main>
         </div>
       </div>
+
       <Footer />
     </>
   );
@@ -316,9 +312,3 @@ function ChatPageEx() {
 }
 
 export default ChatPageEx;
-
-
-
-
-
-

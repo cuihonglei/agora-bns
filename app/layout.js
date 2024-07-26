@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Script src="https://cdn.botpress.cloud/webchat/v1/inject.js" />
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-gray-100`}>
 
         {/* Auth Context */}
         <AuthContextProvider>

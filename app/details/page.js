@@ -95,7 +95,7 @@ function ProductDetails() {
 
       <Header />
 
-      <main className="flex flex-col items-center bg-gray-100 p-4 min-h-[calc(100vh-8rem)]">
+      <main className="flex flex-col items-center p-4 min-h-[calc(100vh-8rem)]">
         <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-lg p-6">
           <div className="flex-1 flex justify-center items-center mb-4 md:mb-0">
             <Image

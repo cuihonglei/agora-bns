@@ -32,29 +32,31 @@ const FAQ = () => {
   };
 
   return (
-    <div className="max-w-5xl flex flex-col items-center justify-center bg-white text-black mx-auto my-14">
-      <p className="text-2xl font-bold mb-6 border-b-2 border-gray-300 pb-2">Frequently Asked Questions</p>
-      <div className="w-full">
-        {faqs.map((faq, index) => (
-          <div key={index} className="mb-4">
-            <button
-              className="text-xl font-semibold focus:outline-none flex justify-between items-center w-full border border-gray-300 p-4 rounded-lg"
-              onClick={() => toggleExpand(index)}
-            >
-              {faq.question}
-              {expandedIndex === index ? (
-                <FaChevronDown className="ml-2" />
-              ) : (
-                <FaChevronRight className="ml-2" />
+    <div className="bg-white">
+      <div className="max-w-5xl flex flex-col items-center justify-center text-black mx-auto py-14">
+        <p className="text-2xl font-bold mb-6 border-b-2 border-gray-300 pb-2">Frequently Asked Questions</p>
+        <div className="w-full">
+          {faqs.map((faq, index) => (
+            <div key={index} className="mb-4">
+              <button
+                className="text-xl font-semibold focus:outline-none flex justify-between items-center w-full border border-gray-300 p-4 rounded-lg"
+                onClick={() => toggleExpand(index)}
+              >
+                {faq.question}
+                {expandedIndex === index ? (
+                  <FaChevronDown className="ml-2" />
+                ) : (
+                  <FaChevronRight className="ml-2" />
+                )}
+              </button>
+              {expandedIndex === index && (
+                <div className="mt-2 text-lg p-4">
+                  {faq.answer}
+                </div>
               )}
-            </button>
-            {expandedIndex === index && (
-              <div className="mt-2 text-lg p-4">
-                {faq.answer}
-              </div>
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
