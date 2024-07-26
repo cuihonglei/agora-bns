@@ -180,7 +180,7 @@ function ChatPage() {
 
       <Header/>
 
-      <div className="flex flex-col items-center justify-center bg-gray-100">
+      <div className="flex flex-col items-center justify-center bg-gray-100 min-h-[calc(100vh-8rem)]">
         <div className="flex flex-grow w-full max-w-5xl bg-white shadow-lg m-4">
           <aside className="w-1/4 bg-[#392F5A] p-4 text-white">
             <div className="text-2xl font-bold mb-4">Chat History</div>

@@ -97,7 +97,7 @@ function LoginPage() {
 
       <Header />
 
-      <div className="flex flex-col justify-center items-center bg-[#392F5A] text-white py-36">
+      <div className="flex flex-col justify-center items-center bg-[#392F5A] text-white py-36 min-h-[calc(100vh-8rem)]">
         {/* Title */}
         <p className="text-5xl font-extrabold leading-tight">Sign In to Agora BNS</p>
         <p className="text-lg font-semibold leading-6 mt-4">Explore the best products from various categories all in one place.</p>

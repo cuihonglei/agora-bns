@@ -1,17 +1,32 @@
-// components/profile/sidebar.js
 "use client";
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUserAuth } from '../../_utils/auth-context';
 import Image from 'next/image';
-import { GrCart, GrUser, GrChatOption, GrPower } from "react-icons/gr";
-import Link from 'next/link';
 
+import { useUserAuth } from '../../_utils/auth-context';
+import { AiOutlineHome, AiOutlineShopping, AiOutlineMessage, AiOutlineLogout } from 'react-icons/ai';
+import profileImage from '../../_assets/images/profile-image.png';
+
+
+// MenuItem
+function MenuItem({ Icon, text, onClick, active, first }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full h-14 font-semibold text-lg flex items-center justify-start ${first && 'border-t'} border-b border-[#FF8811] ${active ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'}`}
+    >
+      <Icon size={24} className="ml-10 mr-3" />{text}
+    </button>
+  );
+}
+
+// Sidebar
 function Sidebar({ setActiveSection }) {
-  const [activeSection, setActiveSectionState] = useState('general');
+
   const router = useRouter();
   const { user, firebaseSignOut } = useUserAuth();
+  const [activeSection, setActiveSectionState] = useState('general');
 
   const handleSignOut = async () => {
     try {
@@ -28,66 +43,43 @@ function Sidebar({ setActiveSection }) {
   };
 
   return (
-    <div className="w-1/4 text-white flex flex-col bg-[#392F5A] font-bold">
-      <div className="flex flex-col items-center p-4 flex-grow h-full">
-        {user && user.photoURL && (
-          <Image src={user.photoURL} alt="profile image" className="rounded-full mt-4 mb-3" width={100} height={100} />
-        )}
+    <div className="w-60 text-white bg-[#392F5A] flex flex-col items-center">
 
-        <div className="w-full">
-          <button
-            onClick={() => handleSetActiveSection('general')}
-            className={`w-full py-2 flex items-center justify-center border-b ${
-              activeSection === 'general' ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'
-            }`}
-            style={{ borderColor: '#FF8811' }}
-          >
-            <GrUser className="mr-2" />
-            General
-          </button>
-        </div>
+      {/* Profile Image */}
+      <Image src={(user && user.photoURL) || profileImage} alt="profile image" className="rounded-full my-12" width={151} height={151} />
 
-        <div className="w-full">
-          <button
-            onClick={() => handleSetActiveSection('products')}
-            className={`w-full py-2 flex items-center justify-center border-b ${
-              activeSection === 'products' ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'
-            }`}
-            style={{ borderColor: '#FF8811' }}
-          >
-            <GrCart className="mr-2" />
-            Products
-          </button>
-        </div>
+      {/* General */}
+      <MenuItem
+        Icon={AiOutlineHome}
+        text="General"
+        active={activeSection === 'general'}
+        onClick={() => handleSetActiveSection('general')}
+        first={true}
+      />
 
-        <div className="w-full">
-          <button
-            
-            className={`w-full py-2 flex items-center justify-center border-b  ${
-              activeSection === 'messages' ? 'bg-[#FF8811] text-black' : 'hover:bg-gray-700'
-            }`}
-            style={{ borderColor: '#FF8811' }}
-          >
-            <GrChatOption className="mr-2" />
-            <Link href="/chat">
-            Messages
-            </Link>
-          </button>
-        </div>
+      {/* Products */}
+      <MenuItem
+        Icon={AiOutlineShopping}
+        text="Products"
+        active={activeSection === 'products'}
+        onClick={() => handleSetActiveSection('products')}
+      />
 
-        <div className="w-full">
-          <button
-            onClick={handleSignOut}
-            className="w-full py-2 flex items-center justify-center border-b hover:bg-gray-700"
-            style={{ borderColor: '#FF8811' }}
-          >
-            <GrPower className="mr-2" />
-            Logout
-          </button>
-        </div>
+      {/* Messages */}
+      <MenuItem
+        Icon={AiOutlineMessage}
+        text="Messages"
+        active={false}
+        onClick={() => router.push('/chat')}
+      />
 
-        <div className="flex-grow"></div>
-      </div>
+      {/* Logout */}
+      <MenuItem
+        Icon={AiOutlineLogout}
+        text="Logout"
+        active={false}
+        onClick={handleSignOut}
+      />
     </div>
   );
 }

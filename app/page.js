@@ -23,10 +23,12 @@ const Home = () => {
 
       <Header />
 
-      <Intro />
-      <FeaturedProducts />
-      <FeaturedCategories />
-      <FAQ />
+      <div className="min-h-[calc(100vh-8rem)]">
+        <Intro />
+        <FeaturedProducts />
+        <FeaturedCategories />
+        <FAQ />
+      </div>
 
       <Footer />
     </>
