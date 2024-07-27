@@ -20,13 +20,17 @@ import { AiOutlineSend } from "react-icons/ai";
 function ChatPage() {
   const searchParams = useSearchParams();
   const { user } = useUserAuth();
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
+  
   const [selectedChat, setSelectedChat] = useState(null);
   const [userInfos, setUserInfos] = useState({});
   const [showActions, setShowActions] = useState({});
+
   const messagesEndRef = useRef(null);
 
   useEffect(() => {

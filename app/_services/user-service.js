@@ -81,7 +81,6 @@ export const getUser = async (userId) => {
       // Return user data if document exists
       return userDocSnap.data();
     } else {
-      console.error('User document not found');
       return null;
     }
   } catch (error) {
@@ -90,15 +89,15 @@ export const getUser = async (userId) => {
   }
 };
 
-// update the user's profile picture
-export const updateUserPhoto = async (userId, photoURL) => {
+// update the user's name and photo if the user object is not existing
+export const checkAndUpdateUserNamePhoto = async (userId, firstName, lastName, photoURL) => {
   try {
-    const userDocRef = doc(db, 'users', userId);
-
-    // Update the user document with the new photoURL
-    await updateDoc(userDocRef, { photoURL });
-
-    //console.log('User photo updated successfully');
+    const user = await getUser(userId);
+    if (!user) {
+      const userDocRef = doc(db, 'users', userId);
+      // Update the user document with the new name and photoURL
+      await setDoc(userDocRef, {firstName, lastName, photoURL });
+    }
   } catch (error) {
     console.error('Error updating user photo:', error);
     throw error; // Throw the error for handling in the calling component
