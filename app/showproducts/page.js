@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '../_components/header';
 import Footer from '../_components/footer';
 
-import { getProductsByCategory, getProducts } from '../_services/product-service'; // Adjust the import path as necessary
+import { getProductsByCategory, getProducts } from '../_services/product-service';
 import Image from 'next/image';
 
 function ShowProducts() {

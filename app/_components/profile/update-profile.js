@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { GrFormClose, GrFormCheckmark } from "react-icons/gr";
-import { updateUser, getUser } from '../../_services/user-service'; // Adjust the path to updateUser and getUser functions
-import { useUserAuth } from '../../_utils/auth-context'; // Adjust the path to useUserAuth
+import { updateUser, getUser } from '../../_services/user-service';
+import { useUserAuth } from '../../_utils/auth-context';
 
 function UpdateProfile({ onCancel }) {
   const { user } = useUserAuth(); // Retrieve user from context
@@ -56,16 +56,16 @@ function UpdateProfile({ onCancel }) {
 
   const validateForm = () => {
     let errors = {};
-    if (!formData.firstName.trim()) {
+    if (!formData.firstName || !formData.firstName.trim()) {
       errors.firstName = 'First Name is required';
     }
-    if (!formData.lastName.trim()) {
+    if (!formData.lastName || !formData.lastName.trim()) {
       errors.lastName = 'Last Name is required';
     }
-    if (!formData.phoneNumber.trim()) {
+    if (!formData.phoneNumber || !formData.phoneNumber.trim()) {
       errors.phoneNumber = 'Phone Number is required';
     }
-    if (!formData.email.trim()) {
+    if (!formData.email || !formData.email.trim()) {
       errors.email = 'Email Address is required';
     }
     setFormErrors(errors);
@@ -84,10 +84,10 @@ function UpdateProfile({ onCancel }) {
         lastName: formData.lastName,
         phoneNumber: formData.phoneNumber,
         email: formData.email,
-        website: formData.website,
-        facebook: formData.facebook,
-        twitter: formData.twitter,
-        address: formData.address
+        website: formData.website || '',
+        facebook: formData.facebook || '',
+        twitter: formData.twitter || '',
+        address: formData.address || ''
       };
 
       // Call updateUser function to save data
@@ -100,6 +100,7 @@ function UpdateProfile({ onCancel }) {
       setTimeout(() => {
         setSaveMessage('');
         handleCancel(); // Redirect to general information
+        // TODO Do not use the reload!!!
         setTimeout(() => {
           window.location.reload(); // Reload the page after navigation
         }, 100); // Delay to ensure navigation occurs before reload

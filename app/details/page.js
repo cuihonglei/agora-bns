@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import Header from '../_components/header';
 import Footer from '../_components/footer';
+import Map from '../_components/Map';
 
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -14,16 +15,18 @@ import { addComment, getComments } from '../_services/comment-service';
 import { getUser } from '../_services/user-service';
 
 function ProductDetails() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
+
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState('');
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(0);
+
   const [sellerName, setSellerName] = useState('');
-  const category = searchParams.get('category');
-  const router = useRouter();
+  const [sellerAddress, setSellerAddress] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -43,6 +46,10 @@ function ProductDetails() {
           if (userInfo) {
             const fullName = `${userInfo.firstName || ''} ${userInfo.lastName || ''}`.trim();
             setSellerName(fullName || productData.userId);
+
+            if (userInfo.address) {
+              setSellerAddress(userInfo.address);
+            }
           } else {
             console.error(`No user info found for userId ${productData.userId}`);
           }
@@ -149,10 +156,12 @@ function ProductDetails() {
               >
                 ← Back to Products
               </button>
+              
             </div>
+            <Map address={sellerAddress} width="400px" height="200px" />
           </div>
         </div>
-
+      
         <div className="w-full max-w-5xl bg-white shadow-lg p-6 mt-4">
           <h2 className="text-2xl font-bold text-black">Comments and Ratings</h2>
           <div className="mt-4">
@@ -194,8 +203,9 @@ function ProductDetails() {
             </button>
           </div>
         </div>
+       
       </main>
-
+      
       <Footer />
     </>
   );
@@ -210,3 +220,5 @@ function ProductDetailsEx() {
 }
 
 export default ProductDetailsEx;
+
+
