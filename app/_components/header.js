@@ -34,7 +34,7 @@ function Menu() {
 
       {/* Categories */}
       <div
-        className="relative pb-1"
+        className="relative"
         onMouseEnter={() => setIsDropdownOpen(true)}
         onMouseLeave={() => setIsDropdownOpen(false)}
       >
