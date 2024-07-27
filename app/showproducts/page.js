@@ -48,7 +48,7 @@ function ShowProducts() {
     };
 
     fetchProducts();
-  }, [category, currentPage, sortOrder]);
+  }, [category, currentPage, sortOrder, cursorMap]);
 
   useEffect(() => {
     // Reset to the first page when category changes
@@ -84,7 +84,6 @@ function ShowProducts() {
 
   const renderPagination = () => {
     const pages = [];
-    const maxPagesToShow = 3;
 
     const showLeftDots = currentPage > 2;
     const showRightDots = currentPage < totalPages - 1;

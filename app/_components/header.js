@@ -11,7 +11,7 @@ import { getUnreadMessages } from '../_services/user-service';
 import logo from '../_assets/images/logo.png';
 import profileImage from '../_assets/images/profile-image.png';
 
-import { AiOutlineMessage } from 'react-icons/ai';
+import { AiOutlineArrowDown, AiOutlineMessage } from 'react-icons/ai';
 
 
 // Menu component
@@ -38,9 +38,11 @@ function Menu() {
         onMouseEnter={() => setIsDropdownOpen(true)}
         onMouseLeave={() => setIsDropdownOpen(false)}
       >
-        <a className="text-lg font-bold hover:text-[#FF8811] cursor-pointer">
-          {/* TODO use the react icon, not the ↓ */}
-          Categories ↓
+        <a
+          className="text-lg font-bold flex items-center hover:text-[#FF8811] cursor-pointer"
+          onClick={() => { router.push('/showproducts') }}
+        >
+          Categories <AiOutlineArrowDown size={20} className="ml-0.5" />
         </a>
         {isDropdownOpen && (
           <div className="absolute z-10 mt-1 bg-white rounded-md shadow-lg w-48">
