@@ -1,6 +1,5 @@
 "use client";
 
-// Import necessary modules and functions from external libraries
 import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
 
