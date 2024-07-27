@@ -2,17 +2,20 @@
 
 import React, { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Head from "next/head";
+import Image from "next/image";
+
 import { useUserAuth } from "app/_utils/auth-context";
 import { getUser } from "../_services/user-service";
-import { getChat, addMessage, getMessages, getUserChats, deleteChat } from "../_services/chat-service";
-
-import Head from "next/head";
-import Link from "next/link";
-import Header from "app/_components/header";
-import Footer from "app/_components/footer";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "app/_utils/firebase";
-import Image from "next/image";
+import { getChat, addMessage, getMessages, getUserChats, deleteChat } from "../_services/chat-service";
+
+import Header from "app/_components/header";
+import Footer from "app/_components/footer";
+
+import { AiOutlineSend } from "react-icons/ai";
+
 
 function ChatPage() {
   const searchParams = useSearchParams();
@@ -240,8 +243,8 @@ function ChatPage() {
             </div>
           </aside>
 
-          <main className="flex-grow p-4 bg-white">
-            <div className="p-6 overflow-y-auto" style={{ height: "60vh" }}>
+          <main className="flex-grow bg-white flex flex-col h-[calc(100vh-8rem)]">
+            <div className="p-4 overflow-y-auto flex-grow">
               {Object.entries(groupedMessages).map(([date, messages]) => (
                 <div key={date}>
                   <div className="text-center text-black my-4">{date}</div>
@@ -253,7 +256,7 @@ function ChatPage() {
                           alt={`${userInfos[message.userId]?.firstName} profile`}
                           width={32}
                           height={32}
-                          className="w-8 h-8 rounded-full mr-2"
+                          className="w-10 h-10 rounded-full mr-2"
                         />
                       )}
                       <div className={`max-w-xs p-3 rounded-lg ${message.userId === user?.uid ? 'bg-[#FFF8F0] text-black' : 'bg-[#d8d5e2] text-black'}`} style={{ wordWrap: 'break-word', overflowWrap: 'break-word' }}>
@@ -268,7 +271,7 @@ function ChatPage() {
                           alt={`${userInfos[message.userId]?.firstName} profile`}
                           width={32}
                           height={32}
-                          className="w-8 h-8 rounded-full ml-2"
+                          className="w-10 h-10 rounded-full ml-2"
                         />
                       )}
                     </div>
@@ -279,19 +282,16 @@ function ChatPage() {
             </div>
 
             {/* Message Input Field */}
-            <form onSubmit={handleSendMessage} className="mt-2 flex items-center">
+            <form onSubmit={handleSendMessage} className="m-2 flex items-center relative">
               <input
                 type="text"
-                className="flex-grow p-3 border border-black rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                className="flex-grow p-3 border rounded-lg"
                 placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
               />
-              <button
-                type="submit"
-                className="ml-2 px-4 py-2 bg-[#392F5A] text-white rounded-lg hover:bg-[#e09a4b] focus:outline-none focus:ring focus:ring-blue-300"
-              >
-                Send
+              <button type="submit" className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <AiOutlineSend size={24} color="#FF8811" />
               </button>
             </form>
           </main>

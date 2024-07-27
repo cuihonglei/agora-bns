@@ -207,7 +207,7 @@ function ShowProducts() {
               disabled={currentPage === 1}
               className={`px-4 py-2 mx-1 ${currentPage === 1 ? 'bg-gray-300 text-gray-600' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
             >
-              &larr; Prev
+              &larr;
             </button>
             {renderPagination()}
             <button
@@ -215,7 +215,7 @@ function ShowProducts() {
               disabled={currentPage === totalPages}
               className={`px-4 py-2 mx-1 ${currentPage === totalPages ? 'bg-gray-300 text-gray-600' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
             >
-              Next &rarr;
+              &rarr;
             </button>
           </div>
           <div className="text-center mt-8">
