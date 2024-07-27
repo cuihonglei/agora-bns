@@ -79,17 +79,17 @@ function ProfilePage() {
     <>
       <Header />
 
-      <div className="max-w-5xl flex flex-row justify-center mx-auto min-h-[calc(100vh-8rem)]">
+      <div className="max-w-5xl min-h-[calc(100vh-8rem)] flex flex-row justify-center mx-auto">
 
         {/* Sidebar */}
         <Sidebar setActiveSection={setActiveSection} />
 
         {/* Main content */}
-        <div className="w-3/4 bg-white p-8">
+        <div className="flex-grow bg-white p-9">
           {activeSection === 'general' && (
             <>
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-2">General Information</h2>
+                <h2 className="text-xl font-bold mb-9">General Information</h2>
 
                 <div className='font-bold'>First Name:</div>
                 <div className='mb-2'>
@@ -145,17 +145,17 @@ function ProfilePage() {
           {/* Render UpdateProfile component */}
           {activeSection === 'updateProfile' && (
             <UpdateProfile
-              onCancel={handleCancelUpdate}
-              onSave={handleSaveGeneralInfo}
+              onCanceled={handleCancelUpdate}
+              onSaved={handleSaveGeneralInfo}
               initialData={generalInfo} // Pass initial data to UpdateProfile
             />
           )}
 
           { /* Render products component */}
           {activeSection === 'products' && (
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-2xl font-bold">Listed Products</h2>
-              <ShowProducts className="mt-0" />
+            <div>
+              <h2 className="text-xl font-bold mb-9">Listed Products</h2>
+              <ShowProducts />
             </div>
           )}
         </div>

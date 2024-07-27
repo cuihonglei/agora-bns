@@ -170,12 +170,12 @@ function ShowProducts() {
 
   return (
     <>
-      <main className="bg-white pt-24 pb-12 flex-grow">
+      <main className="bg-white flex-grow">
         <ToastContainer />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto">
           <div className="flex flex-col gap-4"> {/* Reduced gap between items */}
             {products.map(product => (
-              <div key={product.id} className="border rounded-lg shadow-lg overflow-hidden flex flex-col w-full relative">
+              <div key={product.id} className="border rounded-lg overflow-hidden flex flex-col w-full relative">
                 <div className="absolute top-4 right-4 text-sm text-gray-500"> {/* Date in top-right corner */}
                   {typeof product.date === 'object' && product.date.toDate ? (
                     new Date(product.date.toDate()).toLocaleDateString()
@@ -183,8 +183,8 @@ function ShowProducts() {
                     new Date(product.date).toLocaleDateString()
                   )}
                 </div>
-                <div className="p-4 flex flex-col sm:flex-row">
-                  <div className="relative w-32 h-24"> {/* Smaller width and height */}
+                <div className="p-2 flex flex-col sm:flex-row">
+                  <div className="relative w-32 h-32"> {/* Smaller width and height */}
                     {product.imageUrls && Array.isArray(product.imageUrls) && product.imageUrls.length > 0 && (
                       <Link href={`/details?id=${product.id}`}>
                         <Image

@@ -5,9 +5,10 @@ import { GrFormClose, GrFormCheckmark } from "react-icons/gr";
 import { updateUser, getUser } from '../../_services/user-service';
 import { useUserAuth } from '../../_utils/auth-context';
 
-function UpdateProfile({ onCancel }) {
+function UpdateProfile({ onCanceled, onSaved }) {
+
   const { user } = useUserAuth(); // Retrieve user from context
-  const [activeSection, setActiveSection] = useState('general'); // State to manage the active section
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -18,7 +19,6 @@ function UpdateProfile({ onCancel }) {
     twitter: '',
     address: ''
   });
-
   const [saveMessage, setSaveMessage] = useState('');
   const [formErrors, setFormErrors] = useState({});
   
@@ -50,8 +50,7 @@ function UpdateProfile({ onCancel }) {
   };
 
   const handleCancel = () => {
-    setActiveSection('general'); // Navigate to the general section
-    onCancel();
+    onCanceled();
   };
 
   const validateForm = () => {
@@ -91,21 +90,12 @@ function UpdateProfile({ onCancel }) {
       };
 
       // Call updateUser function to save data
-      await updateUser(user.uid, updateInfo); // Pass userId and updateInfo
+      const updatedUserData = await updateUser(user.uid, updateInfo); // Pass userId and updateInfo
 
       // Set save message
       setSaveMessage('Changes have been saved. Redirecting...');
 
-      // Redirect to general information after 3 seconds
-      setTimeout(() => {
-        setSaveMessage('');
-        handleCancel(); // Redirect to general information
-        // TODO Do not use the reload!!!
-        setTimeout(() => {
-          window.location.reload(); // Reload the page after navigation
-        }, 100); // Delay to ensure navigation occurs before reload
-      }, 3000); // 3 seconds
-
+      onSaved(updatedUserData);
     } catch (error) {
       console.error('Error saving data:', error);
       // Optionally, handle error scenario
@@ -114,12 +104,12 @@ function UpdateProfile({ onCancel }) {
 
   return (
     <div className="mb-1">
-      <h2 className="text-2xl font-bold">Update Your Profile!</h2>
+      <h2 className="text-xl font-bold">Update Your Profile!</h2>
       <div className="ml-1" style={{ color: 'grey', fontSize: '10px' }}>
         fields with * are required
       </div>
 
-      <form className="mt-3">
+      <form className="mt-9">
         {/* First Name */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">First Name *</label>
@@ -243,7 +233,7 @@ function UpdateProfile({ onCancel }) {
           <button
             type="button"
             className="bg-[#FF8811] text-white px-4 py-2 rounded flex items-center"
-            onClick={handleCancel}
+            onClick={onCanceled}
           >
             <GrFormClose className="mr-2" />
             Cancel

@@ -62,6 +62,8 @@ export const updateUser = async (userId, updateInfo) => {
     // Update the user document with the merged data
     await setDoc(userDocRef, updatedUserData, { merge: true });
 
+    return updatedUserData;
+
     //console.log('User data updated successfully');
   } catch (error) {
     console.error('Error updating user data:', error);
