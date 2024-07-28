@@ -37,7 +37,14 @@ function ChatPage() {
 
   useEffect(() => {
     if (user) {
-      const unsubscribe = getUserChats(user.uid, setChats);
+      const unsubscribe = getUserChats(user.uid, (chats) => {
+        setChats(chats);
+
+        // Set the first one as the selected chat.
+        if (chats.length > 0) {
+          setSelectedChat(chats[0]);
+        }
+      });
       return () => unsubscribe();
     }
   }, [user]);
@@ -107,6 +114,7 @@ function ChatPage() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    
     if (newMessage.trim() && chatId && user) {
       const message = {
         text: newMessage,
@@ -193,8 +201,6 @@ function ChatPage() {
                 const otherUserId = chat.users.find(uid => uid !== user.uid);
                 const otherUserInfo = userInfos[otherUserId];
                 const otherUserName = `${otherUserInfo?.firstName || ''} ${otherUserInfo?.lastName || ''}`.trim() || otherUserId;
-                // Debugging log
-                //console.log(`Chat ID: ${chat.id}, Other User ID: ${otherUserId}, Other User Name: ${otherUserName}`);
 
                 return (
                   <div
