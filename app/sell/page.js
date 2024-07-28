@@ -11,8 +11,11 @@ import { addProduct } from "../_services/product-service";
 import { addUserProduct } from "../_services/user-service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import Header from "../_components/header"; 
 import Footer from "../_components/footer"; 
+import Loading from "../_components/loading";
+
 
 export default function Sell() {
   const { user } = useUserAuth();
@@ -136,6 +139,11 @@ export default function Sell() {
     setModalIsOpen(false);
     setSelectedImage("");
   };
+
+  // Avoid not logged users to access this page.
+  if (!user) {
+    return <Loading />;
+  }
 
   return (
     <>

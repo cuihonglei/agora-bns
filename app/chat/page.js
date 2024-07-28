@@ -5,14 +5,15 @@ import { useSearchParams } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 
-import { useUserAuth } from "app/_utils/auth-context";
+import { useUserAuth } from "../_utils/auth-context";
 import { getUser } from "../_services/user-service";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "app/_utils/firebase";
+import { db } from "../_utils/firebase";
 import { getChat, addMessage, getMessages, getUserChats, deleteChat } from "../_services/chat-service";
 
-import Header from "app/_components/header";
-import Footer from "app/_components/footer";
+import Header from "../_components/header";
+import Footer from "../_components/footer";
+import Loading from "../_components/loading";
 
 import { AiOutlineSend } from "react-icons/ai";
 
@@ -169,14 +170,9 @@ function ChatPage() {
 
   const groupedMessages = groupMessagesByDate(messages);
 
+  // Avoid not logged users to access this page.
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p>Loading chat...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

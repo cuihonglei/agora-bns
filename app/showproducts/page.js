@@ -7,13 +7,19 @@ import { useSearchParams } from 'next/navigation';
 
 import Header from '../_components/header';
 import Footer from '../_components/footer';
+import Loading from '../_components/loading';
 
+import { useUserAuth } from '../_utils/auth-context';
 import { getProductsByCategory, getProducts } from '../_services/product-service';
 import Image from 'next/image';
+
 
 function ShowProducts() {
   const searchParams = useSearchParams(); // Get search parameters
   const category = searchParams.get('category'); // Get the 'category' parameter
+
+  const { user } = useUserAuth();
+
   const [sortOrder, setSortOrder] = useState('desc'); // State for sorting order
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -150,6 +156,11 @@ function ShowProducts() {
 
     return pages;
   };
+
+  // Avoid not logged users to access this page.
+  if (!user) {
+    return <Loading />;
+  }
 
   return (
     <>

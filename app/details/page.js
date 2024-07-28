@@ -7,17 +7,22 @@ import Image from 'next/image';
 
 import Header from '../_components/header';
 import Footer from '../_components/footer';
+import Loading from '../_components/loading';
 import Map from '../_components/Map';
 
+import { useUserAuth } from 'app/_utils/auth-context';
 import { db } from '../_utils/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { addComment, getComments } from '../_services/comment-service';
 import { getUser } from '../_services/user-service';
 
+
 function ProductDetails() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
+
+  const { user } = useUserAuth();
 
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState('');
@@ -30,7 +35,7 @@ function ProductDetails() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!id) return;
+      if (!user || !id) return;
       try {
         const docRef = doc(db, "products", id);
         const docSnap = await getDoc(docRef);
@@ -40,7 +45,7 @@ function ProductDetails() {
           setMainImage(productData.imageUrls[0]);
           const productComments = await getComments(productData.id);
           setComments(productComments || []);
-          
+
           // Fetch seller info
           const userInfo = await getUser(productData.userId);
           if (userInfo) {
@@ -62,7 +67,7 @@ function ProductDetails() {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [user, id]);
 
   const handleImageClick = (url) => {
     setMainImage(url);
@@ -91,6 +96,11 @@ function ProductDetails() {
       router.push(`/chat?userBId=${product.userId}`);
     }
   };
+
+  // Avoid not logged users to access this page.
+  if (!user) {
+    return <Loading />;
+  }
 
   if (!product) return <div className="text-center mt-20">Loading...</div>;
 
@@ -122,7 +132,7 @@ function ProductDetails() {
             <p className="text-sm text-black mb-4"><strong>Description:</strong> {product.description}</p>
             <p className="text-sm text-black mb-2"><strong>Category:</strong> {product.category}</p>
             <p className="text-sm text-black mb-2"><strong>Condition:</strong> {product.condition}</p>
-            
+
             <div className="flex flex-wrap mt-4">
               {product.imageUrls.map((url, index) => (
                 <div key={index} className="w-24 h-24 relative cursor-pointer m-1" onClick={() => handleImageClick(url)}>
@@ -150,18 +160,18 @@ function ProductDetails() {
             </div>
 
             <div className="mt-6 flex space-x-4">
-              <button 
-                onClick={() => router.back()} 
+              <button
+                onClick={() => router.back()}
                 className="text-[#392F5A] hover:text-[#cc8839] font-semibold inline-flex items-center"
               >
                 ← Back to Products
               </button>
-              
+
             </div>
             <Map address={sellerAddress} width="400px" height="200px" />
           </div>
         </div>
-      
+
         <div className="w-full max-w-5xl bg-white shadow-lg p-6 mt-4">
           <h2 className="text-2xl font-bold text-black">Comments and Ratings</h2>
           <div className="mt-4">
@@ -173,7 +183,7 @@ function ProductDetails() {
               </div>
             ))}
           </div>
-          
+
           <div className="mt-4">
             <textarea
               className="w-full p-2 border-[#392F5A] border-2 rounded-lg text-black bg-white"
@@ -203,9 +213,9 @@ function ProductDetails() {
             </button>
           </div>
         </div>
-       
+
       </main>
-      
+
       <Footer />
     </>
   );
@@ -220,5 +230,3 @@ function ProductDetailsEx() {
 }
 
 export default ProductDetailsEx;
-
-

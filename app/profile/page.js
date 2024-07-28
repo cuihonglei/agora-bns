@@ -7,6 +7,8 @@ import { getUser } from '../_services/user-service';
 
 import Header from '../_components/header';
 import Footer from '../_components/footer';
+import Loading from '../_components/loading';
+
 import Sidebar from '../_components/profile/sidebar';
 import UpdateProfile from '../_components/profile/update-profile';
 import ShowProducts from '../_components/profile/profile-product';
@@ -74,6 +76,11 @@ function ProfilePage() {
     // Set active section back to 'general'
     setActiveSection('general');
   };
+
+  // Avoid not logged users to access this page.
+  if (!user) {
+    return <Loading />;
+  }
 
   return (
     <>
