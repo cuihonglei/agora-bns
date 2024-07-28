@@ -16,6 +16,7 @@ import Footer from "../_components/footer";
 import Loading from "../_components/loading";
 
 import { AiOutlineSend } from "react-icons/ai";
+import profileImage from '../_assets/images/profile-image.png';
 
 
 function ChatPage() {
@@ -202,14 +203,12 @@ function ChatPage() {
                     onClick={() => setSelectedChat(chat)}
                   >
                     <div className="flex items-center mx-4">
-                      {otherUserInfo?.photoURL && (
                         <Image
-                          src={otherUserInfo.photoURL}
+                          src={otherUserInfo?.photoURL || profileImage}
                           alt={`${otherUserName} profile`}
                           width={32}
                           height={32}
                           className="w-9 h-9 rounded-full mr-3" />
-                      )}
                       <span className="font-semibold overflow-hidden whitespace-nowrap text-ellipsis w-36">{otherUserName}</span>
                     </div>
                     <div className="relative">
@@ -252,7 +251,7 @@ function ChatPage() {
                     <div key={message.id} className={`flex mb-4 ${message.userId === user?.uid ? 'justify-end' : 'justify-start'}`}>
                       {message.userId !== user?.uid && (
                         <Image
-                          src={userInfos[message.userId]?.photoURL}
+                          src={userInfos[message.userId]?.photoURL || profileImage}
                           alt={`${userInfos[message.userId]?.firstName} profile`}
                           width={32}
                           height={32}
@@ -267,7 +266,7 @@ function ChatPage() {
                       </div>
                       {message.userId === user?.uid && (
                         <Image
-                          src={user.photoURL}
+                          src={user.photoURL || profileImage}
                           alt={`${userInfos[message.userId]?.firstName} profile`}
                           width={32}
                           height={32}
