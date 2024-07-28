@@ -187,7 +187,7 @@ function ShowProducts() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map(product => (
-              <div key={product.id} className="border rounded-lg shadow-lg overflow-hidden">
+              <div key={product.id} className="border rounded-lg overflow-hidden">
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-black">{product.name}</h2>
                   <p className="text-sm text-black">{product.description}</p>
