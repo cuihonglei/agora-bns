@@ -45,7 +45,7 @@ function Menu() {
           Categories <AiOutlineArrowDown size={20} className="ml-0.5" />
         </a>
         {isDropdownOpen && (
-          <div className="absolute z-10 mt-1 bg-white rounded-md shadow-lg w-48">
+          <div className="absolute z-10 bg-white rounded-md shadow-lg w-48">
             <a
               href="#"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
