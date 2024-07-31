@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Header from '../_components/header';
 import Footer from '../_components/footer';
 import Loading from '../_components/loading';
-import Map from '../_components/Map';
+import Map from '../_components/map';
 
 import { useUserAuth } from 'app/_utils/auth-context';
 import { db } from '../_utils/firebase';
