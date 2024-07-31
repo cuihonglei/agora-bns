@@ -118,11 +118,10 @@ function ProductDetails() {
             <Image
               src={mainImage}
               alt={product.name}
-              width={600}
-              height={400}
-              style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
+              width={480}
+              height={480}
               className="rounded-md"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
             />
           </div>
 
@@ -141,9 +140,8 @@ function ProductDetails() {
                     alt={`${product.name} image ${index + 1}`}
                     width={96}
                     height={96}
-                    style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
                     className="rounded-md border border-gray-300"
-                    sizes="(max-width: 768px) 25vw, (max-width: 1200px) 12.5vw, 8.3vw"
+                    priority
                   />
                 </div>
               ))}

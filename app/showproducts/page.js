@@ -63,6 +63,9 @@ function ShowProducts() {
   }, [category]);
 
   const handlePageChange = (page) => {
+
+    console.log(page);
+
     setCurrentPage(page);
   };
 
@@ -200,8 +203,10 @@ function ShowProducts() {
                         <Image
                           src={product.imageUrls[0]}
                           alt={product.name}
-                          layout="fill"
-                          objectFit="cover"
+                          width={320}
+                          height={160}
+                          style={{ objectFit: 'cover' }}
+                          priority
                           onError={(e) => { e.target.onerror = null; e.target.src = '/no-image-available.png'; }}
                         />
                       </div>
