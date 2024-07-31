@@ -25,8 +25,6 @@ export const addProduct = async (productData) => {
   return docRef.id;
 };
 
-
-// Function to get the total number of products
 const getTotalProductsCount = async () => {
   const productsCollection = collection(db, "products");
   const querySnapshot = await getDocs(productsCollection);
@@ -40,7 +38,6 @@ const getTotalProductsCountByCategory = async (category) => {
   const querySnapshot = await getDocs(q);
   return querySnapshot.size;
 };
-
 
 // Get all products.
 export const getProducts = async (currentPage, pageSize, sortOrder, cursorMap) => {
@@ -106,7 +103,6 @@ export const getProductsByCategory = async (category, currentPage, pageSize, sor
     return { products: [], totalPages: 0, lastVisible: null };
   }
 };
-
 
 // Get products under a specific user.
 // TODO pagination

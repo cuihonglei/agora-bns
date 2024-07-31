@@ -90,24 +90,23 @@ function ShowProducts() {
 
   const renderPagination = () => {
     const pages = [];
+    const maxPagesToShow = 3;
 
-    const showLeftDots = currentPage > 2;
-    const showRightDots = currentPage < totalPages - 1;
+    const showLeftDots = currentPage > 3;
+    const showRightDots = currentPage < totalPages - 2;
 
-    // Show first page button
-    if (currentPage > 1) {
-      pages.push(
-        <button
-          key="first"
-          onClick={() => handlePageChange(1)}
-          className={`px-4 py-2 mx-1 bg-gray-200 text-black rounded-lg hover:bg-blue-800 font-semibold`}
-        >
-          First
-        </button>
-      );
-    }
+    // Always show first page number
+    pages.push(
+      <button
+        key="first"
+        onClick={() => handlePageChange(1)}
+        className={`px-4 py-2 mx-1 ${currentPage === 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
+      >
+        1
+      </button>
+    );
 
-    // Show left dots
+    // Show left dots if applicable
     if (showLeftDots) {
       pages.push(
         <span key="leftDots" className="px-4 py-2 mx-1 text-black">
@@ -117,8 +116,8 @@ function ShowProducts() {
     }
 
     // Show middle pages
-    let startPage = Math.max(1, currentPage - 1);
-    let endPage = Math.min(totalPages, currentPage + 1);
+    let startPage = Math.max(2, currentPage - 1);
+    let endPage = Math.min(totalPages - 1, currentPage + 1);
 
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
@@ -132,7 +131,7 @@ function ShowProducts() {
       );
     }
 
-    // Show right dots
+    // Show right dots if applicable
     if (showRightDots) {
       pages.push(
         <span key="rightDots" className="px-4 py-2 mx-1 text-black">
@@ -141,15 +140,15 @@ function ShowProducts() {
       );
     }
 
-    // Show last page button
-    if (currentPage < totalPages) {
+    // Always show last page number
+    if (totalPages > 1) {
       pages.push(
         <button
           key="last"
           onClick={() => handlePageChange(totalPages)}
-          className={`px-4 py-2 mx-1 bg-gray-200 text-black rounded-lg hover:bg-blue-800 font-semibold`}
+          className={`px-4 py-2 mx-1 ${currentPage === totalPages ? 'bg-blue-600 text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-blue-800 font-semibold`}
         >
-          Last
+          {totalPages}
         </button>
       );
     }
