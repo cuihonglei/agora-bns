@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 const EditProduct = ({ product, onSave }) => {
   const [updatedProduct, setUpdatedProduct] = useState({ ...product });
-  const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -15,17 +14,8 @@ const EditProduct = ({ product, onSave }) => {
     const { name, value } = e.target;
     setUpdatedProduct((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === 'price' ? parseFloat(value) : value,
     }));
-  };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
-  const handleDeleteImage = () => {
-    setImage(null);
-    onSave({ ...updatedProduct, image: null });
   };
 
   const validateForm = () => {
@@ -40,7 +30,7 @@ const EditProduct = ({ product, onSave }) => {
 
   const handleSave = () => {
     if (validateForm()) {
-      onSave({ ...updatedProduct, image });
+      onSave(updatedProduct);
     }
   };
 
