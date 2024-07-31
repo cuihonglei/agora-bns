@@ -3,9 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useJsApiLoader, GoogleMap } from '@react-google-maps/api';
 
+const libraries = ['places'];
+
 const Map = ({ address, width, height }) => {
 
   const [location, setLocation] = useState({ lat: 51.0646, lng: -114.0896 });
+  
 
   useEffect(() => {
     const fetchCoordinates = async () => {
@@ -24,7 +27,7 @@ const Map = ({ address, width, height }) => {
   // Load the Google Maps JavaScript API asynchronously
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY,
-    libraries: ['places'],
+    libraries,
   });
 
   if (loadError) return <p>Encountered error while loading Google Maps</p>;

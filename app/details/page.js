@@ -147,7 +147,7 @@ function ProductDetails() {
               ))}
             </div>
 
-            <div className="mt-4">
+            <div className="my-4">
               <p className="text-md text-black"><strong>Seller:</strong> {sellerName}</p>
               <button
                 onClick={handleChatButtonClick}
@@ -156,6 +156,8 @@ function ProductDetails() {
                 Chat with Seller
               </button>
             </div>
+
+            <Map address={sellerAddress} width="480px" height="200px" />
 
             <div className="mt-6 flex space-x-4">
               <button
@@ -166,7 +168,6 @@ function ProductDetails() {
               </button>
 
             </div>
-            <Map address={sellerAddress} width="400px" height="200px" />
           </div>
         </div>
 
