@@ -54,7 +54,7 @@ function ShowProducts() {
     };
 
     fetchProducts();
-  }, [category, currentPage, sortOrder, cursorMap]);
+  }, [category, currentPage, sortOrder]);
 
   useEffect(() => {
     // Reset to the first page when category changes
@@ -63,9 +63,6 @@ function ShowProducts() {
   }, [category]);
 
   const handlePageChange = (page) => {
-
-    console.log(page);
-
     setCurrentPage(page);
   };
 
