@@ -33,6 +33,9 @@ function ProductDetails() {
   const [sellerName, setSellerName] = useState('');
   const [sellerAddress, setSellerAddress] = useState('');
 
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+
   useEffect(() => {
     const fetchProduct = async () => {
       if (!user || !id) return;
@@ -97,6 +100,16 @@ function ProductDetails() {
     }
   };
 
+  const handleReportSeller = () => {
+    setIsReportModalOpen(true);
+  };
+
+  const handleReportSubmit = () => {
+    alert("The admin has received the report.");
+    setIsReportModalOpen(false);
+    setReportReason('');
+  };
+
   // Avoid not logged users to access this page.
   if (!user) {
     return <Loading />;
@@ -155,6 +168,12 @@ function ProductDetails() {
               >
                 Chat with Seller
               </button>
+              <button
+                onClick={handleReportSeller}
+                className="mt-1 ml-4 px-4 py-2 bg-[#b83737] text-white rounded-lg hover:bg-[#692020]"
+              >
+                Report Seller
+              </button>
             </div>
 
             <Map address={sellerAddress} width="480px" height="200px" />
@@ -166,7 +185,6 @@ function ProductDetails() {
               >
                 ← Back to Products
               </button>
-
             </div>
           </div>
         </div>
@@ -214,6 +232,35 @@ function ProductDetails() {
         </div>
 
       </main>
+
+      {isReportModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4">Report Seller</h2>
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+              rows="4"
+              placeholder="Please describe the reason for reporting..."
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
+            />
+            <div className="flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                onClick={() => setIsReportModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-800"
+                onClick={handleReportSubmit}
+              >
+                Submit
+              </button>
+              </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

@@ -145,6 +145,10 @@ function ChatPage() {
     }
   };
 
+  const handleReportChat = (chatId) => {
+    alert("The admin has received the report.");
+  };
+
   const toggleActions = (chatId) => {
     setShowActions((prev) => ({
       ...prev,
@@ -192,7 +196,7 @@ function ChatPage() {
 
       <Header />
 
-      <div className="flex flex-col items-center justify-cente min-h-[calc(100vh-8rem)]">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
         <div className="flex flex-grow w-full max-w-5xl bg-white">
           <aside className="w-60 bg-[#392F5A] text-white">
             <div className="text-lg font-bold text-center mt-12 mb-9">Chat History</div>
@@ -230,7 +234,7 @@ function ChatPage() {
                       {showActions[chat.id] && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                           <button
-                            className="block w-full text-center px-4 py-2 text-black"
+                            className="block w-full text-center px-4 py-2 text-black hover:bg-red-500"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteChat(chat.id);
@@ -238,6 +242,16 @@ function ChatPage() {
                             }}
                           >
                             Delete
+                          </button>
+                          <button
+                            className="block w-full text-center px-4 py-2 text-black hover:bg-red-500"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleReportChat(chat.id);
+                              setShowActions({});
+                            }}
+                          >
+                            Report
                           </button>
                         </div>
                       )}
