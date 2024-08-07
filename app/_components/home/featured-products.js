@@ -24,7 +24,7 @@ function FeaturedProducts() {
 
     // The featured product IDs, change them as needed.
     const featuredProductIDs = [
-      's0IWhfKoXxeSV1gFQYkf',
+      'dnhyIrvk9M1ZqLyjNfgA',
       'vBq0KKSMjHDIrmftkgIM',
       'BKX9GuaehUNHjautc6hs',
     ];
